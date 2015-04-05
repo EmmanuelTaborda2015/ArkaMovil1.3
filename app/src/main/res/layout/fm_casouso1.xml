@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+          <RelativeLayout
+            android:id="@+id/RelativeLayout01"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent">
+
+            <LinearLayout
+                android:id="@+id/LinearLayout01"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:id="@+id/label_id_acta"
+                    android:text="@string/string_id_acta"
+                    style="@style/labelArkaMovil"/>
+
+                <EditText
+                    android:layout_below="@+id/label_id_acta"
+                    android:id="@+id/id_acta"
+                    android:inputType="number"
+                    style="@style/textViewArkaMovil"/>
+
+                <TextView
+                    android:layout_below="@+id/string_id_acta"
+                    android:id="@+id/label_fecha"
+                    android:text="@string/string_fecha"
+                    style="@style/labelArkaMovil"/>
+
+                <Button
+                    android:layout_below="@+id/label_fecha"
+                    android:id="@+id/fecha"
+                    style="@style/textViewArkaMovil"/>
+
+                <TextView
+                    android:layout_below="@+id/fecha"
+                    android:id="@+id/label_sede"
+                    android:text="@string/string_sede"
+                    style="@style/labelArkaMovil"/>
+
+                <Spinner
+                    android:layout_below="@+id/label_sede"
+                    android:id="@+id/sede"
+                    style="@style/spinnerArkaMovil"
+                    />
+
+                <TextView
+                    android:layout_below="@+id/sede"
+                    android:id="@+id/label_documento"
+                    android:text="@string/string_documento"
+                    style="@style/labelArkaMovil"/>
+
+                <EditText
+                    android:layout_below="@+id/label_documento"
+                    android:id="@+id/documento"
+                    android:inputType="number"
+                    style="@style/textViewArkaMovil"/>
+
+                <TextView
+                    android:layout_below="@+id/documento"
+                    android:id="@+id/label_observacion"
+                    android:text="@string/string_observacion"
+                    style="@style/labelArkaMovil"/>
+
+                <EditText
+                    android:layout_below="@+id/label_observacion"
+                    android:id="@+id/observacion"
+                    android:inputType="textMultiLine"
+                    android:lines="5"
+                    android:maxLines = "5"
+                    android:scrollbars = "vertical"
+                    style="@style/textViewArkaMovil"/>
+
+                <TextView
+                    android:layout_below="@+id/observacion"
+                    android:id="@+id/label_proxvis"
+                    android:text="@string/string_proxvis"
+                    style="@style/labelArkaMovil"/>
+
+                <Button
+                    android:layout_below="@+id/label_proxvis"
+                    android:id="@+id/proxvis"
+                    style="@style/textViewArkaMovil"/>
+
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
+

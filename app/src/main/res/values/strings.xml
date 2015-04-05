@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--Etiquetas activity Login-->
+
+    <string name="app_name">ArkaMovil</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="login">Ingresar</string>
+    <string name="titulo">ArkaMovil</string>
+    <string name="etiqueta_usuario"> Usuario </string>
+    <string name="etiqueta_contrasenna"> Contraseña </string>
+    <string name="title_activity_casos_uso">ArkaMovil</string>
+
+    <!--///////////////////////////// -->
+
+    <!--Etiquetas casos de uso en menu desplegable-->
+
+    <string name="title_section1">CasoUso 1</string>
+    <string name="title_section2">CasoUso 2</string>
+    <string name="title_section3">CasoUso 3</string>
+    <string name="title_section4">CasoUso 4</string>
+    <string name="title_section5">CasoUso 5</string>
+    <string name="title_section6">CasoUso 6</string>
+    <string name="title_section7">CasoUso 7</string>
+
+    <!--///////////////////////////// -->
+
+    <!--Etiquetas casos de uso en menu desplegable-->
+
+    <string name="string_id_acta">Id Acta</string>
+    <string name="string_fecha">Fecha (dd:mm:aa)</string>
+    <string name="string_sede">Sede, Facultad, Dependencia</string>
+    <string name="string_documento">Documento de Responsable</string>
+    <string name="string_observacion">Observaciones</string>
+    <string name="string_proxvis">Fecha Proxima Visita (dd:mm:aa)</string>
+
+
+    <!--///////////////////////////// -->
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_example">Example action</string>
+    <string name="title_activity_caso_uso1">CasoUso1</string>
+    <string name="title_activity_calendario2">Calendario2</string>
+    <string name="title_activity_necad">necad</string>
+    <string name="title_activity_login">Login</string>
+
+
+</resources>
