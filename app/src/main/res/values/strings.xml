@@ -29,11 +29,11 @@
     <!--Etiquetas casos de uso en menu desplegable-->
 
     <string name="string_id_acta">Id Acta</string>
-    <string name="string_fecha">Fecha (dd:mm:aa)</string>
+    <string name="string_fecha">Fecha</string>
     <string name="string_sede">Sede, Facultad, Dependencia</string>
     <string name="string_documento">Documento de Responsable</string>
     <string name="string_observacion">Observaciones</string>
-    <string name="string_proxvis">Fecha Proxima Visita (dd:mm:aa)</string>
+    <string name="string_proxvis">Fecha Proxima Visita</string>
 
 
     <!--///////////////////////////// -->
@@ -47,5 +47,14 @@
     <string name="title_activity_necad">necad</string>
     <string name="title_activity_login">Login</string>
 
+    <!--Caso uso 1-->
+
+    <string name="formatofecha">dd:mm:aa</string>
+
+    <!--Caso uso 5-->
+
+    <string name="String_funcionario">Funcionario</string>
+    <string name="String_dependencia">Dependencia</string>
+    <string name="String_estado">Estado</string>
 
 </resources>

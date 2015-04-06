@@ -13,50 +13,54 @@
         android:src="@drawable/nombre"
         android:layout_height="170dp"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="10dp"/>
+        android:layout_marginLeft="10dp">
+        </ImageView>
+
 
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:paddingTop="160dp"
+        android:paddingTop="180dp"
         android:paddingBottom="5dp"
         android:paddingLeft="20dp"
         android:paddingRight="20dp">
 
-    <TextView
-        android:id="@+id/etiqueta_usuario"
-        style="@style/labelArkaMovil"
-        android:layout_below="@+id/titulo"
-        android:text="@string/etiqueta_usuario"/>
+        <LinearLayout
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_width="0px"
+            android:layout_height="0px" >
+            <requestFocus />
+        </LinearLayout>
 
-    <EditText
+
+        <EditText
         android:id="@+id/user"
         style="@style/textViewArkaMovil"
         android:layout_below="@+id/etiqueta_usuario"
-        android:inputType="number">
-        <requestFocus />
+        android:inputType="number"
+        android:text="Usuario"
+        android:textColor="@color/GRIS"
+        android:layout_marginTop="10dp">
     </EditText>
-
-    <TextView
-        android:id="@+id/etiqueta_contrasenna"
-        style="@style/labelArkaMovil"
-        android:layout_below="@+id/user"
-        android:text="@string/etiqueta_contrasenna" />
 
     <EditText
         android:id="@+id/contrasenna_usuario"
         style="@style/textViewArkaMovil"
-        android:layout_below="@+id/etiqueta_contrasenna"
-        android:inputType="textPassword" />
+        android:text="Contraseña"
+        android:textColor="@color/GRIS"
+        android:layout_marginTop="10dp"/>
 
     <Button
         android:id="@+id/botonlogin"
         style="@style/buttonArkaMovil"
         android:layout_below="@+id/contrasenna_usuario"
         android:text="@string/login"
-        android:onClick="login"/>
+        android:onClick="login">
+    </Button>
+
 
 </LinearLayout>
 

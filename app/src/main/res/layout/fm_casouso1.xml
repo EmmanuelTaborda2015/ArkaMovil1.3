@@ -16,26 +16,15 @@
                 android:padding="20dp">
 
                 <TextView
-                    android:id="@+id/label_id_acta"
-                    android:text="@string/string_id_acta"
-                    style="@style/labelArkaMovil"/>
-
-                <EditText
-                    android:layout_below="@+id/label_id_acta"
-                    android:id="@+id/id_acta"
-                    android:inputType="number"
-                    style="@style/textViewArkaMovil"/>
-
-                <TextView
-                    android:layout_below="@+id/string_id_acta"
                     android:id="@+id/label_fecha"
                     android:text="@string/string_fecha"
                     style="@style/labelArkaMovil"/>
 
-                <Button
+                <TextView
                     android:layout_below="@+id/label_fecha"
                     android:id="@+id/fecha"
-                    style="@style/textViewArkaMovil"/>
+                    style="@style/buttonTextArkaMovil"
+                    android:text="@string/formatofecha"/>
 
                 <TextView
                     android:layout_below="@+id/fecha"
@@ -46,8 +35,7 @@
                 <Spinner
                     android:layout_below="@+id/label_sede"
                     android:id="@+id/sede"
-                    style="@style/spinnerArkaMovil"
-                    />
+                    style="@style/buttonTextArkaMovil"/>
 
                 <TextView
                     android:layout_below="@+id/sede"
@@ -58,6 +46,7 @@
                 <EditText
                     android:layout_below="@+id/label_documento"
                     android:id="@+id/documento"
+                    android:maxLength="15"
                     android:inputType="number"
                     style="@style/textViewArkaMovil"/>
 
@@ -82,10 +71,12 @@
                     android:text="@string/string_proxvis"
                     style="@style/labelArkaMovil"/>
 
-                <Button
+                <TextView
                     android:layout_below="@+id/label_proxvis"
                     android:id="@+id/proxvis"
-                    style="@style/textViewArkaMovil"/>
+                    style="@style/buttonTextArkaMovil"
+                    android:text="@string/formatofecha"
+                    />
 
             </LinearLayout>
         </RelativeLayout>

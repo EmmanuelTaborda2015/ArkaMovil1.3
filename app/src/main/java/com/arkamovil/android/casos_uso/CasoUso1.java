@@ -13,7 +13,7 @@ package com.arkamovil.android.casos_uso;
         import android.widget.Toast;
 
         import com.arkamovil.android.R;
-        import com.arkamovil.android.procesos.LlenarSpinner;
+        import com.arkamovil.android.procesos.LlenarListas;
 
         import java.util.Calendar;
 
@@ -38,7 +38,7 @@ public class CasoUso1 extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fm_casouso1, container, false);
 
-        Button fecha = (Button) rootView.findViewById(R.id.fecha);
+        TextView fecha = (TextView) rootView.findViewById(R.id.fecha);
         fecha.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,7 +58,7 @@ public class CasoUso1 extends Fragment {
             }
         });
 
-        Button proxvis = (Button) rootView.findViewById(R.id.proxvis);
+        TextView proxvis = (TextView) rootView.findViewById(R.id.proxvis);
         proxvis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,8 +84,8 @@ public class CasoUso1 extends Fragment {
         //Se crea un objeto de la clse Llenar Spinner y se llama la función llenar, que es la encargada de cargar los datos al Spinner.
         //Se envian como parametros la actividad y el Spinner a llenar. posiblemente tambien se envie una consulta.
 
-        LlenarSpinner llenar = new LlenarSpinner();
-        llenar.llenar(getActivity(),(Spinner) rootView.findViewById(R.id.sede));
+        LlenarListas llenar = new LlenarListas();
+        llenar.llenarSpinner(getActivity(),(Spinner) rootView.findViewById(R.id.sede));
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -108,8 +108,14 @@ public class CasoUso1 extends Fragment {
                 year1 = selectedYear;
                 tvDisplayDate1.setText(new StringBuilder()
                         // Month is 0 based, just add 1
-                        .append(month1 + 1).append("-").append(day1).append("-")
+                        .append(day1).append("-").append(month1+1).append("-")
                         .append(year1).append(" "));
+                        tvDisplayDate1.setTextColor(getResources().getColor(R.color.NEGRO));
+                if( !tvDisplayDate2.getText().equals("")){
+                    tvDisplayDate2.setTextColor(getResources().getColor(R.color.GRIS));
+                    tvDisplayDate2.setText("dd:mm:aa");
+
+                }
                 contador++;
             }
 
@@ -121,8 +127,9 @@ public class CasoUso1 extends Fragment {
                 if(verificarFechas()==true){
                     tvDisplayDate2.setText(new StringBuilder()
                             // Month is 0 based, just add 1
-                            .append(month2 + 1).append("-").append(day2).append("-")
+                            .append(day2).append("-").append(month2).append("-")
                             .append(year2).append(" "));
+                            tvDisplayDate2.setTextColor(getResources().getColor(R.color.NEGRO));
                 }else{
                     Toast.makeText(getActivity(), "La fecha de la próxima visita no es valida, por favor verifiquela e ingresela de nuevo", Toast.LENGTH_LONG).show();
                 }

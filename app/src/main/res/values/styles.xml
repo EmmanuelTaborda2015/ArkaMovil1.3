@@ -31,6 +31,17 @@
 </style>
 
 
+<style name="buttonTextArkaMovil">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">30dp</item>
+    <item name="android:textColor">#c0c0c0</item>
+    <item name="android:textSize">20sp</item>
+    <item name="android:paddingLeft">10dp</item>
+    <item name="android:paddingRight">10dp</item>
+    <item name="android:ems">10</item>
+    <item name="android:background">@drawable/campotexto</item>
+</style>
+
 <style name="buttonArkaMovil">
     <item name="android:layout_alignParentRight">true</item>
     <item name="android:layout_width">wrap_content</item>

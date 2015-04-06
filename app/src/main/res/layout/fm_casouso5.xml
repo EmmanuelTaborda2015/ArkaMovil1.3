@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp">
+
+    <TextView
+        android:id="@+id/label_dependencia"
+        android:text="@string/String_dependencia"
+        style="@style/labelArkaMovil"/>
+
+    <AutoCompleteTextView
+        style="@style/buttonTextArkaMovil"
+        android:id="@+id/dependencia" />
+
+    <TextView
+        android:id="@+id/label_funcionario"
+        android:text="@string/String_funcionario"
+        style="@style/labelArkaMovil"/>
+
+    <AutoCompleteTextView
+        style="@style/buttonTextArkaMovil"
+        android:id="@+id/funcionario" />
+
+    <TextView
+        android:id="@+id/label_estado"
+        android:text="@string/String_estado"
+        style="@style/labelArkaMovil"/>
+
+    <Spinner
+        android:id="@+id/estado"
+        style="@style/buttonTextArkaMovil"/>
+
+</LinearLayout>
