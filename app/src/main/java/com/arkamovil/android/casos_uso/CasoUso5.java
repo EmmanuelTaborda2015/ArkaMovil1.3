@@ -1,7 +1,9 @@
 package com.arkamovil.android.casos_uso;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,14 +11,19 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.Spinner;
+import android.widget.TableLayout;
+import android.widget.TableRow;
+import android.widget.TextView;
 
 import com.arkamovil.android.R;
+import com.arkamovil.android.procesos.CrearTablas;
 import com.arkamovil.android.procesos.LlenarListas;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CasoUso5 extends Fragment {
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
@@ -53,7 +60,13 @@ public class CasoUso5 extends Fragment {
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
 
+        //Clase para crear Tablas, se envian como parametros la Vista, La Actividad y el numero de Filas.
+        CrearTablas crear = new CrearTablas();
+        crear.crear(rootView, getActivity(), 3);
+        ////////////////////////////////////////////////////////////////////////////////////////////////
 
         return rootView;
     }
+
+
 }

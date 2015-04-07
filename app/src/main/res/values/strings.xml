@@ -56,5 +56,7 @@
     <string name="String_funcionario">Funcionario</string>
     <string name="String_dependencia">Dependencia</string>
     <string name="String_estado">Estado</string>
+    <string name="id">Id</string>
+    <string name="valor">Valor</string>
 
 </resources>

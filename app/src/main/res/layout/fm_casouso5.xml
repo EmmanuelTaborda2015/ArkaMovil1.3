@@ -1,35 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="20dp">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/label_dependencia"
-        android:text="@string/String_dependencia"
-        style="@style/labelArkaMovil"/>
+    <RelativeLayout
+        android:id="@+id/RelativeLayout01"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent">
 
-    <AutoCompleteTextView
-        style="@style/buttonTextArkaMovil"
-        android:id="@+id/dependencia" />
+        <LinearLayout
+            android:id="@+id/LinearLayout01"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:padding="20dp">
+                <TextView
+                    android:id="@+id/label_dependencia"
+                    android:text="@string/String_dependencia"
+                    style="@style/labelArkaMovil"/>
 
-    <TextView
-        android:id="@+id/label_funcionario"
-        android:text="@string/String_funcionario"
-        style="@style/labelArkaMovil"/>
+                <AutoCompleteTextView
+                    style="@style/buttonTextArkaMovil"
+                    android:id="@+id/dependencia" />
 
-    <AutoCompleteTextView
-        style="@style/buttonTextArkaMovil"
-        android:id="@+id/funcionario" />
+                <TextView
+                    android:id="@+id/label_funcionario"
+                    android:text="@string/String_funcionario"
+                    style="@style/labelArkaMovil"/>
 
-    <TextView
-        android:id="@+id/label_estado"
-        android:text="@string/String_estado"
-        style="@style/labelArkaMovil"/>
+                <AutoCompleteTextView
+                    style="@style/buttonTextArkaMovil"
+                    android:id="@+id/funcionario" />
 
-    <Spinner
-        android:id="@+id/estado"
-        style="@style/buttonTextArkaMovil"/>
+                <TextView
+                    android:id="@+id/label_estado"
+                    android:text="@string/String_estado"
+                    style="@style/labelArkaMovil"/>
 
-</LinearLayout>
+                <Spinner
+                    android:id="@+id/estado"
+                    style="@style/buttonTextArkaMovil"/>
+
+                <TableLayout android:id="@+id/cabecera"
+                android:layout_width="wrap_content" android:layout_height="wrap_content">
+                </TableLayout>
+
+                <LinearLayout android:orientation="vertical"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content">
+                    <TableLayout android:id="@+id/tabla"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content">
+                    </TableLayout>
+                </LinearLayout>
+
+
+        </LinearLayout>
+    </RelativeLayout>
+</ScrollView>
