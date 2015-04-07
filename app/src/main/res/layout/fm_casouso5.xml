@@ -32,17 +32,10 @@
                     style="@style/buttonTextArkaMovil"
                     android:id="@+id/funcionario" />
 
-                <TextView
-                    android:id="@+id/label_estado"
-                    android:text="@string/String_estado"
-                    style="@style/labelArkaMovil"/>
-
-                <Spinner
-                    android:id="@+id/estado"
-                    style="@style/buttonTextArkaMovil"/>
-
                 <TableLayout android:id="@+id/cabecera"
-                android:layout_width="wrap_content" android:layout_height="wrap_content">
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="10dp">
                 </TableLayout>
 
                 <LinearLayout android:orientation="vertical"
@@ -52,6 +45,14 @@
                     </TableLayout>
                 </LinearLayout>
 
+                <TextView
+                    android:id="@+id/label_estado"
+                    android:text="@string/String_estado"
+                    style="@style/labelArkaMovil"/>
+
+                <Spinner
+                    android:id="@+id/estado"
+                    style="@style/buttonTextArkaMovil"/>
 
         </LinearLayout>
     </RelativeLayout>

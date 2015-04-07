@@ -62,7 +62,7 @@ public class CasoUso5 extends Fragment {
 
         //Clase para crear Tablas, se envian como parametros la Vista, La Actividad y el numero de Filas.
         CrearTablas crear = new CrearTablas();
-        crear.crear(rootView, getActivity(), 3);
+        crear.crear(rootView, getActivity(), 5);
         ////////////////////////////////////////////////////////////////////////////////////////////////
 
         return rootView;

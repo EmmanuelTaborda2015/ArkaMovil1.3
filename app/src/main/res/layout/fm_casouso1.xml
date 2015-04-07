@@ -24,7 +24,8 @@
                     android:layout_below="@+id/label_fecha"
                     android:id="@+id/fecha"
                     style="@style/buttonTextArkaMovil"
-                    android:text="@string/formatofecha"/>
+                    android:text="@string/formatofecha"
+                    android:textColor="@color/GRIS"/>
 
                 <TextView
                     android:layout_below="@+id/fecha"
@@ -76,7 +77,7 @@
                     android:id="@+id/proxvis"
                     style="@style/buttonTextArkaMovil"
                     android:text="@string/formatofecha"
-                    />
+                    android:textColor="@color/GRIS"/>
 
             </LinearLayout>
         </RelativeLayout>
