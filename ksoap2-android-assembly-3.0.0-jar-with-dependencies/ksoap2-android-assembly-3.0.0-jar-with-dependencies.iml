@@ -3,7 +3,7 @@
   <component name="FacetManager">
     <facet type="android-gradle" name="Android-Gradle">
       <configuration>
-        <option name="GRADLE_PROJECT_PATH" value=":librerias" />
+        <option name="GRADLE_PROJECT_PATH" value=":ksoap2-android-assembly-3.0.0-jar-with-dependencies" />
       </configuration>
     </facet>
   </component>
