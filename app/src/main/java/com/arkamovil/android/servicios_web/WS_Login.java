@@ -7,21 +7,7 @@ package com.arkamovil.android.servicios_web;
     import org.ksoap2.serialization.SoapSerializationEnvelope;
     import org.ksoap2.transport.HttpTransportSE;
 
-    import android.app.Activity;
-    import android.app.ProgressDialog;
-    import android.content.Context;
-    import android.os.Handler;
-    import android.support.v4.app.Fragment;
-    import android.util.Log;
-    import android.view.View;
-    import android.widget.Button;
-    import android.widget.EditText;
-    import android.widget.Toast;
-
-    import com.arkamovil.android.R;
-
-
-public class WS_Login extends  Fragment {
+public class WS_Login {
 
         private final String NAMESPACE = "arkaurn:arka";
         private final String URL = "http://10.0.2.2/ws/servicio.php?wsdl";
@@ -30,20 +16,9 @@ public class WS_Login extends  Fragment {
         private final String METHOD_NAME = "login";
 
         private String webResponse = "";
-        private Thread thread;
-        private Handler handler = new Handler();
 
-        private Context mensaje;
+        public String startWebAccess(final String usuario, String contrasena) {
 
-
-        public void startWebAccess(Context mens, final String usuario, String contrasena) {
-
-            this.mensaje = mens;
-
-
-
-            thread = new Thread() {
-                public void run() {
                     try {
 
                         SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
@@ -70,25 +45,7 @@ public class WS_Login extends  Fragment {
                         e.printStackTrace();
                     }
 
-                    handler.post(createUI);
-                }
-            };
-
-            thread.start();
+            return webResponse;
 
         }
-
-        final Runnable createUI = new Runnable() {
-
-            public void run() {
-
-                //Toast.makeText(mensaje, webResponse, Toast.LENGTH_LONG).show();
-
-                if("true".equals(webResponse)){
-                    Toast.makeText(mensaje, "Conectado", Toast.LENGTH_LONG).show();
-                }else{
-                    Toast.makeText(mensaje, "No Conectado", Toast.LENGTH_LONG).show();
-                }
-            }
-        };
 }

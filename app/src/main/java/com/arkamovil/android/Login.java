@@ -1,6 +1,8 @@
 package com.arkamovil.android;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -13,22 +15,26 @@ import com.arkamovil.android.servicios_web.WS_Login;
 
 public class Login extends ActionBarActivity {
 
+    private Thread thread;
+    private Handler handler = new Handler();
+    private String webResponse;
+
+    private EditText usuario;
+    private EditText contrasena;
+    private Button boton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        usuario = (EditText)findViewById(R.id.user);
+        contrasena = (EditText)findViewById(R.id.contrasenna_usuario);
 
-        final EditText usuario = (EditText)findViewById(R.id.user);
-        final EditText password = (EditText)findViewById(R.id.contrasenna_usuario);
+        boton = (Button)findViewById(R.id.botonlogin);
 
-        Button boton = (Button)findViewById(R.id.botonlogin);
         boton.setOnClickListener( new View.OnClickListener() {
             public void onClick(View v) {
 
-                EditText usuario = (EditText)findViewById(R.id.user);
-                EditText contrasena = (EditText)findViewById(R.id.contrasenna_usuario);
-
-                Button boton = (Button)findViewById(R.id.botonlogin);
 
                 boton.setEnabled(false);
 
@@ -43,17 +49,23 @@ public class Login extends ActionBarActivity {
                     contador++;
                 }
                 if(contador == 0){
-                    //Se crea el objeto de la clase (Web Service Login), y se le envian los parametros Context, usuario y contraseña ingresadas.
-                    WS_Login verificar = new WS_Login();
-                    verificar.startWebAccess(getApplicationContext(), String.valueOf(usuario.getText()), String.valueOf(contrasena.getText()));
-                }else{
 
+                    thread = new Thread() {
+                        public void run() {
+                            //Se crea el objeto de la clase (Web Service Login), y se le envian los parametros Context, usuario y contraseña ingresadas.
+                            WS_Login verificar = new WS_Login();
+                            webResponse = verificar.startWebAccess(String.valueOf(usuario.getText()), String.valueOf(contrasena.getText()));
+                            handler.post(createUI);
+                        }
+                    };
+
+                    thread.start();
+
+                }else{
+                    boton.setEnabled(true);
                 }
             }
         });
-
-
-
 
         usuario.setOnFocusChangeListener(new View.OnFocusChangeListener(){
                                                     public void onFocusChange(View v, boolean hasFocus){
@@ -69,12 +81,12 @@ public class Login extends ActionBarActivity {
                                                 }
         );
 
-        password.setOnFocusChangeListener(new View.OnFocusChangeListener(){
+        contrasena.setOnFocusChangeListener(new View.OnFocusChangeListener(){
                                              public void onFocusChange(View v, boolean hasFocus){
                                                  if (hasFocus) {
                                                      try {
-                                                         password.setText("");
-                                                         password.setTextColor(getResources().getColor(R.color.NEGRO));
+                                                         contrasena.setText("");
+                                                         contrasena.setTextColor(getResources().getColor(R.color.NEGRO));
                                                      }
                                                      catch (NumberFormatException e) {
                                                      }
@@ -83,4 +95,20 @@ public class Login extends ActionBarActivity {
                                          }
         );
     }
+
+    final Runnable createUI = new Runnable() {
+
+        public void run() {
+            if("true".equals(webResponse)){
+                Toast.makeText(getApplicationContext(), "Conectado", Toast.LENGTH_LONG).show();
+                Intent i = new Intent(getApplicationContext(), CasosUso.class);
+                startActivity(i);
+
+            }else if("false".equals(webResponse)){
+                Toast.makeText(getApplicationContext(), "Usuario y/o Contraseña invalida", Toast.LENGTH_LONG).show();
+                boton.setEnabled(true);
+
+            }
+        }
+    };
 }
