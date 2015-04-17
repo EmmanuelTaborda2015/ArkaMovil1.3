@@ -13,13 +13,13 @@ import org.ksoap2.transport.HttpTransportSE;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WS_Funcionario {
+public class WS_Dependencia {
 
     private final String NAMESPACE = "arkaurn:arka";
     private final String URL = "http://10.0.2.2/ws/servicio.php?wsdl";
     //private final String URL = "http://10.20.2.12/arka/index.php?wsdl";
-    private final String SOAP_ACTION = "arkaurn:arka/consultar_funcionarios";
-    private final String METHOD_NAME = "consultar_funcionarios";
+    private final String SOAP_ACTION = "arkaurn:arka/consultar_dependencias";
+    private final String METHOD_NAME = "consultar_dependencias";
 
     private Thread thread;
     private Handler handler = new Handler();
@@ -29,7 +29,7 @@ public class WS_Funcionario {
     List<String> toSpin = new ArrayList<String>();
 
 
-    public void startWebAccess(final Activity act, final AutoCompleteTextView spin, final int dependencia) {
+    public void startWebAccess(final Activity act, final AutoCompleteTextView spin) {
 
         this.act = act;
         this.spin = spin;
@@ -37,8 +37,6 @@ public class WS_Funcionario {
         thread = new Thread() {
             public void run() {
                 SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
-
-                request.addProperty("dependencia", dependencia);
 
                 SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
                 envelope.setOutputSoapObject(request);
