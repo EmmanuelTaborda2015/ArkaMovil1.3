@@ -1,6 +1,5 @@
 package com.arkamovil.android;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
@@ -68,31 +67,31 @@ public class Login extends ActionBarActivity {
         });
 
         usuario.setOnFocusChangeListener(new View.OnFocusChangeListener(){
-                                                    public void onFocusChange(View v, boolean hasFocus){
-                                                        if (hasFocus) {
-                                                            try {
-                                                                usuario.setText("");
-                                                                usuario.setTextColor(getResources().getColor(R.color.NEGRO));
-                                                            }
-                                                            catch (NumberFormatException e) {
-                                                            }
-                                                        }
-                                                    }
-                                                }
-        );
-
-        contrasena.setOnFocusChangeListener(new View.OnFocusChangeListener(){
                                              public void onFocusChange(View v, boolean hasFocus){
                                                  if (hasFocus) {
                                                      try {
-                                                         contrasena.setText("");
-                                                         contrasena.setTextColor(getResources().getColor(R.color.NEGRO));
+                                                         usuario.setText("");
+                                                         usuario.setTextColor(getResources().getColor(R.color.NEGRO));
                                                      }
                                                      catch (NumberFormatException e) {
                                                      }
                                                  }
                                              }
                                          }
+        );
+
+        contrasena.setOnFocusChangeListener(new View.OnFocusChangeListener(){
+                                                public void onFocusChange(View v, boolean hasFocus){
+                                                    if (hasFocus) {
+                                                        try {
+                                                            contrasena.setText("");
+                                                            contrasena.setTextColor(getResources().getColor(R.color.NEGRO));
+                                                        }
+                                                        catch (NumberFormatException e) {
+                                                        }
+                                                    }
+                                                }
+                                            }
         );
     }
 

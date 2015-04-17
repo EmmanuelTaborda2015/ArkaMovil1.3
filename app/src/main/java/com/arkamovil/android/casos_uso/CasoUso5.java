@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.arkamovil.android.R;
 import com.arkamovil.android.procesos.CrearTablas;
 import com.arkamovil.android.procesos.LlenarListas;
+import com.arkamovil.android.servicios_web.WS_Funcionario;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,13 +28,15 @@ public class CasoUso5 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+
+
         View rootView = inflater.inflate(R.layout.fm_casouso5, container, false);
 
         final LlenarListas llenarA = new LlenarListas();
-        llenarA.llenarAutoComplete(getActivity(), (AutoCompleteTextView) rootView.findViewById(R.id.funcionario));
+        //llenarA.llenarAutoComplete(getActivity(), (AutoCompleteTextView) rootView.findViewById(R.id.funcionario));
 
-        final LlenarListas llenarB = new LlenarListas();
-        llenarB.llenarAutoComplete(getActivity(), (AutoCompleteTextView) rootView.findViewById(R.id.dependencia));
+        final WS_Funcionario llenarB = new WS_Funcionario();
+        llenarB.startWebAccess(getActivity(), (AutoCompleteTextView) rootView.findViewById(R.id.dependencia));
 
 
         final AutoCompleteTextView funcionario = (AutoCompleteTextView) rootView.findViewById(R.id.funcionario);

@@ -7,6 +7,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.Spinner;
 
+import com.arkamovil.android.servicios_web.WS_Funcionario;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +39,7 @@ public class LlenarListas extends Fragment{
 
     public ArrayAdapter<String> llenarAutoComplete(Activity act,AutoCompleteTextView aut) {
         List<String> toSpin = new ArrayList<String>();
+
         toSpin.add("sede 40");
         toSpin.add("Sede Vivero");
         toSpin.add("Sede Macarena");
@@ -55,7 +58,7 @@ public class LlenarListas extends Fragment{
         toSpin.add("Sede 13");
 
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(act,android.R.layout.simple_dropdown_item_1line,toSpin);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(act,android.R.layout.simple_dropdown_item_1line);
         aut.setAdapter(adapter);
         return  adapter;
     }
