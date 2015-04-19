@@ -13,24 +13,23 @@ import org.ksoap2.transport.HttpTransportSE;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WS_Dependencia {
+public class WS_Elemento {
 
     private final String NAMESPACE = "arkaurn:arka";
     private final String URL = "http://10.0.2.2/ws/servicio.php?wsdl";
     //private final String URL = "http://10.20.2.12/arka/index.php?wsdl";
-    private final String SOAP_ACTION = "arkaurn:arka/consultar_dependencias";
-    private final String METHOD_NAME = "consultar_dependencias";
+    private final String SOAP_ACTION = "arkaurn:arka/consultar_funcionarios";
+    private final String METHOD_NAME = "consultar_funcionarios";
 
     private Thread thread;
     private Handler handler = new Handler();
 
-    private Activity act;
-    private AutoCompleteTextView spin;
+    Activity act;
+    AutoCompleteTextView spin;
+    List<String> toSpin = new ArrayList<String>();
 
-    private List<String> dependecia = new ArrayList<String>();
 
-
-    public void startWebAccess(final Activity act, final AutoCompleteTextView spin) {
+    public void startWebAccess(final Activity act, final AutoCompleteTextView spin, final int dependencia) {
 
         this.act = act;
         this.spin = spin;
@@ -38,6 +37,8 @@ public class WS_Dependencia {
         thread = new Thread() {
             public void run() {
                 SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
+
+                request.addProperty("dependencia", dependencia);
 
                 SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
                 envelope.setOutputSoapObject(request);
@@ -49,7 +50,7 @@ public class WS_Dependencia {
                     httpTransport.call(SOAP_ACTION, envelope);
                     SoapObject response = (SoapObject) envelope.getResponse();
                     for (int i = 0; i < response.getPropertyCount(); i++) {
-                        dependecia.add(response.getProperty(i).toString());
+                        toSpin.add(response.getProperty(i).toString());
                     }
 
                 } catch (Exception exception) {
@@ -59,17 +60,15 @@ public class WS_Dependencia {
         };
 
         thread.start();
+
     }
 
     final Runnable createUI = new Runnable() {
 
         public void run() {
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(act, android.R.layout.simple_spinner_item, dependecia);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(act, android.R.layout.simple_spinner_item, toSpin);
             spin.setAdapter(adapter);
         }
     };
 
-    public List<String> getDependecia() {
-        return dependecia;
-    }
 }

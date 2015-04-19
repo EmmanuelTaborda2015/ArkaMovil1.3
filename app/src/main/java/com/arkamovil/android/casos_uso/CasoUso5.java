@@ -1,5 +1,6 @@
 package com.arkamovil.android.casos_uso;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.MultiAutoCompleteTextView;
@@ -32,14 +34,16 @@ import java.util.List;
 
 public class CasoUso5 extends Fragment {
 
-    private int contador1=0;
-    private int contador2=0;
+    private int contador1 = 0;
+    private int contador2 = 0;
     private AutoCompleteTextView dep;
     private AutoCompleteTextView fun;
 
+    private List<String> lista_dependencia = new ArrayList<String>();
+    private int dependencia_seleccionada = -1;
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
 
         final View rootView = inflater.inflate(R.layout.fm_casouso5, container, false);
 
@@ -47,34 +51,39 @@ public class CasoUso5 extends Fragment {
         fun = (AutoCompleteTextView) rootView.findViewById(R.id.funcionario);
 
         //Se envia parametros de vista y de campo AutoComplete al web service de dependencias.
-        if(contador1==0) {
+        if (contador1 == 0) {
             WS_Dependencia cargar_dependencias = new WS_Dependencia();
             cargar_dependencias.startWebAccess(getActivity(), dep);
+            lista_dependencia = cargar_dependencias.getDependecia();
             contador1++;
         }
 
-        //Se envia parametros de vista y de campo AutoComplete al web service de funcionarios.
-        if(contador2==0) {
-            WS_Funcionario cargar_funcionarios = new WS_Funcionario();
-            cargar_funcionarios.startWebAccess(getActivity(), fun, dep.getListSelection() );
-            contador2++;
-            Log.v("Tag", dep.getListSelection()+"");
-        }
-
-
-        final AutoCompleteTextView funcionario = (AutoCompleteTextView) rootView.findViewById(R.id.funcionario);
-        funcionario.setOnClickListener(new View.OnClickListener() {
+        fun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                funcionario.showDropDown();
+                fun.showDropDown();
             }
         });
 
-        final AutoCompleteTextView dependencia = (AutoCompleteTextView) rootView.findViewById(R.id.dependencia);
-        dependencia.setOnClickListener(new View.OnClickListener() {
+        dep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dependencia.showDropDown();
+                dep.showDropDown();
+            }
+        });
+
+        dep.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                for (int i = 0; i < lista_dependencia.size(); i++) {
+                    if (String.valueOf(dep.getText()).equals(lista_dependencia.get(i))) {
+                        dependencia_seleccionada = i + 1;
+                    }
+                }
+                //Se envia parametros de vista y de campo AutoComplete al web service de funcionarios.
+                WS_Funcionario cargar_funcionarios = new WS_Funcionario();
+                cargar_funcionarios.startWebAccess(getActivity(), fun, dependencia_seleccionada);
+                fun.setText("");
             }
         });
 
