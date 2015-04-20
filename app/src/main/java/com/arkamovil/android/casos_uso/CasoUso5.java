@@ -26,6 +26,7 @@ import com.arkamovil.android.menu_desplegable.CasosUso;
 import com.arkamovil.android.procesos.CrearTablas;
 import com.arkamovil.android.procesos.LlenarListas;
 import com.arkamovil.android.servicios_web.WS_Dependencia;
+import com.arkamovil.android.servicios_web.WS_Elemento;
 import com.arkamovil.android.servicios_web.WS_Funcionario;
 import com.arkamovil.android.servicios_web.WS_Login;
 
@@ -72,6 +73,7 @@ public class CasoUso5 extends Fragment {
             }
         });
 
+        //Se genera esta función cuando se selecciona un item de la lista
         dep.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -87,6 +89,15 @@ public class CasoUso5 extends Fragment {
             }
         });
 
+        fun.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                WS_Elemento elem = new WS_Elemento();
+                elem.startWebAccess(rootView, getActivity(), 1);
+            }
+        });
+
         //Se crea un objeto de la clse Llenar Spinner y se llama la función llenar, que es la encargada de cargar los datos al Spinner.
         //Se envian como parametros la actividad y el Spinner a llenar. posiblemente tambien se envie una consulta.
 
@@ -94,11 +105,6 @@ public class CasoUso5 extends Fragment {
         llenar.llenarSpinnerEstado(getActivity(), (Spinner) rootView.findViewById(R.id.estado));
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
-
-        //Clase para crear Tablas, se envian como parametros la Vista, La Actividad y el numero de Filas.
-        CrearTablas crear = new CrearTablas();
-        crear.crear(rootView, getActivity(), 5);
-        ////////////////////////////////////////////////////////////////////////////////////////////////
 
         return rootView;
     }
