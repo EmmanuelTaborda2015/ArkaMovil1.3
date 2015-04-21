@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.Spinner;
 import android.widget.TableLayout;
@@ -39,6 +40,8 @@ public class CasoUso5 extends Fragment {
     private int contador2 = 0;
     private AutoCompleteTextView dep;
     private AutoCompleteTextView fun;
+    private Button bajar;
+    private Button subir;
 
     private List<String> lista_dependencia = new ArrayList<String>();
     private int dependencia_seleccionada = -1;
@@ -50,6 +53,8 @@ public class CasoUso5 extends Fragment {
 
         dep = (AutoCompleteTextView) rootView.findViewById(R.id.dependencia);
         fun = (AutoCompleteTextView) rootView.findViewById(R.id.funcionario);
+        bajar = (Button) rootView.findViewById(R.id.bajar);
+        subir = (Button) rootView.findViewById(R.id.subir);
 
         //Se envia parametros de vista y de campo AutoComplete al web service de dependencias.
         if (contador1 == 0) {
@@ -95,6 +100,23 @@ public class CasoUso5 extends Fragment {
 
                 WS_Elemento elem = new WS_Elemento();
                 elem.startWebAccess(rootView, getActivity(), 1);
+            }
+        });
+
+        //boton para bajar los elementos
+        bajar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CrearTablas baj = new CrearTablas();
+                baj.bajar(rootView, getActivity());
+            }
+        });
+
+        subir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CrearTablas sub = new CrearTablas();
+                sub.subir(rootView, getActivity());
             }
         });
 

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
 import com.arkamovil.android.procesos.CrearTablas;
@@ -16,7 +15,6 @@ import org.ksoap2.transport.HttpTransportSE;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class WS_Elemento {
 
@@ -29,9 +27,10 @@ public class WS_Elemento {
     private Thread thread;
     private Handler handler = new Handler();
 
-    Activity act;
-    View rootView;
-    AutoCompleteTextView spin;
+    private Activity act;
+    private View rootView;
+
+    private int contador = 0;
 
     private List<String> descripcion = new ArrayList<String>();
     private List<String> id_elemento = new ArrayList<String>();
@@ -46,41 +45,44 @@ public class WS_Elemento {
 
     public void startWebAccess(View rootView, Activity actividad, int documento_fun) {
 
-        this.rootView = rootView;
-        this.act = actividad;
-        this.spin = spin;
+        if (contador == 0) {
 
-        thread = new Thread() {
-            public void run() {
-                SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
+            this.rootView = rootView;
+            this.act = actividad;
 
-                request.addProperty("documento_funcionario", 1);
+            thread = new Thread() {
+                public void run() {
+                    SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 
-                SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-                envelope.setOutputSoapObject(request);
+                    request.addProperty("documento_funcionario", 1);
 
-                HttpTransportSE httpTransport = new HttpTransportSE(URL);
+                    SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+                    envelope.setOutputSoapObject(request);
 
-                try {
+                    HttpTransportSE httpTransport = new HttpTransportSE(URL);
 
-                    httpTransport.call(SOAP_ACTION, envelope);
-                    //SoapObject response = (SoapObject) envelope.getResponse();
-                    //Log.v("Aqui", response.getProperty(0).toString());
+                    try {
 
-                    SoapObject obj1 = (SoapObject) envelope.getResponse();
-                    for (int i = 0; i < obj1.getPropertyCount(); i++) {
-                        SoapObject obj2 = (SoapObject) obj1.getProperty(i);
-                        id_elemento.add(obj2.getProperty("id_elemento").toString());
-                        descripcion.add(obj2.getProperty("descripcion").toString());
+                        httpTransport.call(SOAP_ACTION, envelope);
+                        //SoapObject response = (SoapObject) envelope.getResponse();
+                        //Log.v("Aqui", response.getProperty(0).toString());
+
+                        SoapObject obj1 = (SoapObject) envelope.getResponse();
+                        for (int i = 0; i < obj1.getPropertyCount(); i++) {
+                            SoapObject obj2 = (SoapObject) obj1.getProperty(i);
+                            id_elemento.add(obj2.getProperty("id_elemento").toString());
+                            descripcion.add(obj2.getProperty("descripcion").toString());
+                        }
+
+                    } catch (Exception exception) {
                     }
-
-                } catch (Exception exception) {
+                    handler.post(createUI);
                 }
-                handler.post(createUI);
-            }
-        };
+            };
 
-        thread.start();
+            thread.start();
+
+        }
 
     }
 
@@ -91,8 +93,6 @@ public class WS_Elemento {
             CrearTablas crear = new CrearTablas();
             crear.crear(rootView, act, id_elemento, descripcion);
             ////////////////////////////////////////////////////////////////////////////////////////////////
-            //ArrayAdapter<String> adapter = new ArrayAdapter<String>(act, android.R.layout.simple_spinner_item, toSpin);
-            //spin.setAdapter(adapter);
         }
     };
 
