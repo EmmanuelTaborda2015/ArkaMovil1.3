@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.Spinner;
 import android.widget.TableLayout;
@@ -40,8 +41,8 @@ public class CasoUso5 extends Fragment {
     private int contador2 = 0;
     private AutoCompleteTextView dep;
     private AutoCompleteTextView fun;
-    private Button bajar;
-    private Button subir;
+    private ImageView bajar;
+    private ImageView subir;
 
     private List<String> lista_dependencia = new ArrayList<String>();
     private int dependencia_seleccionada = -1;
@@ -53,8 +54,11 @@ public class CasoUso5 extends Fragment {
 
         dep = (AutoCompleteTextView) rootView.findViewById(R.id.dependencia);
         fun = (AutoCompleteTextView) rootView.findViewById(R.id.funcionario);
-        bajar = (Button) rootView.findViewById(R.id.bajar);
-        subir = (Button) rootView.findViewById(R.id.subir);
+        bajar = (ImageView) rootView.findViewById(R.id.bajar);
+        subir = (ImageView) rootView.findViewById(R.id.subir);
+
+        bajar.setVisibility(View.INVISIBLE);
+        subir.setVisibility(View.INVISIBLE);
 
         //Se envia parametros de vista y de campo AutoComplete al web service de dependencias.
         if (contador1 == 0) {
@@ -91,6 +95,13 @@ public class CasoUso5 extends Fragment {
                 WS_Funcionario cargar_funcionarios = new WS_Funcionario();
                 cargar_funcionarios.startWebAccess(getActivity(), fun, dependencia_seleccionada);
                 fun.setText("");
+                fun.setFocusable(true);
+                CrearTablas borrar = new CrearTablas();
+                borrar.borrarTabla(rootView, getActivity());
+                bajar.setVisibility(View.INVISIBLE);
+                subir.setVisibility(View.INVISIBLE);
+
+
             }
         });
 
@@ -98,8 +109,15 @@ public class CasoUso5 extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                WS_Elemento elem = new WS_Elemento();
-                elem.startWebAccess(rootView, getActivity(), 1);
+                if(!"".equals(String.valueOf(dep.getText()))) {
+                    WS_Elemento elem = new WS_Elemento();
+                    elem.startWebAccess(rootView, getActivity(), String.valueOf(fun.getText()));
+
+                    bajar.setVisibility(View.VISIBLE);
+                    subir.setVisibility(View.VISIBLE);
+                }
+
+
             }
         });
 
@@ -111,7 +129,7 @@ public class CasoUso5 extends Fragment {
                 baj.bajar(rootView, getActivity());
             }
         });
-
+        //llamar metodo en clase CrearTablas para ir hacia los primeros registros mostrados en la tabla
         subir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,14 +137,6 @@ public class CasoUso5 extends Fragment {
                 sub.subir(rootView, getActivity());
             }
         });
-
-        //Se crea un objeto de la clse Llenar Spinner y se llama la función llenar, que es la encargada de cargar los datos al Spinner.
-        //Se envian como parametros la actividad y el Spinner a llenar. posiblemente tambien se envie una consulta.
-
-        LlenarListas llenar = new LlenarListas();
-        llenar.llenarSpinnerEstado(getActivity(), (Spinner) rootView.findViewById(R.id.estado));
-
-        //////////////////////////////////////////////////////////////////////////////////////////////////
 
         return rootView;
     }

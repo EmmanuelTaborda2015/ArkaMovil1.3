@@ -1,6 +1,9 @@
 package com.arkamovil.android.procesos;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.res.Resources;
 import android.util.Log;
 import android.view.Gravity;
@@ -10,7 +13,9 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.arkamovil.android.Informacion.Informacion_Elementos;
 import com.arkamovil.android.R;
+import com.arkamovil.android.casos_uso.CasoUso1;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +33,14 @@ public class CrearTablas {
     TableRow.LayoutParams layoutTexto;
     TableRow.LayoutParams layoutVer;
 
-    Activity act;
+    private static Activity act;
+    private static View vista;
+
+    public void cerrarDialog() {
+        dialog.dismiss();
+    }
+
+    private static Informacion_Elementos dialog;
 
     Resources rs;
     private static List<String> id_elemento;
@@ -158,7 +170,8 @@ public class CrearTablas {
             txtVer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.v("Hola", v.getId() + "");
+                    dialog = new Informacion_Elementos(act, (contador-1)*5 + v.getId());
+                    dialog.show();
                 }
             });
 
@@ -171,7 +184,7 @@ public class CrearTablas {
         }
     }
 
-    public void bajar(View rootView, Activity actividad){
+    public void bajar(View rootView, Activity actividad) {
 
         this.act = actividad;
         this.MAX_FILAS = 5;
@@ -211,7 +224,7 @@ public class CrearTablas {
         }
     }
 
-    public void subir(View rootView, Activity actividad){
+    public void subir(View rootView, Activity actividad) {
 
         this.act = actividad;
         this.MAX_FILAS = 5;
@@ -249,5 +262,23 @@ public class CrearTablas {
             agregarFilasTabla();
             contador--;
         }
+    }
+
+    public void borrarTabla(View rootView, Activity actividad) {
+
+        this.act = actividad;
+        this.MAX_FILAS = 5;
+
+        rs = actividad.getResources();
+        tabla = (TableLayout) rootView.findViewById(R.id.tabla);
+        cabecera = (TableLayout) rootView.findViewById(R.id.cabecera);
+        layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
+                TableRow.LayoutParams.WRAP_CONTENT);
+        layoutId = new TableRow.LayoutParams(160, TableRow.LayoutParams.WRAP_CONTENT);
+        layoutTexto = new TableRow.LayoutParams(160, TableRow.LayoutParams.WRAP_CONTENT);
+        layoutVer = new TableRow.LayoutParams(100, TableRow.LayoutParams.WRAP_CONTENT);
+
+        tabla.removeAllViews();
+        cabecera.removeAllViews();
     }
 }
