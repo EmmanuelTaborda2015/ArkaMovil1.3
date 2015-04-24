@@ -63,7 +63,9 @@
                     android:inputType="textMultiLine"
                     android:lines="5"
                     android:maxLines = "5"
+                    android:maxLength="100"
                     android:scrollbars = "vertical"
+                    android:gravity="left|top"
                     style="@style/textViewArkaMovil"/>
 
                 <TextView

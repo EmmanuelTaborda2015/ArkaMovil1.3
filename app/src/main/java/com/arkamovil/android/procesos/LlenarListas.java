@@ -28,7 +28,7 @@ public class LlenarListas extends Fragment{
 
     public ArrayAdapter<String> llenarSpinnerEstado(Activity act,Spinner spin) {
         List<String> toSpin = new ArrayList<String>();
-        toSpin.add("Seleccione una opción");
+        toSpin.add("--Seleccione una opción--");
         toSpin.add("Sobrante");
         toSpin.add("Faltante");
         toSpin.add("Baja");

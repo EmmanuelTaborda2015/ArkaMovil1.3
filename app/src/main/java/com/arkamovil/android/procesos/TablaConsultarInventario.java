@@ -1,29 +1,19 @@
 package com.arkamovil.android.procesos;
 
 import android.app.Activity;
-import android.app.Dialog;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.res.Resources;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.arkamovil.android.Informacion.Informacion_Elementos;
 import com.arkamovil.android.R;
-import com.arkamovil.android.casos_uso.CasoUso1;
 
-import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Emmanuel on 7/04/15.
- */
-public class CrearTablas {
+public class TablaConsultarInventario {
 
     TableLayout tabla;
     TableLayout cabecera;
@@ -66,9 +56,9 @@ public class CrearTablas {
         cabecera = (TableLayout) rootView.findViewById(R.id.cabecera);
         layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT);
-        layoutId = new TableRow.LayoutParams(160, TableRow.LayoutParams.WRAP_CONTENT);
+        layoutId = new TableRow.LayoutParams(100, TableRow.LayoutParams.WRAP_CONTENT);
         layoutTexto = new TableRow.LayoutParams(160, TableRow.LayoutParams.WRAP_CONTENT);
-        layoutVer = new TableRow.LayoutParams(100, TableRow.LayoutParams.WRAP_CONTENT);
+        layoutVer = new TableRow.LayoutParams(160, TableRow.LayoutParams.MATCH_PARENT);
 
         int val1 = 0;
         int val2 = 0;
@@ -110,7 +100,7 @@ public class CrearTablas {
         txtDescripcion = new TextView(act);
         txtInfo = new TextView(act);
 
-        txtId.setText("Id_elemento");
+        txtId.setText("Id");
         txtId.setGravity(Gravity.CENTER_HORIZONTAL);
         txtId.setTextAppearance(act, R.style.etiqueta);
         txtId.setBackgroundResource(R.drawable.tabla_celda_cabecera);
@@ -170,7 +160,7 @@ public class CrearTablas {
             txtVer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    dialog = new Informacion_Elementos(act, (contador-1)*5 + v.getId());
+                    dialog = new Informacion_Elementos(act, v.getId());
                     dialog.show();
                 }
             });
@@ -194,9 +184,9 @@ public class CrearTablas {
         cabecera = (TableLayout) rootView.findViewById(R.id.cabecera);
         layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT);
-        layoutId = new TableRow.LayoutParams(160, TableRow.LayoutParams.WRAP_CONTENT);
+        layoutId = new TableRow.LayoutParams(100, TableRow.LayoutParams.WRAP_CONTENT);
         layoutTexto = new TableRow.LayoutParams(160, TableRow.LayoutParams.WRAP_CONTENT);
-        layoutVer = new TableRow.LayoutParams(100, TableRow.LayoutParams.WRAP_CONTENT);
+        layoutVer = new TableRow.LayoutParams(160, TableRow.LayoutParams.MATCH_PARENT);
 
         int val1 = 0;
         int val2 = 0;
@@ -234,9 +224,9 @@ public class CrearTablas {
         cabecera = (TableLayout) rootView.findViewById(R.id.cabecera);
         layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT);
-        layoutId = new TableRow.LayoutParams(160, TableRow.LayoutParams.WRAP_CONTENT);
+        layoutId = new TableRow.LayoutParams(100, TableRow.LayoutParams.WRAP_CONTENT);
         layoutTexto = new TableRow.LayoutParams(160, TableRow.LayoutParams.WRAP_CONTENT);
-        layoutVer = new TableRow.LayoutParams(100, TableRow.LayoutParams.WRAP_CONTENT);
+        layoutVer = new TableRow.LayoutParams(160, TableRow.LayoutParams.MATCH_PARENT);
 
         int val1 = 0;
         int val2 = 0;

@@ -14,6 +14,7 @@ import com.arkamovil.android.R;
 import com.arkamovil.android.casos_uso.CasoUso1;
 import com.arkamovil.android.casos_uso.CasoUso4;
 import com.arkamovil.android.casos_uso.CasoUso5;
+import com.arkamovil.android.casos_uso.CasoUso6;
 
 
 public class CasosUso extends ActionBarActivity
@@ -104,8 +105,9 @@ public class CasosUso extends ActionBarActivity
                 break;
             case 5:
                 fragment = new CasoUso5();
+                break;
             case 6:
-                mTitle = getString(R.string.title_section3);
+                fragment = new CasoUso6();
                 break;
             case 7:
                 mTitle = getString(R.string.title_section3);

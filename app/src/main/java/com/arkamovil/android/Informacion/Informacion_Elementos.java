@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.arkamovil.android.R;
-import com.arkamovil.android.procesos.CrearTablas;
+import com.arkamovil.android.procesos.TablaConsultarInventario;
 import com.arkamovil.android.servicios_web.WS_Elemento;
 
 public class Informacion_Elementos extends Dialog {
@@ -60,7 +60,7 @@ public class Informacion_Elementos extends Dialog {
         cerrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CrearTablas cerrarDialog = new CrearTablas();
+                TablaConsultarInventario cerrarDialog = new TablaConsultarInventario();
                 cerrarDialog.cerrarDialog();
             }
         });

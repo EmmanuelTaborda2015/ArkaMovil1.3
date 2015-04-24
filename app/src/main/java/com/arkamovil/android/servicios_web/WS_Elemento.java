@@ -2,11 +2,12 @@ package com.arkamovil.android.servicios_web;
 
 import android.app.Activity;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
-import android.widget.AutoCompleteTextView;
+import android.widget.ImageView;
 
-import com.arkamovil.android.procesos.CrearTablas;
+import com.arkamovil.android.R;
+import com.arkamovil.android.procesos.TablaConsultarInventario;
+import com.arkamovil.android.procesos.TablaModificarInventario;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
@@ -24,11 +25,16 @@ public class WS_Elemento {
     private final String SOAP_ACTION = "arkaurn:arka/consultar_elementos";
     private final String METHOD_NAME = "consultar_elementos";
 
+    public Thread getThread() {
+        return thread;
+    }
+
     private Thread thread;
     private Handler handler = new Handler();
 
     private Activity act;
     private View rootView;
+    private int caso;
 
     private int contador = 0;
 
@@ -84,10 +90,11 @@ public class WS_Elemento {
         return id_elemento;
     }
 
-    public void startWebAccess(View rootView, Activity actividad, final String nombre_fun) {
+    public void startWebAccess(View rootView, Activity actividad, final String nombre_fun, int caso) {
 
         this.rootView = rootView;
         this.act = actividad;
+        this.caso = caso;
 
         thread = new Thread() {
             public void run() {
@@ -132,10 +139,26 @@ public class WS_Elemento {
 
         public void run() {
             //Clase para crear Tablas, se envian como parametros la Vista, La Actividad y los valores para cada una de las columnas (ArrayList)
-            CrearTablas crear = new CrearTablas();
-            crear.crear(rootView, act, id_elemento, descripcion);
+            //TablaConsultarIventario crear = new TablaConsultarIventario();
+            //crear.crear(rootView, act, id_elemento, descripcion);
             ////////////////////////////////////////////////////////////////////////////////////////////////
+            if(caso == 1){
+                TablaConsultarInventario crear = new TablaConsultarInventario();
+                crear.crear(rootView, act, id_elemento, descripcion);
+                ImageView bajar =  (ImageView) rootView.findViewById(R.id.bajar);
+                ImageView subir =  (ImageView) rootView.findViewById(R.id.subir);
+                bajar.setVisibility(View.VISIBLE);
+                subir.setVisibility(View.VISIBLE);
+            }else if(caso == 2){
+                TablaModificarInventario crear = new TablaModificarInventario();
+                crear.crear(rootView, act, id_elemento, descripcion);
+                ImageView bajar =  (ImageView) rootView.findViewById(R.id.bajar_6);
+                ImageView subir =  (ImageView) rootView.findViewById(R.id.subir_6);
+                bajar.setVisibility(View.VISIBLE);
+                subir.setVisibility(View.VISIBLE);
+            }
         }
     };
+
 
 }
