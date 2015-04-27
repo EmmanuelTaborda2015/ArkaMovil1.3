@@ -32,6 +32,15 @@
                 style="@style/buttonTextArkaMovil"
                 android:id="@+id/funcionario_6" />
 
+
+            <Button
+                style="@style/buttonTextArkaMovil"
+                android:id="@+id/escanear_6"
+                android:editable="false"
+                android:text="Escanear Placa"
+                android:layout_marginTop="20dp"
+                android:onClick="escanear"/>
+
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"

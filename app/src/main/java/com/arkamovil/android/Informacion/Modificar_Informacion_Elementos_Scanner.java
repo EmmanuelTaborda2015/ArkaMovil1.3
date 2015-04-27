@@ -3,20 +3,17 @@ package com.arkamovil.android.Informacion;
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.arkamovil.android.R;
+import com.arkamovil.android.casos_uso.CasoUso6;
 import com.arkamovil.android.procesos.LlenarListas;
-import com.arkamovil.android.procesos.TablaModificarInventario;
-import com.arkamovil.android.servicios_web.WS_Elemento;
 
-public class Modificar_Informacion_Elementos extends Dialog {
+public class Modificar_Informacion_Elementos_Scanner extends Dialog {
 
 
     private Activity c;
@@ -26,45 +23,43 @@ public class Modificar_Informacion_Elementos extends Dialog {
     private TextView serie;
     private Spinner estadoSpin;
 
-    public Modificar_Informacion_Elementos(Activity a, int i) {
+    public Modificar_Informacion_Elementos_Scanner(Activity a) {
         super(a);
         // TODO Auto-generated constructor stub
         this.c = a;
-        this.i = i;
-
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.dg_modificar);
+        setContentView(R.layout.dg_modificar_scanner);
 
-        elemento = (TextView) findViewById(R.id.elemento_61);
-        placa = (TextView) findViewById(R.id.placa_61);
-        serie = (TextView) findViewById(R.id.serial_61);
+        elemento = (TextView) findViewById(R.id.elemento_61s);
+        placa = (TextView) findViewById(R.id.placa_61s);
+        serie = (TextView) findViewById(R.id.serial_61s);
 
-        estadoSpin = (Spinner) findViewById(R.id.estado_61);
+        estadoSpin = (Spinner) findViewById(R.id.estado_61s);
 
-        WS_Elemento datos = new WS_Elemento();
-
-        elemento.setText(datos.getDescripcion().get(i));
-        serie.setText(datos.getMarca().get(i));
-        placa.setText(datos.getPlaca().get(i));
-        serie.setText(datos.getSerie().get(i));
+//        WS_Elemento datos = new WS_Elemento();
+//
+//        elemento.setText(datos.getDescripcion().get(i));
+//        serie.setText(datos.getMarca().get(i));
+//        placa.setText(datos.getPlaca().get(i));
+//        serie.setText(datos.getSerie().get(i));
 
         Button cancelar;
-        cancelar = (Button) findViewById(R.id.cancelar_61);
+        cancelar = (Button) findViewById(R.id.cancelar_61s);
         cancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TablaModificarInventario cerrarDialog = new TablaModificarInventario();
-                cerrarDialog.cerrarDialog();
+                CasoUso6 cerrar = new CasoUso6();
+                cerrar.cerrarDialog();
             }
         });
 
         Button guardar;
-        guardar = (Button) findViewById(R.id.guardar_61);
+        guardar = (Button) findViewById(R.id.guardar_61s);
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,16 +67,11 @@ public class Modificar_Informacion_Elementos extends Dialog {
                 String placaGuardar = String.valueOf(placa.getText());
                 String serieGuardar = String.valueOf(serie.getText());
                 String estadoGuardar = String.valueOf(estadoSpin.getSelectedItem());
-                if ("--Seleccione una opción--".equals(estadoGuardar)) {
-                    Toast.makeText(c, "Porfavor seleccione el estado", Toast.LENGTH_LONG).show();
-                }
-                Log.v("Estado", estadoGuardar);
-
             }
         });
 
         LlenarListas estado = new LlenarListas();
-        estado.llenarSpinnerEstado1(c, estadoSpin);
+        estado.llenarSpinnerEstado2(c, estadoSpin);
     }
 
 }

@@ -23,7 +23,8 @@
 
             <EditText
                 style="@style/buttonTextArkaMovil"
-                android:id="@+id/elemento_61" />
+                android:id="@+id/elemento_61"
+                android:editable="false"/>
 
             <TextView
                 android:id="@+id/label_serial"
@@ -32,9 +33,8 @@
 
             <EditText
                 style="@style/buttonTextArkaMovil"
-                android:inputType="number"
-                android:maxLength="15"
-                android:id="@+id/serial_61" />
+                android:id="@+id/serial_61"
+                android:editable="false"/>
 
             <TextView
                 android:id="@+id/label_placa"
@@ -43,8 +43,7 @@
 
             <EditText
                 style="@style/buttonTextArkaMovil"
-                android:inputType="number"
-                android:maxLength="15"
+                android:editable="false"
                 android:id="@+id/placa_61" />
 
             <TextView

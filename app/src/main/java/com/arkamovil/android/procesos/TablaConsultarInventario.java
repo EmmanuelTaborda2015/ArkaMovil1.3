@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.res.Resources;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -129,7 +130,7 @@ public class TablaConsultarInventario {
         TableRow fila;
         TextView txtId;
         TextView txtDescripcion;
-        TextView txtVer;
+        ImageView txtVer;
 
         for (int i = 0; i < MAX_FILAS; i++) {
             fila = new TableRow(act);
@@ -137,7 +138,7 @@ public class TablaConsultarInventario {
 
             txtId = new TextView(act);
             txtDescripcion = new TextView(act);
-            txtVer = new TextView(act);
+            txtVer = new ImageView(act);
 
             txtId.setText(id_elemento.get(this.inicio + i));
             txtId.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -151,10 +152,8 @@ public class TablaConsultarInventario {
             txtDescripcion.setBackgroundResource(R.drawable.tabla_celda);
             txtDescripcion.setLayoutParams(layoutTexto);
 
-            txtVer.setText("ver");
+            txtVer.setImageResource(R.drawable.ver);
             txtVer.setId(this.inicio + i);
-            txtVer.setGravity(Gravity.CENTER_HORIZONTAL);
-            txtVer.setTextAppearance(act, R.style.etiqueta);
             txtVer.setBackgroundResource(R.drawable.tabla_celda);
             txtVer.setLayoutParams(layoutVer);
             txtVer.setOnClickListener(new View.OnClickListener() {

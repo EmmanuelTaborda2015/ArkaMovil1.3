@@ -17,13 +17,13 @@ import org.ksoap2.transport.HttpTransportSE;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WS_Elemento {
+public class WS_Placa {
 
     private final String NAMESPACE = "arkaurn:arka";
     private final String URL = "http://10.0.2.2/ws/servicio.php?wsdl";
     //private final String URL = "http://10.20.2.12/arka/index.php?wsdl";
-    private final String SOAP_ACTION = "arkaurn:arka/consultar_elementos";
-    private final String METHOD_NAME = "consultar_elementos";
+    private final String SOAP_ACTION = "arkaurn:arka/consultar_elemento_placa";
+    private final String METHOD_NAME = "consultar_elemento_placa";
 
     public Thread getThread() {
         return thread;
@@ -90,7 +90,7 @@ public class WS_Elemento {
         return id_elemento;
     }
 
-    public void startWebAccess(View rootView, Activity actividad, final String nombre_fun, int caso) {
+    public void startWebAccess(View rootView, Activity actividad, final int numPlaca) {
 
         this.rootView = rootView;
         this.act = actividad;
@@ -100,7 +100,7 @@ public class WS_Elemento {
             public void run() {
                 SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 
-                request.addProperty("nombre_funcionario", nombre_fun);
+                request.addProperty("placa", numPlaca);
 
                 SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
                 envelope.setOutputSoapObject(request);
@@ -138,24 +138,9 @@ public class WS_Elemento {
     final Runnable createUI = new Runnable() {
 
         public void run() {
-            //Clase para crear Tablas, se envian como parametros la Vista, La Actividad y los valores para cada una de las columnas (ArrayList)
-            if(caso == 1){
-                TablaConsultarInventario crear = new TablaConsultarInventario();
-                crear.crear(rootView, act, id_elemento, descripcion);
-                ImageView bajar =  (ImageView) rootView.findViewById(R.id.bajar);
-                ImageView subir =  (ImageView) rootView.findViewById(R.id.subir);
-                bajar.setVisibility(View.VISIBLE);
-                subir.setVisibility(View.VISIBLE);
-            }else if(caso == 2){
-                TablaModificarInventario crear = new TablaModificarInventario();
-                crear.crear(rootView, act, id_elemento, descripcion);
-                ImageView bajar =  (ImageView) rootView.findViewById(R.id.bajar_6);
-                ImageView subir =  (ImageView) rootView.findViewById(R.id.subir_6);
-                bajar.setVisibility(View.VISIBLE);
-                subir.setVisibility(View.VISIBLE);
-            }
+
+
         }
     };
-
 
 }

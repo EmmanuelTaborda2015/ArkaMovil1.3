@@ -26,12 +26,20 @@ public class LlenarListas extends Fragment{
         return  adapter;
     }
 
-    public ArrayAdapter<String> llenarSpinnerEstado(Activity act,Spinner spin) {
+    public ArrayAdapter<String> llenarSpinnerEstado1(Activity act,Spinner spin) {
         List<String> toSpin = new ArrayList<String>();
         toSpin.add("--Seleccione una opción--");
         toSpin.add("Sobrante");
         toSpin.add("Faltante");
         toSpin.add("Baja");
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(act,android.R.layout.simple_spinner_item,toSpin);
+        spin.setAdapter(adapter);
+        return  adapter;
+    }
+
+    public ArrayAdapter<String> llenarSpinnerEstado2(Activity act,Spinner spin) {
+        List<String> toSpin = new ArrayList<String>();
+        toSpin.add("Sobrante");
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(act,android.R.layout.simple_spinner_item,toSpin);
         spin.setAdapter(adapter);
         return  adapter;

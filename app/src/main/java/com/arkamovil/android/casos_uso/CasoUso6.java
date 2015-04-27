@@ -1,5 +1,6 @@
 package com.arkamovil.android.casos_uso;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -9,8 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.arkamovil.android.Informacion.Modificar_Informacion_Elementos;
+import com.arkamovil.android.Informacion.Modificar_Informacion_Elementos_Scanner;
 import com.arkamovil.android.R;
 import com.arkamovil.android.herramientas.Despliegue;
 import com.arkamovil.android.procesos.TablaModificarInventario;
@@ -27,11 +33,15 @@ public class CasoUso6 extends Fragment {
 
     private AutoCompleteTextView dep;
     private AutoCompleteTextView fun;
+    private Button scanear;
+
 
     private ImageView bajar;
     private ImageView subir;
 
     private Despliegue despliegue;
+
+    private static Modificar_Informacion_Elementos_Scanner dialog;
 
     private WS_Elemento elem;
 
@@ -100,9 +110,6 @@ public class CasoUso6 extends Fragment {
                     elem = new WS_Elemento();
                     elem.startWebAccess(rootView, getActivity(), String.valueOf(fun.getText()), 2);
 
-
-
-
                 }
             }
         });
@@ -124,6 +131,45 @@ public class CasoUso6 extends Fragment {
             }
         });
 
+        //<!--IMPORTANTE--!>
+        //El proceso que se encarga de leer el código de barras  se encuentra en la clase casos de uso ya que es la actividad principal (Super) y solo desde allí se pueden generar los procesos.
+
+
+        scanear = (Button) rootView.findViewById(R.id.escanear_6);
+        scanear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent("com.arkamovil.android.SCAN");
+                startActivityForResult(intent, 0);
+            }
+        });
+
+
         return rootView;
+    }
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //En esta función se llama a la libreria encargada de leer y obtener la información de los códigos de barras despues de que se ha generado el intent.
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+
+        if (resultCode == getActivity().RESULT_OK) {
+            String contenido = intent.getStringExtra("SCAN_RESULT");
+            String formato = intent.getStringExtra("SCAN_RESULT_FORMAT");
+
+            scanear.setText(contenido);
+
+            dialog = new Modificar_Informacion_Elementos_Scanner(getActivity());
+            dialog.show();
+
+        } else if (resultCode == getActivity().RESULT_CANCELED) {
+            // Si se cancelo la captura.
+        }
+
+    }
+
+    public void cerrarDialog() {
+        dialog.dismiss();
     }
 }

@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.arkamovil.android.R;
@@ -22,40 +24,11 @@ public class CasosUso extends ActionBarActivity
 
     int cont = 0;
 
+    private Button scanear;
+
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
     private CharSequence mTitle;
-
-
-    //función que captura el evento scanner del fragmen fm_casouso4, que inicia la captura del código de barras
-
-    public void escanear(View v){
-        Intent intent = new Intent("com.arkamovil.android.SCAN");
-        startActivityForResult(intent, 0);
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    //En esta función se llama a la libreria encargada de leer y obtener la información de los códigos de barras.
-
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        if (requestCode == 0) {
-            if (resultCode == RESULT_OK) {
-                String contenido = intent.getStringExtra("SCAN_RESULT");
-                String formato = intent.getStringExtra("SCAN_RESULT_FORMAT");
-                // Hacer algo con los datos obtenidos.
-
-                Toast.makeText(getApplicationContext(), contenido, Toast.LENGTH_SHORT).show();
-
-
-            } else if (resultCode == RESULT_CANCELED) {
-                // Si se cancelo la captura.
-            }
-        }
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 
     @Override
