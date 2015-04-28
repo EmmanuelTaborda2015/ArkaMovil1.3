@@ -2,6 +2,7 @@ package com.arkamovil.android.servicios_web;
 
 import android.app.Activity;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -20,8 +21,8 @@ import java.util.List;
 public class WS_Elemento {
 
     private final String NAMESPACE = "arkaurn:arka";
-    private final String URL = "http://10.0.2.2/ws/servicio.php?wsdl";
-    //private final String URL = "http://10.20.2.12/arka/index.php?wsdl";
+    //private final String URL = "http://10.0.2.2/ws/servicio.php?wsdl";
+    private final String URL = "http://10.20.0.38/ws_arka_android/servicio.php?wsdl";
     private final String SOAP_ACTION = "arkaurn:arka/consultar_elementos";
     private final String METHOD_NAME = "consultar_elementos";
 
@@ -100,31 +101,54 @@ public class WS_Elemento {
             public void run() {
                 SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 
-                request.addProperty("nombre_funcionario", nombre_fun);
+                request.addProperty("nom_fun", nombre_fun);
 
                 SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
                 envelope.setOutputSoapObject(request);
 
                 HttpTransportSE httpTransport = new HttpTransportSE(URL);
 
+                //Log.v("aqui", "Aquiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
+
                 try {
 
                     httpTransport.call(SOAP_ACTION, envelope);
 
                     SoapObject obj1 = (SoapObject) envelope.getResponse();
-                    for (int i = 0; i < obj1.getPropertyCount(); i++) {
-                        SoapObject obj2 = (SoapObject) obj1.getProperty(i);
-                        id_elemento.add(obj2.getProperty("id_elemento").toString());
-                        descripcion.add(obj2.getProperty("descripcion").toString());
-                        nivel.add(obj2.getProperty("nivel").toString());
-                        marca.add(obj2.getProperty("marca").toString());
-                        placa.add(obj2.getProperty("placa").toString());
-                        serie.add(obj2.getProperty("serie").toString());
-                        valor.add(obj2.getProperty("valor").toString());
-                        subtotal.add(obj2.getProperty("subtotal_sin_iva").toString());
-                        iva.add(obj2.getProperty("total_iva").toString());
-                        total.add(obj2.getProperty("total_iva_con").toString());
-                    }
+
+                    Log.v("aqui", "Aquiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
+
+                    int c = -1;
+
+                    for (int i = 0; i < obj1.getPropertyCount() / 10; i++) {
+
+                            id_elemento.add(obj1.getProperty(c++).toString());
+                            descripcion.add(obj1.getProperty(c++).toString());
+                            nivel.add(obj1.getProperty(c++).toString());
+                            marca.add(obj1.getProperty(c++).toString());
+
+                            serie.add(obj1.getProperty(c++).toString());
+                            valor.add(obj1.getProperty(c++).toString());
+                            subtotal.add(obj1.getProperty(c++).toString());
+                            iva.add(obj1.getProperty(c++).toString());
+                            total.add(obj1.getProperty(c++).toString());
+                            placa.add(obj1.getProperty(c++).toString());
+                        }
+
+                    Log.v("Aqui", placa.get(0)+"              Aquiiiiiiiiiiiiii");
+//                    for (int i = 0; i < obj1.getPropertyCount(); i++) {
+//                        SoapObject obj2 = (SoapObject) obj1.getProperty(i);
+//                        id_elemento.add(obj2.getProperty("id_elemento").toString());
+//                        descripcion.add(obj2.getProperty("descripcion").toString());
+//                        nivel.add(obj2.getProperty("nivel").toString());
+//                        marca.add(obj2.getProperty("marca").toString());
+//                        placa.add(obj2.getProperty("placa").toString());
+//                        serie.add(obj2.getProperty("serie").toString());
+//                        valor.add(obj2.getProperty("valor").toString());
+//                        subtotal.add(obj2.getProperty("subtotal_sin_iva").toString());
+//                        iva.add(obj2.getProperty("total_iva").toString());
+//                        total.add(obj2.getProperty("total_iva_con").toString());
+//                    }
 
                 } catch (Exception exception) {
                 }
@@ -139,18 +163,18 @@ public class WS_Elemento {
 
         public void run() {
             //Clase para crear Tablas, se envian como parametros la Vista, La Actividad y los valores para cada una de las columnas (ArrayList)
-            if(caso == 1){
+            if (caso == 1) {
                 TablaConsultarInventario crear = new TablaConsultarInventario();
                 crear.crear(rootView, act, id_elemento, descripcion);
-                ImageView bajar =  (ImageView) rootView.findViewById(R.id.bajar);
-                ImageView subir =  (ImageView) rootView.findViewById(R.id.subir);
+                ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar);
+                ImageView subir = (ImageView) rootView.findViewById(R.id.subir);
                 bajar.setVisibility(View.VISIBLE);
                 subir.setVisibility(View.VISIBLE);
-            }else if(caso == 2){
+            } else if (caso == 2) {
                 TablaModificarInventario crear = new TablaModificarInventario();
                 crear.crear(rootView, act, id_elemento, descripcion);
-                ImageView bajar =  (ImageView) rootView.findViewById(R.id.bajar_6);
-                ImageView subir =  (ImageView) rootView.findViewById(R.id.subir_6);
+                ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_6);
+                ImageView subir = (ImageView) rootView.findViewById(R.id.subir_6);
                 bajar.setVisibility(View.VISIBLE);
                 subir.setVisibility(View.VISIBLE);
             }
