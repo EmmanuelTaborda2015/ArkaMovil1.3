@@ -18,6 +18,7 @@
                 <TextView
                     android:id="@+id/label_fecha"
                     android:text="@string/string_fecha"
+                    android:editable="false"
                     style="@style/labelArkaMovil"/>
 
                 <TextView
