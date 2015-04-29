@@ -14,7 +14,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arkamovil.android.R;
+import com.arkamovil.android.procesos.GenerarPDF_ActaVisita;
 import com.arkamovil.android.procesos.LlenarListas;
+import com.arkamovil.android.procesos.TablaConsultarInventario;
 
 import java.util.Calendar;
 
@@ -92,6 +94,15 @@ public class CasoUso1 extends Fragment {
         llenar.llenarSpinner(getActivity(), (Spinner) rootView.findViewById(R.id.sede));
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
+        Button descargarPDF = (Button) rootView.findViewById(R.id.descargar);
+        descargarPDF.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GenerarPDF_ActaVisita generar = new GenerarPDF_ActaVisita();
+                generar.generar(getResources());
+            }
+        });
+
 
         return rootView;
     }

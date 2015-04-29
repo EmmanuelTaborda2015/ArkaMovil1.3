@@ -89,6 +89,7 @@
     <orderEntry type="library" exported="" name="ksoap2-android-assembly-3.0.0-jar-with-dependencies" level="project" />
     <orderEntry type="library" exported="" name="1_ksoap2-android-assembly-3.0.0-jar-with-dependencies" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-22.0.0" level="project" />
+    <orderEntry type="library" exported="" name="droidText.0.4" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-22.0.0" level="project" />
     <orderEntry type="module" module-name="ksoap2-android-assembly-3.0.0-jar-with-dependencies" exported="" />
     <orderEntry type="module" module-name="CaptureActivity" exported="" />

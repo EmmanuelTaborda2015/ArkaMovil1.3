@@ -27,4 +27,5 @@ dependencies {
     compile project(':ksoap2-android-assembly-3.0.0-jar-with-dependencies')
     compile files('/home/Emmanuel/Escritorio/ArkaMovil1.3/librerias/ksoap2-android-assembly-3.0.0-jar-with-dependencies.jar')
     compile files('/home/Emmanuel/Escritorio/ArkaMovil1.3/ksoap2-android-assembly-3.0.0-jar-with-dependencies/ksoap2-android-assembly-3.0.0-jar-with-dependencies.jar')
+    compile files('/home/emmanuel/Escritorio/ArkaMovil1.3/librerias/droidText.0.4.jar')
 }
