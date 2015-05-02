@@ -22,45 +22,67 @@
                     style="@style/labelArkaMovil"/>
 
                 <TextView
-                    android:layout_below="@+id/label_fecha"
                     android:id="@+id/fecha"
+                    android:gravity="center"
                     style="@style/buttonTextArkaMovil"
                     android:text="@string/formatofecha"
                     android:textColor="@color/GRIS"/>
 
                 <TextView
-                    android:layout_below="@+id/fecha"
                     android:id="@+id/label_sede"
                     android:text="@string/string_sede"
                     style="@style/labelArkaMovil"/>
 
-                <Spinner
-                    android:layout_below="@+id/label_sede"
-                    android:id="@+id/sede"
-                    style="@style/buttonTextArkaMovil"/>
+                <AutoCompleteTextView
+                    style="@style/buttonTextArkaMovil"
+                    android:id="@+id/sede_c1" />
 
                 <TextView
-                    android:layout_below="@+id/sede"
-                    android:id="@+id/label_documento"
-                    android:text="@string/string_documento"
+                    android:id="@+id/label_facultad"
+                    android:text="@string/String_facultad"
                     style="@style/labelArkaMovil"/>
 
-                <EditText
-                    android:layout_below="@+id/label_documento"
-                    android:id="@+id/documento"
-                    android:maxLength="15"
-                    android:inputType="number"
-                    style="@style/textViewArkaMovil"/>
+                <AutoCompleteTextView
+                    style="@style/buttonTextArkaMovil"
+                    android:id="@+id/facultad_c1" />
+
 
                 <TextView
-                    android:layout_below="@+id/documento"
+                    android:id="@+id/label_dependencia"
+                    android:text="@string/String_dependencia"
+                    style="@style/labelArkaMovil"/>
+
+                <AutoCompleteTextView
+                    style="@style/buttonTextArkaMovil"
+                    android:id="@+id/dependencia_c1" />
+
+                <TextView
+                    android:id="@+id/label_nombreresponsable"
+                    android:text="@string/String_nombreresponsable"
+                    style="@style/labelArkaMovil"/>
+
+                <AutoCompleteTextView
+                    style="@style/buttonTextArkaMovil"
+                    android:id="@+id/nombreresponsable_c1" />
+
+                <TextView
+                    android:id="@+id/label_ceularesponsable"
+                    android:text="@string/String_cedularesponsable"
+                    style="@style/labelArkaMovil"/>
+
+                <AutoCompleteTextView
+                    style="@style/buttonTextArkaMovil"
+                    android:inputType="number"
+                    android:maxLength="15"
+                    android:id="@+id/cedularesponsable_c1" />
+
+                <TextView
                     android:id="@+id/label_observacion"
                     android:text="@string/string_observacion"
                     style="@style/labelArkaMovil"/>
 
                 <EditText
-                    android:layout_below="@+id/label_observacion"
-                    android:id="@+id/observacion"
+                    android:id="@+id/observacion_c1"
                     android:inputType="textMultiLine"
                     android:lines="5"
                     android:maxLines = "5"
@@ -70,14 +92,26 @@
                     style="@style/textViewArkaMovil"/>
 
                 <TextView
-                    android:layout_below="@+id/observacion"
+                    android:id="@+id/label_numerovisita"
+                    android:text="@string/String_numerovisita"
+                    style="@style/labelArkaMovil"/>
+
+                <AutoCompleteTextView
+                    style="@style/buttonTextArkaMovil"
+                    android:inputType="number"
+                    android:editable="false"
+                    android:id="@+id/numerovisita" />
+
+                <TextView
                     android:id="@+id/label_proxvis"
                     android:text="@string/string_proxvis"
                     style="@style/labelArkaMovil"/>
 
+
+
                 <TextView
-                    android:layout_below="@+id/label_proxvis"
-                    android:id="@+id/proxvis"
+                    android:id="@+id/proxvis_c1"
+                    android:gravity="center"
                     style="@style/buttonTextArkaMovil"
                     android:text="@string/formatofecha"
                     android:textColor="@color/GRIS"/>
@@ -85,7 +119,8 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Descargar"
+                    android:layout_marginTop="10dp"
+                    android:text="Generar PDF"
                     android:id="@+id/descargar"/>
 
             </LinearLayout>

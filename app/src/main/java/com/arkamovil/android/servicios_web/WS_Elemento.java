@@ -108,8 +108,6 @@ public class WS_Elemento {
 
                 HttpTransportSE httpTransport = new HttpTransportSE(URL);
 
-                //Log.v("aqui", "Aquiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
-
                 try {
 
                     httpTransport.call(SOAP_ACTION, envelope);
@@ -118,37 +116,20 @@ public class WS_Elemento {
 
                     Log.v("aqui", "Aquiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
 
-                    int c = -1;
 
-                    for (int i = 0; i < obj1.getPropertyCount() / 10; i++) {
-
-                            id_elemento.add(obj1.getProperty(c++).toString());
-                            descripcion.add(obj1.getProperty(c++).toString());
-                            nivel.add(obj1.getProperty(c++).toString());
-                            marca.add(obj1.getProperty(c++).toString());
-
-                            serie.add(obj1.getProperty(c++).toString());
-                            valor.add(obj1.getProperty(c++).toString());
-                            subtotal.add(obj1.getProperty(c++).toString());
-                            iva.add(obj1.getProperty(c++).toString());
-                            total.add(obj1.getProperty(c++).toString());
-                            placa.add(obj1.getProperty(c++).toString());
-                        }
-
-                    Log.v("Aqui", placa.get(0)+"              Aquiiiiiiiiiiiiii");
-//                    for (int i = 0; i < obj1.getPropertyCount(); i++) {
-//                        SoapObject obj2 = (SoapObject) obj1.getProperty(i);
-//                        id_elemento.add(obj2.getProperty("id_elemento").toString());
-//                        descripcion.add(obj2.getProperty("descripcion").toString());
-//                        nivel.add(obj2.getProperty("nivel").toString());
-//                        marca.add(obj2.getProperty("marca").toString());
-//                        placa.add(obj2.getProperty("placa").toString());
-//                        serie.add(obj2.getProperty("serie").toString());
-//                        valor.add(obj2.getProperty("valor").toString());
-//                        subtotal.add(obj2.getProperty("subtotal_sin_iva").toString());
-//                        iva.add(obj2.getProperty("total_iva").toString());
-//                        total.add(obj2.getProperty("total_iva_con").toString());
-//                    }
+                    for (int i = 0; i < obj1.getPropertyCount(); i++) {
+                        SoapObject obj2 = (SoapObject) obj1.getProperty(i);
+                        id_elemento.add(obj2.getProperty("id_elemento").toString());
+                        descripcion.add(obj2.getProperty("descripcion").toString());
+                        nivel.add(obj2.getProperty("nivel").toString());
+                        marca.add(obj2.getProperty("marca").toString());
+                        placa.add(obj2.getProperty("placa").toString());
+                        serie.add(obj2.getProperty("serie").toString());
+                        valor.add(obj2.getProperty("valor").toString());
+                        subtotal.add(obj2.getProperty("subtotal_sin_iva").toString());
+                        iva.add(obj2.getProperty("total_iva").toString());
+                        total.add(obj2.getProperty("total_iva_con").toString());
+                    }
 
                 } catch (Exception exception) {
                 }

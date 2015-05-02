@@ -10,6 +10,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 
 import com.arkamovil.android.R;
+import com.arkamovil.android.herramientas.Despliegue;
 import com.arkamovil.android.procesos.TablaConsultarInventario;
 import com.arkamovil.android.servicios_web.WS_Dependencia;
 import com.arkamovil.android.servicios_web.WS_Elemento;
@@ -20,7 +21,6 @@ import java.util.List;
 
 public class CasoUso5 extends Fragment {
 
-    private int contador1 = 0;
     private AutoCompleteTextView dep;
     private AutoCompleteTextView fun;
     private ImageView bajar;
@@ -43,26 +43,14 @@ public class CasoUso5 extends Fragment {
         subir.setVisibility(View.INVISIBLE);
 
         //Se envia parametros de vista y de campo AutoComplete al web service de dependencias.
-        if (contador1 == 0) {
-            WS_Dependencia cargar_dependencias = new WS_Dependencia();
-            cargar_dependencias.startWebAccess(getActivity(), dep);
-            lista_dependencia = cargar_dependencias.getDependecia();
-            contador1++;
-        }
 
-        fun.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fun.showDropDown();
-            }
-        });
+        WS_Dependencia cargar_dependencias = new WS_Dependencia();
+        cargar_dependencias.startWebAccess(getActivity(), dep);
+        lista_dependencia = cargar_dependencias.getDependecia();
 
-        dep.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dep.showDropDown();
-            }
-        });
+
+        Despliegue despFuncionario = new Despliegue(fun);
+        Despliegue despDependencia = new Despliegue(dep);
 
         //Se genera esta función cuando se selecciona un item de la lista
         dep.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -91,9 +79,9 @@ public class CasoUso5 extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                if(!"".equals(String.valueOf(dep.getText()))) {
+                if (!"".equals(String.valueOf(dep.getText()))) {
                     WS_Elemento elem = new WS_Elemento();
-                    elem.startWebAccess(rootView, getActivity(), String.valueOf(fun.getText()),1);
+                    elem.startWebAccess(rootView, getActivity(), String.valueOf(fun.getText()), 1);
                 }
             }
         });

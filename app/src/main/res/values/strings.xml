@@ -49,10 +49,14 @@
     <!--Caso uso 1-->
 
     <string name="formatofecha">dd:mm:aa</string>
+    <string name="String_facultad">Facultad</string>
 
     <!--Caso uso 5-->
 
     <string name="String_funcionario">Funcionario</string>
+    <string name="String_nombreresponsable">Nombre del responsable</string>
+    <string name="String_cedularesponsable">Cédula del responsable</string>
+    <string name="String_numerovisita">Visita #</string>
     <string name="String_dependencia">Dependencia</string>
     <string name="String_estado">Estado</string>
     <string name="id">Id</string>

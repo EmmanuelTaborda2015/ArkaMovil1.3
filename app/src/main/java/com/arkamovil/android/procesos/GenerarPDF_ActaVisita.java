@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.arkamovil.android.R;
+import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Element;
@@ -28,10 +29,15 @@ import com.lowagie.text.HeaderFooter;
 import com.lowagie.text.Image;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.Phrase;
+import com.lowagie.text.Rectangle;
 import com.lowagie.text.pdf.ColumnText;
+import com.lowagie.text.pdf.MultiColumnText;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
+import com.lowagie.text.pdf.draw.LineSeparator;
+
+import org.w3c.dom.Text;
 
 public class GenerarPDF_ActaVisita{
 
@@ -40,11 +46,55 @@ public class GenerarPDF_ActaVisita{
     private final static String ETIQUETA_ERROR = "ERROR";
 
 
-    public  void generar(Resources resources){
+    public  void generar(Resources resources, String fecha, String sede, String facultad, String dependencia, String nomres, String cedres, String obser, String numvis, String proxVisita){
         // Creamos el documento.
         Document documento = new Document();
 
         try {
+
+
+            String fechaDia = "";
+            String fechaMes = "";
+            String fechaAnno = "";
+            String proxvisDia = "";
+            String proxvisMes = "";
+            String proxvisAnno = "";
+
+            char cFecha[] = fecha.toCharArray();
+            int contador = 0;
+
+            for(int i=0; i<cFecha.length; i++){
+                if('-' == cFecha[i]){
+                    contador++;
+                }else{
+                    if(contador == 0){
+                        fechaDia += cFecha[i];
+                    }else if (contador == 1){
+                        fechaMes += cFecha[i];
+                    }else if(contador == 2){
+                        fechaAnno += cFecha[i];
+                    }
+                }
+            }
+
+            char cProximaVisita[] = proxVisita.toCharArray();
+            contador = 0;
+
+            for(int i=0; i<cProximaVisita.length; i++){
+                if('-' == cProximaVisita[i]){
+                    contador++;
+                }else{
+                    if(contador == 0){
+                        proxvisDia+= cProximaVisita[i];
+                    }else if (contador == 1){
+                        proxvisMes += cProximaVisita[i];
+                    }else if(contador == 2){
+                        proxvisAnno += cProximaVisita[i];
+                    }
+                }
+
+
+            }
 
             // Creamos el fichero con el nombre que deseemos.
             File f = crearFichero(NOMBRE_DOCUMENTO);
@@ -59,9 +109,9 @@ public class GenerarPDF_ActaVisita{
 
             // Incluimos el p�e de p�gina y una cabecera
             HeaderFooter cabecera = new HeaderFooter(new Phrase(
-                    "Esta es mi cabecera"), false);
+                    "Cabecera"), false);
             HeaderFooter pie = new HeaderFooter(new Phrase(
-                    "Este es mi pie de p�gina"), false);
+                    "Pie Página"), false);
 
             documento.setHeader(cabecera);
             documento.setFooter(pie);
@@ -69,10 +119,12 @@ public class GenerarPDF_ActaVisita{
             // Abrimos el documento.
             documento.open();
 
+            Paragraph text1 = new Paragraph("\n");
+            Paragraph text = new Paragraph("\n\n\n");
+
             // se añade el titulo
 
-
-            Paragraph titulo = new Paragraph("UNIVERSIDAD DISTRITAL \"FRANCISCO JOSE DE CALDAS\"");
+            Paragraph titulo = new Paragraph("UNIVERSIDAD DISTRITAL \"FRANCISCO JOSE DE CALDAS\" \n ALMACEN GENERAL E INVENTARIOS");
 
             Font font1 = FontFactory.getFont(FontFactory.HELVETICA, 40,
                     Font.BOLD, Color.BLACK);
@@ -81,34 +133,18 @@ public class GenerarPDF_ActaVisita{
 
             titulo.setFont(font1);
 
-            //documento.add(titulo);
-
 
             // se añade el subtitulo
 
-            Paragraph subtitulo1 = new Paragraph("ALMACEN GENERAL E INVENTARIOS");
+            Paragraph subtitulo2 = new Paragraph("VISITA DE LEVANTAMIENTO FISICO DE INVENTARIOS");
 
 
             Font font2 = FontFactory.getFont(FontFactory.HELVETICA, 38,
                     Font.BOLD, Color.BLACK);
 
-            subtitulo1.setAlignment(Element.ALIGN_CENTER);
-
-            subtitulo1.setFont(font2);
-
-            //documento.add(subtitulo1);
-
-            Paragraph subtitulo2 = new Paragraph("VISITA DE LEVANTAMIENTO FISICO DE INVENTARIOS");
-
-
-            font2 = FontFactory.getFont(FontFactory.HELVETICA, 38,
-                    Font.BOLD, Color.BLACK);
-
             subtitulo2.setAlignment(Element.ALIGN_CENTER);
 
             subtitulo2.setFont(font2);
-
-            //documento.add(subtitulo2);
 
             // Insertamos una imagen que se encuentra en los recursos de la
             Bitmap bitmap = BitmapFactory.decodeResource(resources,
@@ -116,6 +152,9 @@ public class GenerarPDF_ActaVisita{
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.PNG, 5, stream);
             Image imagen = Image.getInstance(stream.toByteArray());
+            imagen.scaleAbsolute(65, 90);
+
+            imagen.setAlignment(Element.ALIGN_CENTER);
 
             //documento.add(imagen);
 
@@ -123,55 +162,42 @@ public class GenerarPDF_ActaVisita{
 
             PdfPCell cell;
             cell = new PdfPCell(new Phrase(titulo));
+            cell.setBorder(0);
             cell.setColspan(2);
+            cell.setPaddingBottom(5);
+            cell.setPaddingTop(5);
             cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             tablaTitulo.addCell(cell);
 
-
-            cell = new PdfPCell(new Phrase());
-            cell.setImage(imagen);
-            cell.setRowspan(2);
+            cell = new PdfPCell(new Phrase(subtitulo2));
+            cell.setBorder(0);
+            cell.setColspan(2);
+            cell.setPaddingBottom(5);
+            cell.setPaddingTop(5);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
             tablaTitulo.addCell(cell);
-            // we add the four remaining cells with addCell()
-            tablaTitulo.addCell(subtitulo1);
-            tablaTitulo.addCell(subtitulo2);
 
             documento.add(tablaTitulo);
 
-            // Insertamos una tabla.
-            PdfPTable tabla = new PdfPTable(1);
-            for (int i = 0; i < 9; i++) {
-                tabla.addCell("Celda " + i);
+            documento.add(imagen);
 
-            }
+            documento.add(text1);
 
+            PdfPTable tablaFecha = new PdfPTable(4);
+            PdfPCell dat;
 
-            String sede = "Macarena";
-            String facultad = "Ingenieria";
-            String dependencia = "Sistemas";
-            String nomres = "Emmanuel";
-            String cedres = "1032418";
-            String obser = "Hola esta es una prueba para ver como se desenvuelven las diferentes observaciones";
-            String numvis = "1";
-            String fechaDia = "15";
-            String fechaMes = "04";
-            String fechaAnno = "15";
-            String proxvisDia = "14";
-            String proxvisMes = "05";
-            String proxvisAnno = "15";
+            dat = new PdfPCell(new Phrase("FECHA"));
+            dat.setRowspan(3);
+            tablaFecha.addCell(dat);
+            // we add the four remaining cells with addCell()
+            tablaFecha.addCell("  Dia  " + fechaDia);
+            tablaFecha.addCell("  Mes  " + fechaMes);
+            tablaFecha.addCell("  Año  " + fechaAnno);
 
-            //documento.add(tabla);
+            documento.add(tablaFecha);
 
             PdfPTable tablaDatos = new PdfPTable(4);
-
             PdfPCell Datos;
-            Datos = new PdfPCell(new Phrase("FECHA"));
-            Datos.setRowspan(3);
-            tablaDatos.addCell(Datos);
-            // we add the four remaining cells with addCell()
-            tablaDatos.addCell("Dia  " + fechaDia);
-            tablaDatos.addCell("Mes  " + fechaMes);
-            tablaDatos.addCell("Año  " + fechaAnno);
 
             Datos = new PdfPCell(new Phrase("SEDE:" + "\n\n" + sede));
             Datos.setColspan(4);
@@ -212,21 +238,38 @@ public class GenerarPDF_ActaVisita{
             Datos.setRowspan(4);
             tablaDatos.addCell(Datos);
             // we add the four remaining cells with addCell()
-            tablaDatos.addCell("Dia  " + fechaDia);
-            tablaDatos.addCell("Mes  " + fechaMes);
-            tablaDatos.addCell("Año  " + fechaAnno);
+            tablaDatos.addCell("  Dia  " + proxvisDia);
+            tablaDatos.addCell("  Mes  " + proxvisMes);
+            tablaDatos.addCell("  Año  " + proxvisAnno);
 
             documento.add(tablaDatos);
 
-            Datos.setHorizontalAlignment(Element.ALIGN_CENTER);
-            tablaTitulo.addCell(Datos);
+            documento.add(text);
+
+            PdfPCell myCell1 = new PdfPCell(new Paragraph("FIRMA FUNCIONARIO DE ALMACEN") );
+            myCell1.setBorder(Rectangle.TOP);
+
+            PdfPCell myCell2 = new PdfPCell(new Paragraph("FIRMA RESPONSABLE DE INVENTARIO") );
+            myCell2.setBorder(Rectangle.TOP);
+
+            PdfPCell myCell3 = new PdfPCell(new Paragraph());
+            myCell3.setBorder(0);
+
+            PdfPTable tablaFirmas = new PdfPTable(3);
+
+            //Datos.setColspan(2);
+            tablaFirmas.addCell(myCell1);
+            tablaFirmas.addCell(myCell3);
+            tablaFirmas.addCell(myCell2);
+
+            documento.add(tablaFirmas);
 
             // Agregar marca de agua
             Font font3 = FontFactory.getFont(FontFactory.HELVETICA, 42, Font.BOLD,
                     Color.GRAY);
             ColumnText.showTextAligned(writer.getDirectContentUnder(),
                     Element.ALIGN_CENTER, new Paragraph(
-                            "amatellanes.wordpress.com", font3), 297.5f, 421,
+                            "Oficina Asesora de Sistemas", font3), 297.5f, 421,
                     writer.getPageNumber() % 2 == 1 ? 45 : -45);
 
         } catch (DocumentException e) {

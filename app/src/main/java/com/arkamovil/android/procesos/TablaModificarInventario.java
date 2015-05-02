@@ -40,6 +40,8 @@ public class TablaModificarInventario {
     private static int inicio = -5;
     private static int contador = 0;
 
+    private int tamanoPantalla;
+
 
     private int MAX_FILAS = 0;
 
@@ -52,24 +54,41 @@ public class TablaModificarInventario {
         this.id_elemento = id;
         this.descripcion = desc;
 
+        tamanoPantalla = rootView.getWidth();
+
+
         rs = actividad.getResources();
         tabla = (TableLayout) rootView.findViewById(R.id.tabla_6);
         cabecera = (TableLayout) rootView.findViewById(R.id.cabecera_6);
         layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT);
-        layoutId = new TableRow.LayoutParams(100, TableRow.LayoutParams.WRAP_CONTENT);
-        layoutTexto = new TableRow.LayoutParams(160, TableRow.LayoutParams.WRAP_CONTENT);
-        layoutMod = new TableRow.LayoutParams(160, TableRow.LayoutParams.MATCH_PARENT);
+        layoutId = new TableRow.LayoutParams((int) (tamanoPantalla*0.2), TableRow.LayoutParams.WRAP_CONTENT);
+        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla*0.35), TableRow.LayoutParams.WRAP_CONTENT);
+        layoutMod = new TableRow.LayoutParams((int) (tamanoPantalla*0.35), TableRow.LayoutParams.MATCH_PARENT);
 
         int val1 = 0;
         int val2 = 0;
 
+        if (id_elemento.size() > 0) {
+            val1 = ((int) id_elemento.size() / 5);
+            val2 = id_elemento.size() % 5;
+        }
 
-        this.inicio = this.inicio + 5;
-        //tabla.removeAllViews();
-        //cabecera.removeAllViews();
-        agregarCabecera();
-        agregarFilasTabla();
+        if (contador < val1) {
+            this.inicio = this.inicio + 5;
+            tabla.removeAllViews();
+            cabecera.removeAllViews();
+            agregarCabecera();
+            agregarFilasTabla();
+        } else if (contador == val1) {
+            this.inicio = this.inicio + 5;
+            MAX_FILAS = val2;
+            tabla.removeAllViews();
+            cabecera.removeAllViews();
+            agregarCabecera();
+            agregarFilasTabla();
+        }
+
         contador++;
     }
 
@@ -170,9 +189,9 @@ public class TablaModificarInventario {
         cabecera = (TableLayout) rootView.findViewById(R.id.cabecera_6);
         layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT);
-        layoutId = new TableRow.LayoutParams(100, TableRow.LayoutParams.WRAP_CONTENT);
-        layoutTexto = new TableRow.LayoutParams(160, TableRow.LayoutParams.WRAP_CONTENT);
-        layoutMod = new TableRow.LayoutParams(160, TableRow.LayoutParams.MATCH_PARENT);
+        layoutId = new TableRow.LayoutParams((int) (tamanoPantalla*0.2), TableRow.LayoutParams.WRAP_CONTENT);
+        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla*0.35), TableRow.LayoutParams.WRAP_CONTENT);
+        layoutMod = new TableRow.LayoutParams((int) (tamanoPantalla*0.35), TableRow.LayoutParams.MATCH_PARENT);
 
         int val1 = 0;
         int val2 = 0;
@@ -210,9 +229,9 @@ public class TablaModificarInventario {
         cabecera = (TableLayout) rootView.findViewById(R.id.cabecera_6);
         layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT);
-        layoutId = new TableRow.LayoutParams(100, TableRow.LayoutParams.WRAP_CONTENT);
-        layoutTexto = new TableRow.LayoutParams(160, TableRow.LayoutParams.WRAP_CONTENT);
-        layoutMod = new TableRow.LayoutParams(160, TableRow.LayoutParams.MATCH_PARENT);
+        layoutId = new TableRow.LayoutParams((int) (tamanoPantalla*0.2), TableRow.LayoutParams.WRAP_CONTENT);
+        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla*0.35), TableRow.LayoutParams.WRAP_CONTENT);
+        layoutMod = new TableRow.LayoutParams((int) (tamanoPantalla*0.35), TableRow.LayoutParams.MATCH_PARENT);
 
         int val1 = 0;
         int val2 = 0;
@@ -250,9 +269,9 @@ public class TablaModificarInventario {
         cabecera = (TableLayout) rootView.findViewById(R.id.cabecera_6);
         layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT);
-        layoutId = new TableRow.LayoutParams(160, TableRow.LayoutParams.WRAP_CONTENT);
-        layoutTexto = new TableRow.LayoutParams(160, TableRow.LayoutParams.WRAP_CONTENT);
-        layoutMod = new TableRow.LayoutParams(100, TableRow.LayoutParams.MATCH_PARENT);
+        layoutId = new TableRow.LayoutParams((int) (tamanoPantalla*0.2), TableRow.LayoutParams.WRAP_CONTENT);
+        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla*0.35), TableRow.LayoutParams.WRAP_CONTENT);
+        layoutMod = new TableRow.LayoutParams((int) (tamanoPantalla*0.35), TableRow.LayoutParams.MATCH_PARENT);
 
         tabla.removeAllViews();
         cabecera.removeAllViews();
