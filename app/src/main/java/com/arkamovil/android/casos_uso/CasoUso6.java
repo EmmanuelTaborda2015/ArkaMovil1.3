@@ -67,7 +67,7 @@ public class CasoUso6 extends Fragment {
         //Se envia parametros de vista y de dependencia seleccionada en el campo AutoComplete al web service de dependencias.
         if (contador1 == 0) {
             WS_Dependencia cargar_dependencias = new WS_Dependencia();
-            cargar_dependencias.startWebAccess(getActivity(), dep);
+            cargar_dependencias.startWebAccess(getActivity(), dep,"aqui","aqui");
             lista_dependencia = cargar_dependencias.getDependecia();
             contador1++;
         }

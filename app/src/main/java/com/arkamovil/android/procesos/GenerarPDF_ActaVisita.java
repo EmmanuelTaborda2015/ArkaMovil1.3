@@ -42,11 +42,14 @@ import org.w3c.dom.Text;
 public class GenerarPDF_ActaVisita{
 
     private final static String NOMBRE_DIRECTORIO = "Acta de Visita";
-    private final static String NOMBRE_DOCUMENTO = "prueba.pdf";
+    private static String NOMBRE_DOCUMENTO = "prueba.pdf";
     private final static String ETIQUETA_ERROR = "ERROR";
 
 
     public  void generar(Resources resources, String fecha, String sede, String facultad, String dependencia, String nomres, String cedres, String obser, String numvis, String proxVisita){
+
+        NOMBRE_DOCUMENTO = "Actavisita"+numvis+".pdf";
+
         // Creamos el documento.
         Document documento = new Document();
 

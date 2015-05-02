@@ -45,7 +45,7 @@ public class CasoUso5 extends Fragment {
         //Se envia parametros de vista y de campo AutoComplete al web service de dependencias.
 
         WS_Dependencia cargar_dependencias = new WS_Dependencia();
-        cargar_dependencias.startWebAccess(getActivity(), dep);
+        cargar_dependencias.startWebAccess(getActivity(), dep,"aqui", "aqui");
         lista_dependencia = cargar_dependencias.getDependecia();
 
 
