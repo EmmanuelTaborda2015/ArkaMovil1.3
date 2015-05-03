@@ -2,6 +2,7 @@ package com.arkamovil.android.procesos;
 
 import android.app.Activity;
 import android.content.res.Resources;
+import android.media.Image;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -57,15 +58,14 @@ public class TablaModificarInventario {
 
         tamanoPantalla = rootView.getWidth();
 
-
         rs = actividad.getResources();
         tabla = (TableLayout) rootView.findViewById(R.id.tabla_6);
         cabecera = (TableLayout) rootView.findViewById(R.id.cabecera_6);
         layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT);
-        layoutId = new TableRow.LayoutParams((int) (tamanoPantalla*0.2), TableRow.LayoutParams.WRAP_CONTENT);
-        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla*0.35), TableRow.LayoutParams.WRAP_CONTENT);
-        layoutMod = new TableRow.LayoutParams((int) (tamanoPantalla*0.35), TableRow.LayoutParams.MATCH_PARENT);
+        layoutId = new TableRow.LayoutParams((int) (tamanoPantalla*0.2), TableRow.LayoutParams.MATCH_PARENT);
+        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla*0.4), TableRow.LayoutParams.MATCH_PARENT);
+        layoutMod = new TableRow.LayoutParams((int) (tamanoPantalla*0.3), TableRow.LayoutParams.MATCH_PARENT);
 
         int val1 = 0;
         int val2 = 0;
@@ -147,22 +147,25 @@ public class TablaModificarInventario {
             txtMod = new ImageView(act);
 
             txtId.setText(id_elemento.get(this.inicio + i));
-            txtId.setGravity(Gravity.CENTER_HORIZONTAL);
+            txtId.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL);
             txtId.setTextAppearance(act, R.style.etiqueta);
             txtId.setBackgroundResource(R.drawable.tabla_celda);
             txtId.setLayoutParams(layoutId);
 
             txtDescripcion.setText(descripcion.get(this.inicio + i));
-            txtDescripcion.setGravity(Gravity.CENTER_HORIZONTAL);
+            txtDescripcion.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL);
             txtDescripcion.setTextAppearance(act, R.style.etiqueta);
             txtDescripcion.setBackgroundResource(R.drawable.tabla_celda);
             txtDescripcion.setLayoutParams(layoutTexto);
 
             //txtMod.setText("ver");
+
             txtMod.setId(this.inicio + i);
             txtMod.setImageResource(R.drawable.modificar);
+            txtMod.setPadding(30,30,30,30);
             txtMod.setBackgroundResource(R.drawable.tabla_celda);
             txtMod.setLayoutParams(layoutMod);
+
             txtMod.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -190,9 +193,9 @@ public class TablaModificarInventario {
         cabecera = (TableLayout) rootView.findViewById(R.id.cabecera_6);
         layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT);
-        layoutId = new TableRow.LayoutParams((int) (tamanoPantalla*0.2), TableRow.LayoutParams.WRAP_CONTENT);
-        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla*0.35), TableRow.LayoutParams.WRAP_CONTENT);
-        layoutMod = new TableRow.LayoutParams((int) (tamanoPantalla*0.35), TableRow.LayoutParams.MATCH_PARENT);
+        layoutId = new TableRow.LayoutParams((int) (tamanoPantalla*0.2), TableRow.LayoutParams.MATCH_PARENT);
+        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla*0.4), TableRow.LayoutParams.MATCH_PARENT);
+        layoutMod = new TableRow.LayoutParams((int) (tamanoPantalla*0.3), TableRow.LayoutParams.MATCH_PARENT);
 
         int val1 = 0;
         int val2 = 0;
@@ -230,9 +233,9 @@ public class TablaModificarInventario {
         cabecera = (TableLayout) rootView.findViewById(R.id.cabecera_6);
         layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT);
-        layoutId = new TableRow.LayoutParams((int) (tamanoPantalla*0.2), TableRow.LayoutParams.WRAP_CONTENT);
-        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla*0.35), TableRow.LayoutParams.WRAP_CONTENT);
-        layoutMod = new TableRow.LayoutParams((int) (tamanoPantalla*0.35), TableRow.LayoutParams.MATCH_PARENT);
+        layoutId = new TableRow.LayoutParams((int) (tamanoPantalla*0.2), TableRow.LayoutParams.MATCH_PARENT);
+        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla*0.4), TableRow.LayoutParams.MATCH_PARENT);
+        layoutMod = new TableRow.LayoutParams((int) (tamanoPantalla*0.3), TableRow.LayoutParams.MATCH_PARENT);
 
         int val1 = 0;
         int val2 = 0;
@@ -270,9 +273,9 @@ public class TablaModificarInventario {
         cabecera = (TableLayout) rootView.findViewById(R.id.cabecera_6);
         layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT);
-        layoutId = new TableRow.LayoutParams((int) (tamanoPantalla*0.2), TableRow.LayoutParams.WRAP_CONTENT);
-        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla*0.35), TableRow.LayoutParams.WRAP_CONTENT);
-        layoutMod = new TableRow.LayoutParams((int) (tamanoPantalla*0.35), TableRow.LayoutParams.MATCH_PARENT);
+        layoutId = new TableRow.LayoutParams((int) (tamanoPantalla*0.2), TableRow.LayoutParams.MATCH_PARENT);
+        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla*0.4), TableRow.LayoutParams.MATCH_PARENT);
+        layoutMod = new TableRow.LayoutParams((int) (tamanoPantalla*0.3), TableRow.LayoutParams.MATCH_PARENT);
 
         inicio = -5;
         contador = 0;

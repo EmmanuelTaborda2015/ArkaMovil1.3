@@ -62,9 +62,9 @@ public class TablaConsultarInventario {
         cabecera = (TableLayout) rootView.findViewById(R.id.cabecera);
         layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT);
-        layoutId = new TableRow.LayoutParams((int) (tamanoPantalla*0.2), TableRow.LayoutParams.WRAP_CONTENT);
-        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla*0.35), TableRow.LayoutParams.WRAP_CONTENT);
-        layoutVer = new TableRow.LayoutParams((int) (tamanoPantalla*0.35), TableRow.LayoutParams.MATCH_PARENT);
+        layoutId = new TableRow.LayoutParams((int) (tamanoPantalla*0.2), TableRow.LayoutParams.MATCH_PARENT);
+        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla*0.40), TableRow.LayoutParams.MATCH_PARENT);
+        layoutVer = new TableRow.LayoutParams((int) (tamanoPantalla*0.30), TableRow.LayoutParams.MATCH_PARENT);
 
         int val1 = 0;
         int val2 = 0;
@@ -146,19 +146,21 @@ public class TablaConsultarInventario {
             txtVer = new ImageView(act);
 
             txtId.setText(id_elemento.get(this.inicio + i));
-            txtId.setGravity(Gravity.CENTER_HORIZONTAL);
+            txtId.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL);
             txtId.setTextAppearance(act, R.style.etiqueta);
             txtId.setBackgroundResource(R.drawable.tabla_celda);
             txtId.setLayoutParams(layoutId);
 
             txtDescripcion.setText(descripcion.get(this.inicio + i));
-            txtDescripcion.setGravity(Gravity.CENTER_HORIZONTAL);
+            txtId.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL);
             txtDescripcion.setTextAppearance(act, R.style.etiqueta);
             txtDescripcion.setBackgroundResource(R.drawable.tabla_celda);
             txtDescripcion.setLayoutParams(layoutTexto);
 
             txtVer.setImageResource(R.drawable.ver);
             txtVer.setId(this.inicio + i);
+            txtVer.setScaleX(2);
+            txtVer.setScaleY(2);
             txtVer.setBackgroundResource(R.drawable.tabla_celda);
             txtVer.setLayoutParams(layoutVer);
             txtVer.setOnClickListener(new View.OnClickListener() {
@@ -188,9 +190,9 @@ public class TablaConsultarInventario {
         cabecera = (TableLayout) rootView.findViewById(R.id.cabecera);
         layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT);
-        layoutId = new TableRow.LayoutParams((int) (tamanoPantalla*0.2), TableRow.LayoutParams.WRAP_CONTENT);
-        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla*0.35), TableRow.LayoutParams.WRAP_CONTENT);
-        layoutVer = new TableRow.LayoutParams((int) (tamanoPantalla*0.35), TableRow.LayoutParams.MATCH_PARENT);
+        layoutId = new TableRow.LayoutParams((int) (tamanoPantalla*0.2), TableRow.LayoutParams.MATCH_PARENT);
+        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla*0.40), TableRow.LayoutParams.MATCH_PARENT);
+        layoutVer = new TableRow.LayoutParams((int) (tamanoPantalla*0.30), TableRow.LayoutParams.MATCH_PARENT);
 
         int val1 = 0;
         int val2 = 0;
@@ -228,9 +230,9 @@ public class TablaConsultarInventario {
         cabecera = (TableLayout) rootView.findViewById(R.id.cabecera);
         layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT);
-        layoutId = new TableRow.LayoutParams((int) (tamanoPantalla*0.2), TableRow.LayoutParams.WRAP_CONTENT);
-        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla*0.35), TableRow.LayoutParams.WRAP_CONTENT);
-        layoutVer = new TableRow.LayoutParams((int) (tamanoPantalla*0.35), TableRow.LayoutParams.MATCH_PARENT);
+        layoutId = new TableRow.LayoutParams((int) (tamanoPantalla*0.2), TableRow.LayoutParams.MATCH_PARENT);
+        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla*0.40), TableRow.LayoutParams.MATCH_PARENT);
+        layoutVer = new TableRow.LayoutParams((int) (tamanoPantalla*0.30), TableRow.LayoutParams.MATCH_PARENT);
 
         int val1 = 0;
         int val2 = 0;
@@ -268,9 +270,9 @@ public class TablaConsultarInventario {
         cabecera = (TableLayout) rootView.findViewById(R.id.cabecera);
         layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT);
-        layoutId = new TableRow.LayoutParams((int) (tamanoPantalla*0.2), TableRow.LayoutParams.WRAP_CONTENT);
-        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla*0.35), TableRow.LayoutParams.WRAP_CONTENT);
-        layoutVer = new TableRow.LayoutParams((int) (tamanoPantalla*0.35), TableRow.LayoutParams.MATCH_PARENT);
+        layoutId = new TableRow.LayoutParams((int) (tamanoPantalla*0.2), TableRow.LayoutParams.MATCH_PARENT);
+        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla*0.40), TableRow.LayoutParams.MATCH_PARENT);
+        layoutVer = new TableRow.LayoutParams((int) (tamanoPantalla*0.30), TableRow.LayoutParams.MATCH_PARENT);
 
 
         inicio = -5;
