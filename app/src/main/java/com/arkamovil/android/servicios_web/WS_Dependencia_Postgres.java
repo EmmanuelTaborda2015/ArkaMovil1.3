@@ -14,13 +14,13 @@ import org.ksoap2.transport.HttpTransportSE;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WS_Dependencia {
+public class WS_Dependencia_Postgres {
 
     private final String NAMESPACE = "arkaurn:arka";
     //private final String URL = "http://10.0.2.2/ws/servicio.php?wsdl";
     private final String URL = "http://10.20.0.38/ws_arka_android/servicio.php?wsdl";
-    private final String SOAP_ACTION = "arkaurn:arka/consultar_dependencia_oracle";
-    private final String METHOD_NAME = "consultar_dependencia_oracle";
+    private final String SOAP_ACTION = "arkaurn:arka/consultar_dependencias";
+    private final String METHOD_NAME = "consultar_dependencias";
 
     private Thread thread;
     private Handler handler = new Handler();
@@ -31,7 +31,7 @@ public class WS_Dependencia {
     private List<String> dependencia = new ArrayList<String>();
 
 
-    public void startWebAccess(final Activity act, final AutoCompleteTextView spin, final String sede, final String facultad) {
+    public void startWebAccess(final Activity act, final AutoCompleteTextView spin) {
 
         this.act = act;
         this.spin = spin;
@@ -39,9 +39,6 @@ public class WS_Dependencia {
         thread = new Thread() {
             public void run() {
                 SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
-
-                request.addProperty("sede", sede);
-                request.addProperty("facultad", facultad);
 
                 SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
                 envelope.setOutputSoapObject(request);

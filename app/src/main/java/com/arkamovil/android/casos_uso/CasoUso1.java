@@ -8,6 +8,7 @@ import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -19,10 +20,14 @@ import com.arkamovil.android.R;
 import com.arkamovil.android.herramientas.Despliegue;
 import com.arkamovil.android.procesos.GenerarPDF_ActaVisita;
 import com.arkamovil.android.servicios_web.WS_Dependencia;
+import com.arkamovil.android.servicios_web.WS_Facultad;
 import com.arkamovil.android.servicios_web.WS_NumeroVisitas;
 import com.arkamovil.android.servicios_web.WS_RegistroActaVisita;
+import com.arkamovil.android.servicios_web.WS_Sede;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 
 public class CasoUso1 extends Fragment {
@@ -57,12 +62,22 @@ public class CasoUso1 extends Fragment {
 
     private Thread thread_registrarActa;
     private Thread thread_numvisitas;
+
     private Handler handler = new Handler();
     private String webResponse;
 
     private View rootView;
 
     private int contador = 0;
+    private int validador = 0;
+
+
+    private List<String> lista_sede = new ArrayList<String>();
+    private List<String> lista_facultad = new ArrayList<String>();
+    private List<String> lista_dependencia = new ArrayList<String>();
+
+    private int seleccion1 = 0;
+    private int seleccion2 = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,26 +85,79 @@ public class CasoUso1 extends Fragment {
 
         rootView = inflater.inflate(R.layout.fm_casouso1, container, false);
 
-        sede = (AutoCompleteTextView) rootView.findViewById(R.id.sede_c1);
-        facultad = (AutoCompleteTextView) rootView.findViewById(R.id.facultad_c1);
-        dependencia = (AutoCompleteTextView) rootView.findViewById(R.id.dependencia_c1);
-        nombRes = (AutoCompleteTextView) rootView.findViewById(R.id.nombreresponsable_c1);
-        docRes = (AutoCompleteTextView) rootView.findViewById(R.id.cedularesponsable_c1);
-        observacion = (EditText) rootView.findViewById(R.id.observacion_c1);
-        numVisita = (AutoCompleteTextView) rootView.findViewById(R.id.numerovisita);
-        proximaVis = (TextView) rootView.findViewById(R.id.proxvis_c1);
+        //Se definen los campos a utilizar en la clase.
+        establecerCampos();
 
+        //Se cargar los datos del web service sede.
+        WS_Sede ws_sede = new WS_Sede();
+        ws_sede.startWebAccess(getActivity(), sede);
+        lista_sede = ws_sede.getSede();
 
-        thread_numvisitas = new Thread() {
-            public void run() {
-                WS_NumeroVisitas visitas = new WS_NumeroVisitas();
-                webResponse = visitas.startWebAccess();
-                handler.post(createUI);
+        //Se despliegan los datos obtenidos por del web service en el campo Atocomplete sede.
+        new Despliegue(sede);
+
+        //se genera la funció que permite generar un evento al seleccionar un item de las sedes.
+        sede.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                for (int i = 0; i < lista_sede.size(); i++) {
+                    if (String.valueOf(sede.getText()).equals(lista_sede.get(i))) {
+                        seleccion1 = i;
+                    }
+                }
+                //Se envia parametros de vista y de campo AutoComplete al web service de facultad.
+                WS_Facultad ws_facultad = new WS_Facultad();
+                ws_facultad.startWebAccess(getActivity(), facultad, lista_sede.get(seleccion1));
+                lista_facultad = ws_facultad.getFacultad();
+
+                //Se eliminan los items seleccionados anteriormente.
+                facultad.setText("");
+                facultad.requestFocus();
+                dependencia.setText("");
+
+                //Se despliegan los datos obtenidos de la facultad.
+                new Despliegue(facultad);
             }
-        };
+        });
 
-        thread_numvisitas.start();
+        facultad.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                for (int i = 0; i < lista_facultad.size(); i++) {
+                    if (String.valueOf(facultad.getText()).equals(lista_facultad.get(i))) {
+                        seleccion2 = i;
+                    }
+                }
 
+                //Se envia parametros de vista y de campo AutoComplete al web service de facultad.
+                WS_Dependencia ws_dependencia = new WS_Dependencia();
+                ws_dependencia.startWebAccess(getActivity(), dependencia, lista_sede.get(seleccion1), lista_facultad.get(seleccion2));
+                lista_dependencia = ws_dependencia.getDependencia();
+
+                dependencia.setText("");
+                dependencia.requestFocus();
+
+                //Se despliegan los datos obtenidos de la dependencia.
+                new Despliegue(dependencia);
+
+                thread_numvisitas = new Thread() {
+                    public void run() {
+                        WS_NumeroVisitas visitas = new WS_NumeroVisitas();
+                        webResponse = visitas.startWebAccess();
+                        handler.post(createUI);
+                    }
+                };
+
+                thread_numvisitas.start();
+            }
+        });
+
+        dependencia.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                nombRes.requestFocus();
+            }
+        });
         Time today = new Time(Time.getCurrentTimezone());
         today.setToNow();
 
@@ -137,10 +205,6 @@ public class CasoUso1 extends Fragment {
             }
         });
 
-        WS_Dependencia cargar_dependencias = new WS_Dependencia();
-        cargar_dependencias.startWebAccess(getActivity(), dependencia);
-
-        Despliegue dep = new Despliegue(dependencia);
 
         //////////////////////////////////////////////////////////////////////////////////////////////////
         Button descargarPDF = (Button) rootView.findViewById(R.id.descargar);
@@ -148,34 +212,7 @@ public class CasoUso1 extends Fragment {
             @Override
             public void onClick(View v) {
 
-                int validador = 0;
-
-
-                if ("".equals(String.valueOf(sede.getText()))) {
-                    Toast.makeText(getActivity(), "Porfavor ingrese la Sede", Toast.LENGTH_LONG).show();
-                    validador++;
-                } else if ("".equals(String.valueOf(facultad.getText())) && validador == 0) {
-                    Toast.makeText(getActivity(), "Porfavor ingrese la Facultad", Toast.LENGTH_LONG).show();
-                    validador++;
-                } else if ("".equals(String.valueOf(dependencia.getText())) && validador == 0) {
-                    Toast.makeText(getActivity(), "Porfavor ingrese la Dependencia", Toast.LENGTH_LONG).show();
-                    validador++;
-                } else if ("".equals(String.valueOf(nombRes.getText())) && validador == 0) {
-                    Toast.makeText(getActivity(), "Porfavor ingrese el Nombre del responsable", Toast.LENGTH_LONG).show();
-                    validador++;
-                } else if ("".equals(String.valueOf(docRes.getText())) && validador == 0) {
-                    Toast.makeText(getActivity(), "Porfavor ingrese la Cédula del responsable", Toast.LENGTH_LONG).show();
-                    validador++;
-                } else if ("".equals(String.valueOf(observacion.getText())) && validador == 0) {
-                    Toast.makeText(getActivity(), "Porfavor ingrese las Observaciones", Toast.LENGTH_LONG).show();
-                    validador++;
-                } else if ("".equals(String.valueOf(numVisita.getText())) && validador == 0) {
-                    Toast.makeText(getActivity(), "Porfavor ingrese el Número de visita", Toast.LENGTH_LONG).show();
-                    validador++;
-                } else if ("dd:mm:aa".equals(String.valueOf(proximaVis.getText())) && validador == 0) {
-                    Toast.makeText(getActivity(), "Porfavor ingrese la fecha de la próxima visita", Toast.LENGTH_LONG).show();
-                    validador++;
-                }
+                validar();
 
 
                 if (validador == 0) {
@@ -201,6 +238,12 @@ public class CasoUso1 extends Fragment {
 
                     GenerarPDF_ActaVisita generar = new GenerarPDF_ActaVisita();
                     generar.generar(getResources(), fecha, sede_s, facultad_s, dependencia_s, nombRes_s, docRes_s, observacion_s, numVisita_s, proxVisita);
+
+                    limpiar();
+
+                    sede.requestFocus();
+
+                    Toast.makeText(getActivity(), "Se ha generado el acta de visita en -> Download -> Acta de Visita -> Actavisita"+numVisita_s, Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -225,11 +268,22 @@ public class CasoUso1 extends Fragment {
             year2 = selectedYear;
 
             if (verificarFechas() == true) {
-                tvDisplayDate2.setText(new StringBuilder()
-                        // Month is 0 based, just add 1
-                        .append(day2).append("-").append(month2).append("-")
-                        .append(year2).append(" "));
+
+
+                String val1 = "";
+                String val2 = "";
+
+                if (day2 < 10) {
+                    val1 = "0";
+                }
+
+                if ((month2 + 1) < 10) {
+                    val2 = "0";
+                }
+
+                tvDisplayDate2.setText(val1 + day2 + "-" + val2 + (month2 + 1) + "-" + year2);
                 tvDisplayDate2.setTextColor(getResources().getColor(R.color.NEGRO));
+
             } else {
                 Toast.makeText(getActivity(), "La fecha de la próxima visita no es valida, por favor verifiquela e ingresela de nuevo", Toast.LENGTH_LONG).show();
             }
@@ -257,12 +311,67 @@ public class CasoUso1 extends Fragment {
 
         public void run() {
             AutoCompleteTextView numVisita = (AutoCompleteTextView) rootView.findViewById(R.id.numerovisita);
-            if("".equals(String.valueOf(webResponse))){
+            if ("".equals(String.valueOf(webResponse))) {
                 numVisita.setText("1");
-            }else{
-                numVisita.setText(String.valueOf(Integer.parseInt(webResponse)+1));
+            } else {
+                numVisita.setText(String.valueOf(Integer.parseInt(webResponse) + 1));
             }
         }
     };
 
+    public void establecerCampos(){
+
+        sede = (AutoCompleteTextView) rootView.findViewById(R.id.sede_c1);
+        facultad = (AutoCompleteTextView) rootView.findViewById(R.id.facultad_c1);
+        dependencia = (AutoCompleteTextView) rootView.findViewById(R.id.dependencia_c1);
+        nombRes = (AutoCompleteTextView) rootView.findViewById(R.id.nombreresponsable_c1);
+        docRes = (AutoCompleteTextView) rootView.findViewById(R.id.cedularesponsable_c1);
+        observacion = (EditText) rootView.findViewById(R.id.observacion_c1);
+        numVisita = (AutoCompleteTextView) rootView.findViewById(R.id.numerovisita);
+        proximaVis = (TextView) rootView.findViewById(R.id.proxvis_c1);
+
+    }
+
+    public void validar() {
+
+        validador = 0;
+
+        if ("".equals(String.valueOf(sede.getText()))) {
+            Toast.makeText(getActivity(), "Porfavor ingrese la Sede", Toast.LENGTH_LONG).show();
+            validador++;
+        } else if ("".equals(String.valueOf(facultad.getText())) && validador == 0) {
+            Toast.makeText(getActivity(), "Porfavor ingrese la Facultad", Toast.LENGTH_LONG).show();
+            validador++;
+        } else if ("".equals(String.valueOf(dependencia.getText())) && validador == 0) {
+            Toast.makeText(getActivity(), "Porfavor ingrese la Dependencia", Toast.LENGTH_LONG).show();
+            validador++;
+        } else if ("".equals(String.valueOf(nombRes.getText())) && validador == 0) {
+            Toast.makeText(getActivity(), "Porfavor ingrese el Nombre del responsable", Toast.LENGTH_LONG).show();
+            validador++;
+        } else if ("".equals(String.valueOf(docRes.getText())) && validador == 0) {
+            Toast.makeText(getActivity(), "Porfavor ingrese la Cédula del responsable", Toast.LENGTH_LONG).show();
+            validador++;
+        } else if ("".equals(String.valueOf(observacion.getText())) && validador == 0) {
+            Toast.makeText(getActivity(), "Porfavor ingrese las Observaciones", Toast.LENGTH_LONG).show();
+            validador++;
+        } else if ("".equals(String.valueOf(numVisita.getText())) && validador == 0) {
+            Toast.makeText(getActivity(), "Porfavor ingrese el Número de visita", Toast.LENGTH_LONG).show();
+            validador++;
+        } else if ("dd:mm:aa".equals(String.valueOf(proximaVis.getText())) && validador == 0) {
+            Toast.makeText(getActivity(), "Porfavor ingrese la fecha de la próxima visita", Toast.LENGTH_LONG).show();
+            validador++;
+        }
+
+    }
+
+    public void limpiar(){
+        sede.setText("");
+        facultad.setText("");
+        dependencia.setText("");
+        nombRes.setText("");
+        docRes.setText("");
+        observacion.setText("");
+        numVisita.setText("");
+        proximaVis.setText("");
+    }
 }

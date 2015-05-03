@@ -13,6 +13,7 @@ import com.arkamovil.android.Informacion.Informacion_Elementos;
 import com.arkamovil.android.Informacion.Modificar_Informacion_Elementos;
 import com.arkamovil.android.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TablaModificarInventario {
@@ -272,6 +273,12 @@ public class TablaModificarInventario {
         layoutId = new TableRow.LayoutParams((int) (tamanoPantalla*0.2), TableRow.LayoutParams.WRAP_CONTENT);
         layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla*0.35), TableRow.LayoutParams.WRAP_CONTENT);
         layoutMod = new TableRow.LayoutParams((int) (tamanoPantalla*0.35), TableRow.LayoutParams.MATCH_PARENT);
+
+        inicio = -5;
+        contador = 0;
+
+        id_elemento = new ArrayList<String>();
+        descripcion = new ArrayList<String>();
 
         tabla.removeAllViews();
         cabecera.removeAllViews();

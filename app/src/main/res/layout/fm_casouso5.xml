@@ -14,6 +14,16 @@
             android:layout_height="fill_parent"
             android:orientation="vertical"
             android:padding="20dp">
+
+            <TextView
+                android:id="@+id/label_sede"
+                android:text="@string/string_sede"
+                style="@style/labelArkaMovil"/>
+
+            <AutoCompleteTextView
+                style="@style/buttonTextArkaMovil"
+                android:id="@+id/sede_c5" />
+
                 <TextView
                     android:id="@+id/label_dependencia"
                     android:text="@string/String_dependencia"
@@ -21,7 +31,7 @@
 
                 <AutoCompleteTextView
                     style="@style/buttonTextArkaMovil"
-                    android:id="@+id/dependencia" />
+                    android:id="@+id/dependencia_c5" />
 
                 <TextView
                     android:id="@+id/label_funcionario"
@@ -30,7 +40,7 @@
 
                 <AutoCompleteTextView
                     style="@style/buttonTextArkaMovil"
-                    android:id="@+id/funcionario" />
+                    android:id="@+id/funcionario_c5" />
 
             <ImageView
                 android:layout_width="20dp"

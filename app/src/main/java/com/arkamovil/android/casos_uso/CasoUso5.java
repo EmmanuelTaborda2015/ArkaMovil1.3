@@ -34,8 +34,8 @@ public class CasoUso5 extends Fragment {
 
         final View rootView = inflater.inflate(R.layout.fm_casouso5, container, false);
 
-        dep = (AutoCompleteTextView) rootView.findViewById(R.id.dependencia);
-        fun = (AutoCompleteTextView) rootView.findViewById(R.id.funcionario);
+        dep = (AutoCompleteTextView) rootView.findViewById(R.id.dependencia_c5);
+        fun = (AutoCompleteTextView) rootView.findViewById(R.id.funcionario_c5);
         bajar = (ImageView) rootView.findViewById(R.id.bajar);
         subir = (ImageView) rootView.findViewById(R.id.subir);
 
@@ -46,7 +46,7 @@ public class CasoUso5 extends Fragment {
 
         WS_Dependencia cargar_dependencias = new WS_Dependencia();
         cargar_dependencias.startWebAccess(getActivity(), dep,"aqui", "aqui");
-        lista_dependencia = cargar_dependencias.getDependecia();
+        lista_dependencia = cargar_dependencias.getDependencia();
 
 
         Despliegue despFuncionario = new Despliegue(fun);
@@ -63,7 +63,7 @@ public class CasoUso5 extends Fragment {
                 }
                 //Se envia parametros de vista y de campo AutoComplete al web service de funcionarios.
                 WS_Funcionario cargar_funcionarios = new WS_Funcionario();
-                cargar_funcionarios.startWebAccess(getActivity(), fun, dependencia_seleccionada);
+                cargar_funcionarios.startWebAccess(getActivity(), fun, "aqui");
                 fun.setText("");
                 fun.setFocusable(true);
                 TablaConsultarInventario borrar = new TablaConsultarInventario();

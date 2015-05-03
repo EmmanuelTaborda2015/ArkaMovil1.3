@@ -2,6 +2,7 @@ package com.arkamovil.android.servicios_web;
 
 import android.app.Activity;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 
@@ -26,10 +27,16 @@ public class WS_Funcionario {
 
     Activity act;
     AutoCompleteTextView spin;
-    List<String> toSpin = new ArrayList<String>();
+
+    List<String> funcionario = new ArrayList<String>();
 
 
-    public void startWebAccess(final Activity act, final AutoCompleteTextView spin, final int dependencia) {
+    public List<String> getFuncionario() {
+        return funcionario;
+    }
+
+
+    public void startWebAccess(final Activity act, final AutoCompleteTextView spin, final String dependencia) {
 
         this.act = act;
         this.spin = spin;
@@ -49,8 +56,9 @@ public class WS_Funcionario {
 
                     httpTransport.call(SOAP_ACTION, envelope);
                     SoapObject response = (SoapObject) envelope.getResponse();
+
                     for (int i = 0; i < response.getPropertyCount(); i++) {
-                        toSpin.add(response.getProperty(i).toString());
+                        funcionario.add(response.getProperty(i).toString());
                     }
 
                 } catch (Exception exception) {
@@ -66,7 +74,7 @@ public class WS_Funcionario {
     final Runnable createUI = new Runnable() {
 
         public void run() {
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(act, android.R.layout.simple_spinner_item, toSpin);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(act, android.R.layout.simple_spinner_item, funcionario);
             spin.setAdapter(adapter);
         }
     };

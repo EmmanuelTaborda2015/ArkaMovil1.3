@@ -97,6 +97,17 @@ public class WS_Elemento {
         this.act = actividad;
         this.caso = caso;
 
+        descripcion = new ArrayList<String>();
+        id_elemento = new ArrayList<String>();
+        nivel = new ArrayList<String>();
+        marca = new ArrayList<String>();
+        placa = new ArrayList<String>();
+        serie = new ArrayList<String>();
+        valor = new ArrayList<String>();
+        subtotal = new ArrayList<String>();
+        iva = new ArrayList<String>();
+        total = new ArrayList<String>();
+
         thread = new Thread() {
             public void run() {
                 SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
@@ -113,9 +124,6 @@ public class WS_Elemento {
                     httpTransport.call(SOAP_ACTION, envelope);
 
                     SoapObject obj1 = (SoapObject) envelope.getResponse();
-
-                    Log.v("aqui", "Aquiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
-
 
                     for (int i = 0; i < obj1.getPropertyCount(); i++) {
                         SoapObject obj2 = (SoapObject) obj1.getProperty(i);

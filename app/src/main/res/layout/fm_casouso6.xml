@@ -14,6 +14,16 @@
             android:layout_height="fill_parent"
             android:orientation="vertical"
             android:padding="20dp">
+
+            <TextView
+                android:id="@+id/label_sede"
+                android:text="@string/string_sede"
+                style="@style/labelArkaMovil"/>
+
+            <AutoCompleteTextView
+                style="@style/buttonTextArkaMovil"
+                android:id="@+id/sede_c6" />
+
             <TextView
                 android:id="@+id/label_dependencia"
                 android:text="@string/String_dependencia"

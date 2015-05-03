@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.arkamovil.android.R;
 import com.arkamovil.android.casos_uso.CasoUso6;
 import com.arkamovil.android.procesos.LlenarListas;
+import com.arkamovil.android.servicios_web.WS_Placa;
 
 public class Modificar_Informacion_Elementos_Scanner extends Dialog {
 
@@ -41,19 +42,17 @@ public class Modificar_Informacion_Elementos_Scanner extends Dialog {
 
         estadoSpin = (Spinner) findViewById(R.id.estado_61s);
 
-//        WS_Elemento datos = new WS_Elemento();
-//
-//        elemento.setText(datos.getDescripcion().get(i));
-//        serie.setText(datos.getMarca().get(i));
-//        placa.setText(datos.getPlaca().get(i));
-//        serie.setText(datos.getSerie().get(i));
+        WS_Placa ws_placa = new WS_Placa();
+        placa.setText(ws_placa.getPlaca().get(0));
+        elemento.setText(ws_placa.getId_elemento().get(0));
+        serie.setText(ws_placa.getSerie().get(0));
 
         Button cancelar;
         cancelar = (Button) findViewById(R.id.cancelar_61s);
         cancelar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CasoUso6 cerrar = new CasoUso6();
+                WS_Placa cerrar = new WS_Placa();
                 cerrar.cerrarDialog();
             }
         });
