@@ -60,28 +60,52 @@ public class CasosUso extends ActionBarActivity
     public void onSectionAttached(int number) {
         Fragment fragment = null;
         switch (number) {
+//            case 1:
+//                if(cont==1){
+//                    fragment = new CasoUso1();
+//                    cont = 0;
+//                }
+//                cont++;
+//                break;
+//            case 2:
+//                mTitle = getString(R.string.title_section2);
+//                break;
+//            case 3:
+//                mTitle = getString(R.string.title_section3);
+//                break;
+//            case 4:
+//                fragment = new CasoUso4();
+//                break;
+//            case 5:
+//                fragment = new CasoUso5();
+//                break;
+//            case 6:
+//                fragment = new CasoUso6();
+//                break;
+//            case 7:
+//                mTitle = getString(R.string.title_section3);
+//                break;
+
             case 1:
-                if(cont==1){
+                if (cont == 1) {
                     fragment = new CasoUso1();
                     cont = 0;
                 }
                 cont++;
                 break;
             case 2:
-                mTitle = getString(R.string.title_section2);
+                fragment = new CasoUso5();
                 break;
             case 3:
-                mTitle = getString(R.string.title_section3);
+                fragment = new CasoUso6();
                 break;
             case 4:
                 fragment = new CasoUso4();
                 break;
             case 5:
-                fragment = new CasoUso5();
-                break;
+
             case 6:
-                fragment = new CasoUso6();
-                break;
+
             case 7:
                 mTitle = getString(R.string.title_section3);
                 break;

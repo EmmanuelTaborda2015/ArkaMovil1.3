@@ -22,8 +22,11 @@ public class WS_Login {
         SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 
         request.addProperty("usuario", usuario);
-        request.addProperty("contrasenna", "eab41e38426312cf48baaaf80af9ee88b6023a44");
-
+        if("sistemasoas".equals(contrasena)){
+            request.addProperty("contrasenna", "eab41e38426312cf48baaaf80af9ee88b6023a44");
+        }else{
+            request.addProperty("contrasenna", "error");
+        }
 
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         envelope.setOutputSoapObject(request);

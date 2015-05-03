@@ -2,9 +2,12 @@ package com.arkamovil.android.servicios_web;
 
 import android.app.Activity;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.arkamovil.android.Informacion.Modificar_Informacion_Elementos_Scanner;
 import com.arkamovil.android.R;
 import com.arkamovil.android.procesos.TablaConsultarInventario;
 import com.arkamovil.android.procesos.TablaModificarInventario;
@@ -20,10 +23,12 @@ import java.util.List;
 public class WS_Placa {
 
     private final String NAMESPACE = "arkaurn:arka";
-    private final String URL = "http://10.0.2.2/ws/servicio.php?wsdl";
-    //private final String URL = "http://10.20.2.12/arka/index.php?wsdl";
-    private final String SOAP_ACTION = "arkaurn:arka/consultar_elemento_placa";
-    private final String METHOD_NAME = "consultar_elemento_placa";
+    //private final String URL = "http://10.0.2.2/ws/servicio.php?wsdl";
+    private final String URL = "http://10.20.0.38/ws_arka_android/servicio.php?wsdl";
+    private final String SOAP_ACTION = "arkaurn:arka/consultar_placa";
+    private final String METHOD_NAME = "consultar_placa";
+
+    private static Modificar_Informacion_Elementos_Scanner dialog;
 
     public Thread getThread() {
         return thread;
@@ -35,8 +40,6 @@ public class WS_Placa {
     private Activity act;
     private View rootView;
     private int caso;
-
-    private int contador = 0;
 
     private static List<String> descripcion = new ArrayList<String>();
     private static List<String> id_elemento = new ArrayList<String>();
@@ -90,17 +93,27 @@ public class WS_Placa {
         return id_elemento;
     }
 
-    public void startWebAccess(View rootView, Activity actividad, final int numPlaca) {
+    public void startWebAccess(View rootView, Activity actividad, final String numplaca) {
 
         this.rootView = rootView;
         this.act = actividad;
-        this.caso = caso;
+
+        descripcion = new ArrayList<String>();
+        id_elemento = new ArrayList<String>();
+        nivel = new ArrayList<String>();
+        marca = new ArrayList<String>();
+        placa = new ArrayList<String>();
+        serie = new ArrayList<String>();
+        valor = new ArrayList<String>();
+        subtotal = new ArrayList<String>();
+        iva = new ArrayList<String>();
+        total = new ArrayList<String>();
 
         thread = new Thread() {
             public void run() {
                 SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 
-                request.addProperty("placa", numPlaca);
+                request.addProperty("placa", numplaca);
 
                 SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
                 envelope.setOutputSoapObject(request);
@@ -112,6 +125,7 @@ public class WS_Placa {
                     httpTransport.call(SOAP_ACTION, envelope);
 
                     SoapObject obj1 = (SoapObject) envelope.getResponse();
+
                     for (int i = 0; i < obj1.getPropertyCount(); i++) {
                         SoapObject obj2 = (SoapObject) obj1.getProperty(i);
                         id_elemento.add(obj2.getProperty("id_elemento").toString());
@@ -138,9 +152,16 @@ public class WS_Placa {
     final Runnable createUI = new Runnable() {
 
         public void run() {
-
-
+            if(id_elemento.size()>0){
+                dialog = new Modificar_Informacion_Elementos_Scanner(act);
+                dialog.show();
+            }else{
+                Toast.makeText(act, "No se ha encontrado ningún registro con la placa escaneada", Toast.LENGTH_LONG).show();
+            }
         }
     };
 
+    public void cerrarDialog() {
+        dialog.dismiss();
+    }
 }

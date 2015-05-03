@@ -12,77 +12,114 @@ import android.widget.ImageView;
 import com.arkamovil.android.R;
 import com.arkamovil.android.herramientas.Despliegue;
 import com.arkamovil.android.procesos.TablaConsultarInventario;
+import com.arkamovil.android.procesos.TablaModificarInventario;
 import com.arkamovil.android.servicios_web.WS_Dependencia;
+import com.arkamovil.android.servicios_web.WS_Dependencia_Postgres;
 import com.arkamovil.android.servicios_web.WS_Elemento;
 import com.arkamovil.android.servicios_web.WS_Funcionario;
+import com.arkamovil.android.servicios_web.WS_Sede;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CasoUso5 extends Fragment {
 
-    private AutoCompleteTextView dep;
-    private AutoCompleteTextView fun;
+    private AutoCompleteTextView sede;
+    private AutoCompleteTextView dependencia;
+    private AutoCompleteTextView funcionario;
     private ImageView bajar;
     private ImageView subir;
 
+    private View rootView;
+
+    private List<String> lista_sede = new ArrayList<String>();
     private List<String> lista_dependencia = new ArrayList<String>();
-    private int dependencia_seleccionada = -1;
+    private List<String> lista_funcionario = new ArrayList<String>();
+
+    private int seleccion = 0;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        final View rootView = inflater.inflate(R.layout.fm_casouso5, container, false);
+        rootView = inflater.inflate(R.layout.fm_casouso5, container, false);
 
-        dep = (AutoCompleteTextView) rootView.findViewById(R.id.dependencia_c5);
-        fun = (AutoCompleteTextView) rootView.findViewById(R.id.funcionario_c5);
+        sede = (AutoCompleteTextView) rootView.findViewById(R.id.sede_c5);
+        dependencia = (AutoCompleteTextView) rootView.findViewById(R.id.dependencia_c5);
+        funcionario = (AutoCompleteTextView) rootView.findViewById(R.id.funcionario_c5);
         bajar = (ImageView) rootView.findViewById(R.id.bajar);
         subir = (ImageView) rootView.findViewById(R.id.subir);
 
         bajar.setVisibility(View.INVISIBLE);
         subir.setVisibility(View.INVISIBLE);
 
-        //Se envia parametros de vista y de campo AutoComplete al web service de dependencias.
+        //Se envia parametros de vista y de dependencia seleccionada en el campo AutoComplete al web service de dependencias.
 
-        WS_Dependencia cargar_dependencias = new WS_Dependencia();
-        cargar_dependencias.startWebAccess(getActivity(), dep,"aqui", "aqui");
-        lista_dependencia = cargar_dependencias.getDependencia();
+        WS_Sede ws_sede = new WS_Sede();
+        ws_sede.startWebAccess(getActivity(), sede);
+        lista_sede = ws_sede.getSede();
 
+        new Despliegue(sede);
 
-        Despliegue despFuncionario = new Despliegue(fun);
-        Despliegue despDependencia = new Despliegue(dep);
-
-        //Se genera esta función cuando se selecciona un item de la lista
-        dep.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        sede.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                for (int i = 0; i < lista_dependencia.size(); i++) {
-                    if (String.valueOf(dep.getText()).equals(lista_dependencia.get(i))) {
-                        dependencia_seleccionada = i + 1;
+                for (int i = 0; i < lista_sede.size(); i++) {
+                    if (String.valueOf(sede.getText()).equals(lista_sede.get(i))) {
+                        seleccion = i;
                     }
                 }
-                //Se envia parametros de vista y de campo AutoComplete al web service de funcionarios.
-                WS_Funcionario cargar_funcionarios = new WS_Funcionario();
-                cargar_funcionarios.startWebAccess(getActivity(), fun, "aqui");
-                fun.setText("");
-                fun.setFocusable(true);
-                TablaConsultarInventario borrar = new TablaConsultarInventario();
-                borrar.borrarTabla(rootView, getActivity());
-                bajar.setVisibility(View.INVISIBLE);
-                subir.setVisibility(View.INVISIBLE);
+                //Se envia parametros de vista y de campo AutoComplete al web service de facultad.
+                //WS_Dependencia ws_dependencia = new WS_Dependencia();
+                //ws_dependencia.startWebAccess(getActivity(), dependencia, lista_sede.get(seleccion), "null");
 
+                WS_Dependencia_Postgres ws_dependencia = new WS_Dependencia_Postgres();
+                ws_dependencia.startWebAccess(getActivity(), dependencia);
 
+                lista_dependencia = ws_dependencia.getDependencia();
+
+                dependencia.setText("");
+                dependencia.requestFocus();
+
+                limpiarTabla();
+
+                //Se despliegan los datos obtenidos de la dependencia.
+                new Despliegue(dependencia);
             }
         });
 
-        fun.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        //Se genera esta función cuando se selecciona un item de la lista
+        dependencia.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                for (int i = 0; i < lista_dependencia.size(); i++) {
+                    if (String.valueOf(dependencia.getText()).equals(lista_dependencia.get(i))) {
+                        seleccion = i;
+                    }
+                }
+                //Se envia parametros de vista y de campo AutoComplete al web service de funcionarios.
+
+                WS_Funcionario ws_funcionario = new WS_Funcionario();
+                ws_funcionario.startWebAccess(getActivity(), funcionario, lista_dependencia.get(seleccion));
+
+                lista_funcionario = ws_funcionario.getFuncionario();
+
+                funcionario.setText("");
+                funcionario.requestFocus();
+
+                limpiarTabla();
+
+                new Despliegue(funcionario);
+            }
+        });
+
+        funcionario.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                if (!"".equals(String.valueOf(dep.getText()))) {
-                    WS_Elemento elem = new WS_Elemento();
-                    elem.startWebAccess(rootView, getActivity(), String.valueOf(fun.getText()), 1);
-                }
+                limpiarTabla();
+
+                WS_Elemento elem = new WS_Elemento();
+                elem.startWebAccess(rootView, getActivity(), String.valueOf(funcionario.getText()), 1);
             }
         });
 
@@ -106,5 +143,12 @@ public class CasoUso5 extends Fragment {
         return rootView;
     }
 
+    public void limpiarTabla() {
+
+        TablaConsultarInventario borrar = new TablaConsultarInventario();
+        borrar.borrarTabla(rootView, getActivity());
+        bajar.setVisibility(View.INVISIBLE);
+        subir.setVisibility(View.INVISIBLE);
+    }
 
 }

@@ -16,7 +16,7 @@
 
     <!--Etiquetas casos de uso en menu desplegable-->
 
-    <string name="title_section1">CasoUso 1</string>
+    <string name="title_section1">Acta de visita</string>
     <string name="title_section2">CasoUso 2</string>
     <string name="title_section3">CasoUso 3</string>
     <string name="title_section4">CasoUso 4</string>
