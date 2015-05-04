@@ -114,9 +114,9 @@ public class GenerarPDF_ActaVisita{
             HeaderFooter cabecera = new HeaderFooter(new Phrase(
                     "Cabecera"), false);
             HeaderFooter pie = new HeaderFooter(new Phrase(
-                    "Pie Página"), false);
+                    "Oficina Asesora de Sistemas"), false);
 
-            documento.setHeader(cabecera);
+
             documento.setFooter(pie);
 
             // Abrimos el documento.
@@ -268,12 +268,12 @@ public class GenerarPDF_ActaVisita{
             documento.add(tablaFirmas);
 
             // Agregar marca de agua
-            Font font3 = FontFactory.getFont(FontFactory.HELVETICA, 42, Font.BOLD,
-                    Color.GRAY);
-            ColumnText.showTextAligned(writer.getDirectContentUnder(),
-                    Element.ALIGN_CENTER, new Paragraph(
-                            "Oficina Asesora de Sistemas", font3), 297.5f, 421,
-                    writer.getPageNumber() % 2 == 1 ? 45 : -45);
+//            Font font3 = FontFactory.getFont(FontFactory.HELVETICA, 42, Font.BOLD,
+//                    Color.GRAY);
+//            ColumnText.showTextAligned(writer.getDirectContentUnder(),
+//                    Element.ALIGN_CENTER, new Paragraph(
+//                            "Oficina Asesora de Sistemas", font3), 297.5f, 421,
+//                    writer.getPageNumber() % 2 == 1 ? 45 : -45);
 
         } catch (DocumentException e) {
 

@@ -178,7 +178,7 @@ public class CasoUso6 extends Fragment {
             String contenido = intent.getStringExtra("SCAN_RESULT");
             String formato = intent.getStringExtra("SCAN_RESULT_FORMAT");
 
-            scanear.setText(contenido);
+            //scanear.setText(contenido);
 
             WS_Placa ws_placa = new WS_Placa();
             ws_placa.startWebAccess(rootView, getActivity(), contenido);

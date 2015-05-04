@@ -1,16 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:weightSum="1">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <Button
-        android:layout_width="170dp"
-        android:layout_height="wrap_content"
-        android:text="Escanear"
-        android:id="@+id/button"
-        android:layout_weight="0.10"
-        android:onClick="escanear"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
-</RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/RelativeLayout01"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent">
+
+        <LinearLayout
+            android:id="@+id/LinearLayout01"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:id="@+id/label_sede"
+                android:text="@string/string_sede"
+                style="@style/labelArkaMovil"/>
+
+            <AutoCompleteTextView
+                style="@style/buttonTextArkaMovil"
+                android:id="@+id/sede_c4" />
+
+            <TextView
+                android:id="@+id/label_dependencia"
+                android:text="@string/String_dependencia"
+                style="@style/labelArkaMovil"/>
+
+            <AutoCompleteTextView
+                style="@style/buttonTextArkaMovil"
+                android:id="@+id/dependencia_c4" />
+
+            <TextView
+                android:id="@+id/label_funcionario"
+                android:text="@string/String_funcionario"
+                style="@style/labelArkaMovil"/>
+
+            <AutoCompleteTextView
+                style="@style/buttonTextArkaMovil"
+                android:id="@+id/funcionario_c4" />
+
+
+            <Button
+                style="@style/buttonTextArkaMovil"
+                android:id="@+id/escanear_c4"
+                android:editable="false"
+                android:text="Escanear Placa"
+                android:layout_marginTop="20dp"
+                android:onClick="escanear"/>
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:id="@+id/subir_c4"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/subir"
+                android:layout_gravity="center_horizontal" />
+
+            <TableLayout android:id="@+id/cabecera_c4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp">
+            </TableLayout>
+
+            <LinearLayout android:orientation="vertical"
+                android:layout_width="match_parent" android:layout_height="wrap_content">
+                <TableLayout android:id="@+id/tabla_c4"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content">
+                </TableLayout>
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:id="@+id/bajar_c4"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/bajar"
+                android:layout_gravity="center_horizontal" />
+
+        </LinearLayout>
+    </RelativeLayout>
+</ScrollView>
