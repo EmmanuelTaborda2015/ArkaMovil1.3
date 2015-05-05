@@ -22,6 +22,9 @@ import com.arkamovil.android.servicios_web.WS_Asignaciones;
 import com.arkamovil.android.servicios_web.WS_Elemento;
 import com.arkamovil.android.servicios_web.WS_RegistroActaVisita;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Asignaciones extends Dialog {
 
 
@@ -34,17 +37,20 @@ public class Asignaciones extends Dialog {
     private EditText estado;
     private EditText observacion;
 
+    private List<String> id_elemento;
+
     private WS_Asignaciones datos;
 
     private Thread thread_actualizarregistro;
 
     private Handler handler = new Handler();
 
-    public Asignaciones(Activity a, int i) {
+    public Asignaciones(Activity a, int i, List<String> id_elemento) {
         super(a);
         // TODO Auto-generated constructor stub
         this.c = a;
         this.i = i;
+        this.id_elemento = id_elemento;
 
     }
 
@@ -61,10 +67,11 @@ public class Asignaciones extends Dialog {
         observacion = (EditText) findViewById(R.id.observacion_c4);
 
         datos = new WS_Asignaciones();
+        datos.startWebAccess(c,id_elemento.get(i));
         elemento.setText(datos.getId_elemento().get(0));
-        placa.setText(datos.getPlaca().get(0));
-        estado.setText(datos.getEstado().get(0));
-        observacion.setText(datos.getObservaciones().get(0));
+        //placa.setText(datos.getPlaca().get(0));
+        //estado.setText(datos.getEstado().get(0));
+        //observacion.setText(datos.getObservaciones().get(0));
 
         Button cancelar;
         cancelar = (Button) findViewById(R.id.cancelar_c4);

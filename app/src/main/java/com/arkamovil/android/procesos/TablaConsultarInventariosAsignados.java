@@ -168,9 +168,8 @@ public class TablaConsultarInventariosAsignados {
             txtVer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    WS_Asignaciones ws_asignaciones= new WS_Asignaciones();
-                    ws_asignaciones.startWebAccess(act, id_elemento.get(v.getId()));
-                    dialog = new Asignaciones(act, v.getId());
+
+                    dialog = new Asignaciones(act, v.getId(), id_elemento);
                     dialog.show();
                 }
             });

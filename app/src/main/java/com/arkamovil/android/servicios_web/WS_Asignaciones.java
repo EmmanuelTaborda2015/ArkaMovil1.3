@@ -95,6 +95,7 @@ public class WS_Asignaciones {
                         placa.add(obj2.getProperty("placa").toString());
                         estado.add(obj2.getProperty("estado").toString());
                         observaciones.add(obj2.getProperty("observacion").toString());
+
                     }
 
                 } catch (Exception exception) {
