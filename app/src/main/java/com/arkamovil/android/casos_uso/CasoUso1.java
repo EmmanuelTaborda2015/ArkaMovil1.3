@@ -42,7 +42,6 @@ public class CasoUso1 extends Fragment {
     private TextView tvDisplayDate2;
 
     private AutoCompleteTextView sede;
-    private AutoCompleteTextView facultad;
     private AutoCompleteTextView dependencia;
     private AutoCompleteTextView nombRes;
     private AutoCompleteTextView docRes;
@@ -73,11 +72,9 @@ public class CasoUso1 extends Fragment {
 
 
     private List<String> lista_sede = new ArrayList<String>();
-    private List<String> lista_facultad = new ArrayList<String>();
     private List<String> lista_dependencia = new ArrayList<String>();
 
     private int seleccion1 = 0;
-    private int seleccion2 = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -105,34 +102,11 @@ public class CasoUso1 extends Fragment {
                         seleccion1 = i;
                     }
                 }
-                //Se envia parametros de vista y de campo AutoComplete al web service de facultad.
-                WS_Facultad ws_facultad = new WS_Facultad();
-                ws_facultad.startWebAccess(getActivity(), facultad, lista_sede.get(seleccion1));
-                lista_facultad = ws_facultad.getFacultad();
+                WS_Dependencia ws_dependencia = new WS_Dependencia();
+                ws_dependencia.startWebAccess(getActivity(), dependencia, lista_sede.get(seleccion1));
+                lista_dependencia = ws_dependencia.getDependencia();
 
                 //Se eliminan los items seleccionados anteriormente.
-                facultad.setText("");
-                facultad.requestFocus();
-                dependencia.setText("");
-
-                //Se despliegan los datos obtenidos de la facultad.
-                new Despliegue(facultad);
-            }
-        });
-
-        facultad.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                for (int i = 0; i < lista_facultad.size(); i++) {
-                    if (String.valueOf(facultad.getText()).equals(lista_facultad.get(i))) {
-                        seleccion2 = i;
-                    }
-                }
-
-                //Se envia parametros de vista y de campo AutoComplete al web service de facultad.
-                WS_Dependencia ws_dependencia = new WS_Dependencia();
-                ws_dependencia.startWebAccess(getActivity(), dependencia, lista_sede.get(seleccion1), lista_facultad.get(seleccion2));
-                lista_dependencia = ws_dependencia.getDependencia();
 
                 dependencia.setText("");
                 dependencia.requestFocus();
@@ -220,7 +194,6 @@ public class CasoUso1 extends Fragment {
                     fecha = String.valueOf(day1) + "-" + String.valueOf(month1 + 1) + "-" + String.valueOf(year1);
                     proxVisita = String.valueOf(day2) + "-" + String.valueOf(month2 + 1) + "-" + String.valueOf(year2);
                     sede_s = String.valueOf(sede.getText());
-                    facultad_s = String.valueOf(facultad.getText());
                     dependencia_s = String.valueOf(dependencia.getText());
                     nombRes_s = String.valueOf(nombRes.getText());
                     docRes_s = String.valueOf(docRes.getText());
@@ -237,7 +210,7 @@ public class CasoUso1 extends Fragment {
                     thread_registrarActa.start();
 
                     GenerarPDF_ActaVisita generar = new GenerarPDF_ActaVisita();
-                    generar.generar(getResources(), fecha, sede_s, facultad_s, dependencia_s, nombRes_s, docRes_s, observacion_s, numVisita_s, proxVisita);
+                    generar.generar(getResources(), fecha, sede_s, dependencia_s, nombRes_s, docRes_s, observacion_s, numVisita_s, proxVisita);
 
                     limpiar();
 
@@ -322,7 +295,6 @@ public class CasoUso1 extends Fragment {
     public void establecerCampos(){
 
         sede = (AutoCompleteTextView) rootView.findViewById(R.id.sede_c1);
-        facultad = (AutoCompleteTextView) rootView.findViewById(R.id.facultad_c1);
         dependencia = (AutoCompleteTextView) rootView.findViewById(R.id.dependencia_c1);
         nombRes = (AutoCompleteTextView) rootView.findViewById(R.id.nombreresponsable_c1);
         docRes = (AutoCompleteTextView) rootView.findViewById(R.id.cedularesponsable_c1);
@@ -338,9 +310,6 @@ public class CasoUso1 extends Fragment {
 
         if ("".equals(String.valueOf(sede.getText()))) {
             Toast.makeText(getActivity(), "Porfavor ingrese la Sede", Toast.LENGTH_LONG).show();
-            validador++;
-        } else if ("".equals(String.valueOf(facultad.getText())) && validador == 0) {
-            Toast.makeText(getActivity(), "Porfavor ingrese la Facultad", Toast.LENGTH_LONG).show();
             validador++;
         } else if ("".equals(String.valueOf(dependencia.getText())) && validador == 0) {
             Toast.makeText(getActivity(), "Porfavor ingrese la Dependencia", Toast.LENGTH_LONG).show();
@@ -366,7 +335,6 @@ public class CasoUso1 extends Fragment {
 
     public void limpiar(){
         sede.setText("");
-        facultad.setText("");
         dependencia.setText("");
         nombRes.setText("");
         docRes.setText("");

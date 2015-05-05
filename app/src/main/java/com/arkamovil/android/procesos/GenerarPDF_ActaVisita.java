@@ -46,7 +46,7 @@ public class GenerarPDF_ActaVisita{
     private final static String ETIQUETA_ERROR = "ERROR";
 
 
-    public  void generar(Resources resources, String fecha, String sede, String facultad, String dependencia, String nomres, String cedres, String obser, String numvis, String proxVisita){
+    public  void generar(Resources resources, String fecha, String sede, String dependencia, String nomres, String cedres, String obser, String numvis, String proxVisita){
 
         NOMBRE_DOCUMENTO = "Actavisita"+numvis+".pdf";
 
@@ -203,11 +203,6 @@ public class GenerarPDF_ActaVisita{
             PdfPCell Datos;
 
             Datos = new PdfPCell(new Phrase("SEDE:" + "\n\n" + sede));
-            Datos.setColspan(4);
-            Datos.setPadding(5);
-            tablaDatos.addCell(Datos);
-
-            Datos = new PdfPCell(new Phrase("FACULTAD:" + "\n\n" + facultad));
             Datos.setColspan(4);
             Datos.setPadding(5);
             tablaDatos.addCell(Datos);

@@ -8,6 +8,7 @@ import android.widget.ImageView;
 
 import com.arkamovil.android.R;
 import com.arkamovil.android.procesos.TablaConsultarInventario;
+import com.arkamovil.android.procesos.TablaConsultarInventariosAsignados;
 import com.arkamovil.android.procesos.TablaModificarInventario;
 
 import org.ksoap2.SoapEnvelope;
@@ -166,7 +167,16 @@ public class WS_Elemento {
                 ImageView subir = (ImageView) rootView.findViewById(R.id.subir_6);
                 bajar.setVisibility(View.VISIBLE);
                 subir.setVisibility(View.VISIBLE);
+            } else if (caso == 3) {
+                TablaConsultarInventariosAsignados crear = new TablaConsultarInventariosAsignados();
+                crear.crear(rootView, act, id_elemento, descripcion);
+                ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_c4);
+                ImageView subir = (ImageView) rootView.findViewById(R.id.subir_c4);
+                bajar.setVisibility(View.VISIBLE);
+                subir.setVisibility(View.VISIBLE);
             }
+
+
         }
     };
 

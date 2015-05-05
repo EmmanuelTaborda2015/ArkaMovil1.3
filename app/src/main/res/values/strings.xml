@@ -59,6 +59,7 @@
     <string name="String_numerovisita">Visita #</string>
     <string name="String_dependencia">Dependencia</string>
     <string name="String_estado">Estado</string>
+    <string name="String_estadoActualizacion">Estado de Actualización</string>
     <string name="id">Id</string>
     <string name="valor">Valor</string>
     <string name="string_sede">Sede</string>

@@ -20,6 +20,7 @@ import com.arkamovil.android.servicios_web.WS_Dependencia;
 import com.arkamovil.android.servicios_web.WS_Dependencia_Postgres;
 import com.arkamovil.android.servicios_web.WS_Elemento;
 import com.arkamovil.android.servicios_web.WS_Funcionario;
+import com.arkamovil.android.servicios_web.WS_Funcionario_Oracle;
 import com.arkamovil.android.servicios_web.WS_Placa;
 import com.arkamovil.android.servicios_web.WS_Sede;
 
@@ -80,11 +81,11 @@ public class CasoUso6 extends Fragment {
                     }
                 }
                 //Se envia parametros de vista y de campo AutoComplete al web service de facultad.
-                //WS_Dependencia ws_dependencia = new WS_Dependencia();
-                //ws_dependencia.startWebAccess(getActivity(), dependencia, lista_sede.get(seleccion), "null");
+                WS_Dependencia ws_dependencia = new WS_Dependencia();
+                ws_dependencia.startWebAccess(getActivity(), dependencia, lista_sede.get(seleccion));
 
-                WS_Dependencia_Postgres ws_dependencia = new WS_Dependencia_Postgres();
-                ws_dependencia.startWebAccess(getActivity(), dependencia);
+//                WS_Dependencia_Postgres ws_dependencia = new WS_Dependencia_Postgres();
+//                ws_dependencia.startWebAccess(getActivity(), dependencia);
 
                 lista_dependencia = ws_dependencia.getDependencia();
 
@@ -109,7 +110,10 @@ public class CasoUso6 extends Fragment {
                 }
                 //Se envia parametros de vista y de campo AutoComplete al web service de funcionarios.
 
-                WS_Funcionario ws_funcionario = new WS_Funcionario();
+//                WS_Funcionario ws_funcionario = new WS_Funcionario();
+//                ws_funcionario.startWebAccess(getActivity(), funcionario, lista_dependencia.get(seleccion));
+
+                WS_Funcionario_Oracle ws_funcionario = new WS_Funcionario_Oracle();
                 ws_funcionario.startWebAccess(getActivity(), funcionario, lista_dependencia.get(seleccion));
 
                 lista_funcionario = ws_funcionario.getFuncionario();

@@ -37,12 +37,12 @@
                     style="@style/buttonTextArkaMovil"
                     android:id="@+id/sede_c1" />
 
-                <TextView
+                TextView
                     android:id="@+id/label_facultad"
                     android:text="@string/String_facultad"
                     style="@style/labelArkaMovil"/>
 
-                <AutoCompleteTextView
+                AutoCompleteTextView
                     style="@style/buttonTextArkaMovil"
                     android:id="@+id/facultad_c1" />
 

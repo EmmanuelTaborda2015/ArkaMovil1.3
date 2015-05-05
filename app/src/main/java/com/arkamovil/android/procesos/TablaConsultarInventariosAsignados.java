@@ -2,6 +2,7 @@ package com.arkamovil.android.procesos;
 
 import android.app.Activity;
 import android.content.res.Resources;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -9,13 +10,15 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.arkamovil.android.Informacion.Asignaciones;
 import com.arkamovil.android.Informacion.Informacion_Elementos;
 import com.arkamovil.android.R;
+import com.arkamovil.android.servicios_web.WS_Asignaciones;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TablaConsultarInventario {
+public class TablaConsultarInventariosAsignados {
 
     TableLayout tabla;
     TableLayout cabecera;
@@ -34,7 +37,7 @@ public class TablaConsultarInventario {
         dialog.dismiss();
     }
 
-    private static Informacion_Elementos dialog;
+    private static Asignaciones dialog;
 
     Resources rs;
     private static List<String> id_elemento;
@@ -50,6 +53,7 @@ public class TablaConsultarInventario {
     public void crear(View rootView, Activity actividad, List<String> id, List<String> desc) {
 
         this.act = actividad;
+        this.vista = rootView;
         this.MAX_FILAS = 5;
 
         this.id_elemento = id;
@@ -58,13 +62,13 @@ public class TablaConsultarInventario {
         tamanoPantalla = rootView.getWidth();
 
         rs = actividad.getResources();
-        tabla = (TableLayout) rootView.findViewById(R.id.tabla);
-        cabecera = (TableLayout) rootView.findViewById(R.id.cabecera);
+        tabla = (TableLayout) rootView.findViewById(R.id.tabla_c4);
+        cabecera = (TableLayout) rootView.findViewById(R.id.cabecera_c4);
         layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT);
         layoutId = new TableRow.LayoutParams((int) (tamanoPantalla*0.2), TableRow.LayoutParams.MATCH_PARENT);
-        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla*0.4), TableRow.LayoutParams.MATCH_PARENT);
-        layoutVer = new TableRow.LayoutParams((int) (tamanoPantalla*0.3), TableRow.LayoutParams.MATCH_PARENT);
+        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla*0.40), TableRow.LayoutParams.MATCH_PARENT);
+        layoutVer = new TableRow.LayoutParams((int) (tamanoPantalla*0.30), TableRow.LayoutParams.MATCH_PARENT);
 
         int val1 = 0;
         int val2 = 0;
@@ -164,7 +168,9 @@ public class TablaConsultarInventario {
             txtVer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    dialog = new Informacion_Elementos(act, v.getId());
+                    WS_Asignaciones ws_asignaciones= new WS_Asignaciones();
+                    ws_asignaciones.startWebAccess(act, id_elemento.get(v.getId()));
+                    dialog = new Asignaciones(act, v.getId());
                     dialog.show();
                 }
             });
@@ -184,13 +190,13 @@ public class TablaConsultarInventario {
         this.MAX_FILAS = 5;
 
         rs = actividad.getResources();
-        tabla = (TableLayout) rootView.findViewById(R.id.tabla);
-        cabecera = (TableLayout) rootView.findViewById(R.id.cabecera);
+        tabla = (TableLayout) rootView.findViewById(R.id.tabla_c4);
+        cabecera = (TableLayout) rootView.findViewById(R.id.cabecera_c4);
         layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT);
         layoutId = new TableRow.LayoutParams((int) (tamanoPantalla*0.2), TableRow.LayoutParams.MATCH_PARENT);
-        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla*0.4), TableRow.LayoutParams.MATCH_PARENT);
-        layoutVer = new TableRow.LayoutParams((int) (tamanoPantalla*0.3), TableRow.LayoutParams.MATCH_PARENT);
+        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla*0.40), TableRow.LayoutParams.MATCH_PARENT);
+        layoutVer = new TableRow.LayoutParams((int) (tamanoPantalla*0.30), TableRow.LayoutParams.MATCH_PARENT);
 
         int val1 = 0;
         int val2 = 0;
@@ -224,13 +230,13 @@ public class TablaConsultarInventario {
         this.MAX_FILAS = 5;
 
         rs = actividad.getResources();
-        tabla = (TableLayout) rootView.findViewById(R.id.tabla);
-        cabecera = (TableLayout) rootView.findViewById(R.id.cabecera);
+        tabla = (TableLayout) rootView.findViewById(R.id.tabla_c4);
+        cabecera = (TableLayout) rootView.findViewById(R.id.cabecera_c4);
         layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT);
         layoutId = new TableRow.LayoutParams((int) (tamanoPantalla*0.2), TableRow.LayoutParams.MATCH_PARENT);
-        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla*0.4), TableRow.LayoutParams.MATCH_PARENT);
-        layoutVer = new TableRow.LayoutParams((int) (tamanoPantalla*0.3), TableRow.LayoutParams.MATCH_PARENT);
+        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla*0.40), TableRow.LayoutParams.MATCH_PARENT);
+        layoutVer = new TableRow.LayoutParams((int) (tamanoPantalla*0.30), TableRow.LayoutParams.MATCH_PARENT);
 
         int val1 = 0;
         int val2 = 0;
@@ -264,13 +270,13 @@ public class TablaConsultarInventario {
         this.MAX_FILAS = 5;
 
         rs = actividad.getResources();
-        tabla = (TableLayout) rootView.findViewById(R.id.tabla);
-        cabecera = (TableLayout) rootView.findViewById(R.id.cabecera);
+        tabla = (TableLayout) rootView.findViewById(R.id.tabla_c4);
+        cabecera = (TableLayout) rootView.findViewById(R.id.cabecera_c4);
         layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT);
         layoutId = new TableRow.LayoutParams((int) (tamanoPantalla*0.2), TableRow.LayoutParams.MATCH_PARENT);
-        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla*0.4), TableRow.LayoutParams.MATCH_PARENT);
-        layoutVer = new TableRow.LayoutParams((int) (tamanoPantalla*0.3), TableRow.LayoutParams.MATCH_PARENT);
+        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla*0.40), TableRow.LayoutParams.MATCH_PARENT);
+        layoutVer = new TableRow.LayoutParams((int) (tamanoPantalla*0.30), TableRow.LayoutParams.MATCH_PARENT);
 
 
         inicio = -5;
