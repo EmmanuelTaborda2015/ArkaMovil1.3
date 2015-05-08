@@ -31,13 +31,6 @@ public class TablaConsultarInventariosAsignados {
     TableRow.LayoutParams layoutVer;
 
     private static Activity act;
-    private static View vista;
-
-    public void cerrarDialog() {
-        dialog.dismiss();
-    }
-
-    private static Asignaciones dialog;
 
     Resources rs;
     private static List<String> id_elemento;
@@ -53,7 +46,6 @@ public class TablaConsultarInventariosAsignados {
     public void crear(View rootView, Activity actividad, List<String> id, List<String> desc) {
 
         this.act = actividad;
-        this.vista = rootView;
         this.MAX_FILAS = 5;
 
         this.id_elemento = id;
@@ -168,9 +160,8 @@ public class TablaConsultarInventariosAsignados {
             txtVer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    dialog = new Asignaciones(act, v.getId(), id_elemento);
-                    dialog.show();
+                    WS_Asignaciones ws_asignaciones = new WS_Asignaciones();
+                    ws_asignaciones.startWebAccess(act, id_elemento.get(v.getId()));
                 }
             });
 

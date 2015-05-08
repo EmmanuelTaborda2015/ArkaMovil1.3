@@ -1,7 +1,9 @@
 package com.arkamovil.android.casos_uso;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,11 +13,14 @@ import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.arkamovil.android.Informacion.Modificar_Informacion_Elementos_Scanner;
 import com.arkamovil.android.R;
 import com.arkamovil.android.herramientas.Despliegue;
+import com.arkamovil.android.procesos.GenerarPDF_Inventarios;
 import com.arkamovil.android.procesos.TablaModificarInventario;
+import com.arkamovil.android.servicios_web.WS_Asignaciones;
 import com.arkamovil.android.servicios_web.WS_Dependencia;
 import com.arkamovil.android.servicios_web.WS_Dependencia_Postgres;
 import com.arkamovil.android.servicios_web.WS_Elemento;
@@ -34,11 +39,21 @@ public class CasoUso4 extends Fragment {
     private AutoCompleteTextView funcionario;
     private Button scanear;
 
+    private Thread thread_actualizarregistro;
+
+    private Handler handler = new Handler();
+
     private List<String> lista_sede = new ArrayList<String>();
     private List<String> lista_dependencia = new ArrayList<String>();
     private List<String> lista_funcionario = new ArrayList<String>();
 
+    public AutoCompleteTextView getSede() {
+        return sede;
+    }
 
+    public AutoCompleteTextView getFuncionario() {
+        return funcionario;
+    }
 
     private ImageView bajar;
     private ImageView subir;
@@ -46,6 +61,7 @@ public class CasoUso4 extends Fragment {
     private WS_Elemento elem;
 
     private View rootView;
+
 
     private int seleccion = 0;
 
@@ -168,6 +184,37 @@ public class CasoUso4 extends Fragment {
             }
         });
 
+        Button guardar;
+        guardar = (Button) rootView.findViewById(R.id.generarpdf_c4);
+        guardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                thread_actualizarregistro = new Thread() {
+                    public void run() {
+
+                        //CasoUso4 casoUso4 = new CasoUso4();
+
+
+                        GenerarPDF_Inventarios generar = new GenerarPDF_Inventarios();
+                        generar.generar(getResources(),"uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho");
+//                            String id_elementoGuardar = datos.getId_elemento().get(i);
+//                            String elementoGuardar = String.valueOf(elemento.getText());
+//                            String placaGuardar = String.valueOf(placa.getText());
+//                            String serieGuardar = String.valueOf(serie.getText());
+//                            String estadoGuardar = String.valueOf(estadoSpin.getSelectedItem());
+//                            String observacionGuardar = String.valueOf(observacion.getText());
+//                            WS_ActualizarInventario ws_actualizarInventario = new WS_ActualizarInventario();
+//                            ws_actualizarInventario.startWebAccess(c, id_elementoGuardar, serieGuardar, placaGuardar,estadoGuardar,observacionGuardar);
+
+                        handler.post(createUI);
+                    }
+                };
+
+                thread_actualizarregistro.start();
+            }
+        });
+
 
         return rootView;
     }
@@ -200,4 +247,11 @@ public class CasoUso4 extends Fragment {
         bajar.setVisibility(View.INVISIBLE);
         subir.setVisibility(View.INVISIBLE);
     }
+
+    final Runnable createUI = new Runnable() {
+
+        public void run() {
+            Toast.makeText(getActivity(), "Se ha generado el pdf en la carpeta -> Download -> Inventarios", Toast.LENGTH_LONG).show();
+        }
+    };
 }

@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.arkamovil.android.Informacion.Asignaciones;
 import com.arkamovil.android.R;
 import com.arkamovil.android.procesos.TablaConsultarInventario;
 import com.arkamovil.android.procesos.TablaConsultarInventariosAsignados;
@@ -21,6 +22,8 @@ import java.util.List;
 
 public class WS_Asignaciones {
 
+    private static Asignaciones dialog;
+
     private final String NAMESPACE = "arkaurn:arka";
     //private final String URL = "http://10.0.2.2/ws/servicio.php?wsdl";
     private final String URL = "http://10.20.0.38/ws_arka_android/servicio.php?wsdl";
@@ -35,18 +38,19 @@ public class WS_Asignaciones {
     private Handler handler = new Handler();
 
     private Activity act;
-    private View rootView;
-    private int caso;
-
-    private int contador = 0;
 
     private static List<String> id_elemento = new ArrayList<String>();
     private static List<String> placa = new ArrayList<String>();
     private static List<String> estado = new ArrayList<String>();
+    private static List<String> estado_actualizacion = new ArrayList<String>();
     private static List<String> observaciones = new ArrayList<String>();
 
     public static List<String> getObservaciones() {
         return observaciones;
+    }
+
+    public static List<String> getEstado_Actualizacion() {
+        return estado_actualizacion;
     }
 
     public static List<String> getEstado() {
@@ -63,9 +67,7 @@ public class WS_Asignaciones {
 
     public void startWebAccess(Activity actividad, final String id_elem) {
 
-        this.rootView = rootView;
         this.act = actividad;
-        this.caso = caso;
 
         id_elemento = new ArrayList<String>();
         placa = new ArrayList<String>();
@@ -94,7 +96,10 @@ public class WS_Asignaciones {
                         id_elemento.add(obj2.getProperty("id_elemento").toString());
                         placa.add(obj2.getProperty("placa").toString());
                         estado.add(obj2.getProperty("estado").toString());
+                        estado_actualizacion.add(obj2.getProperty("estado_actualizacion").toString());
                         observaciones.add(obj2.getProperty("observacion").toString());
+
+                        Log.v("Emmanuel", estado.get(i));
 
                     }
 
@@ -110,9 +115,13 @@ public class WS_Asignaciones {
     final Runnable createUI = new Runnable() {
 
         public void run() {
-
+            dialog = new Asignaciones(act);
+            dialog.show();
         }
     };
 
+    public void cerrarDialog() {
+        dialog.dismiss();
+    }
 
 }

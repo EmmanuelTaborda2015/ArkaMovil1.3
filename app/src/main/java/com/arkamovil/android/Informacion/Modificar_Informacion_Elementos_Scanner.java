@@ -75,22 +75,30 @@ public class Modificar_Informacion_Elementos_Scanner extends Dialog {
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                thread_actualizarregistro = new Thread() {
-                    public void run() {
-                        String id_elementoGuardar = datos.getId_elemento().get(i);
-                        String elementoGuardar = String.valueOf(elemento.getText());
-                        String placaGuardar = String.valueOf(placa.getText());
-                        String serieGuardar = String.valueOf(serie.getText());
-                        String estadoGuardar = String.valueOf(estadoSpin.getSelectedItem());
-                        String observacionGuardar = String.valueOf(observacion.getText());
-                        WS_ActualizarInventario ws_actualizarInventario = new WS_ActualizarInventario();
-                        ws_actualizarInventario.startWebAccess(c, id_elementoGuardar, serieGuardar, placaGuardar,estadoGuardar,observacionGuardar);
 
-                        handler.post(createUI);
-                    }
-                };
+                String estadoGuardar = String.valueOf(estadoSpin.getSelectedItem());
 
-                thread_actualizarregistro.start();
+                if ("--Seleccione una opción--".equals(estadoGuardar)) {
+                    Toast.makeText(c, "Porfavor seleccione el estado", Toast.LENGTH_LONG).show();
+                }else {
+                    thread_actualizarregistro = new Thread() {
+                        public void run() {
+
+                            String id_elementoGuardar = datos.getId_elemento().get(i);
+                            String elementoGuardar = String.valueOf(elemento.getText());
+                            String placaGuardar = String.valueOf(placa.getText());
+                            String serieGuardar = String.valueOf(serie.getText());
+                            String estadoGuardar = String.valueOf(estadoSpin.getSelectedItem());
+                            String observacionGuardar = String.valueOf(observacion.getText());
+                            WS_ActualizarInventario ws_actualizarInventario = new WS_ActualizarInventario();
+                            ws_actualizarInventario.startWebAccess(c, id_elementoGuardar, serieGuardar, placaGuardar, estadoGuardar, observacionGuardar);
+
+                            handler.post(createUI);
+                        }
+                    };
+
+                    thread_actualizarregistro.start();
+                }
             }
         });
 
