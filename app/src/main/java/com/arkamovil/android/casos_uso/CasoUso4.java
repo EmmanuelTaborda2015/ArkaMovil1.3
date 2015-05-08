@@ -39,20 +39,20 @@ public class CasoUso4 extends Fragment {
     private AutoCompleteTextView funcionario;
     private Button scanear;
 
+    private static String string_sede;
+    private static String string_funcionario;
+
     private Thread thread_actualizarregistro;
 
     private Handler handler = new Handler();
 
     private List<String> lista_sede = new ArrayList<String>();
     private List<String> lista_dependencia = new ArrayList<String>();
-    private List<String> lista_funcionario = new ArrayList<String>();
+    private static List<String> lista_funcionario = new ArrayList<String>();
 
-    public AutoCompleteTextView getSede() {
-        return sede;
-    }
 
-    public AutoCompleteTextView getFuncionario() {
-        return funcionario;
+    public static List<String> getLista_funcionario() {
+        return lista_funcionario;
     }
 
     private ImageView bajar;
@@ -105,6 +105,8 @@ public class CasoUso4 extends Fragment {
 
                 lista_dependencia = ws_dependencia.getDependencia();
 
+                string_sede = String.valueOf(sede.getText());
+
                 dependencia.setText("");
                 dependencia.requestFocus();
 
@@ -151,6 +153,7 @@ public class CasoUso4 extends Fragment {
 
                 elem = new WS_Elemento();
                 elem.startWebAccess(rootView, getActivity(), String.valueOf(funcionario.getText()), 3);
+                string_funcionario = String.valueOf(funcionario.getText());
             }
         });
 
@@ -254,4 +257,13 @@ public class CasoUso4 extends Fragment {
             Toast.makeText(getActivity(), "Se ha generado el pdf en la carpeta -> Download -> Inventarios", Toast.LENGTH_LONG).show();
         }
     };
+
+    public static String getString_sede() {
+        return string_sede;
+    }
+
+    public static String getString_funcionario() {
+        return string_funcionario;
+    }
 }
+
