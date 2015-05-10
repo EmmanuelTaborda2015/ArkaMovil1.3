@@ -36,7 +36,7 @@ public class TablaAsignarInventarios {
 
     private static List<String> id_elemento;
     private static List<String> descripcion;
-    private static List<Boolean> seleccion;
+    private static  boolean[] arr;
 
     private static int inicio;
 
@@ -61,10 +61,10 @@ public class TablaAsignarInventarios {
         this.id_elemento = id;
         this.descripcion = desc;
 
-        seleccion = new ArrayList<Boolean>();
+        arr = new boolean[id_elemento.size()];
 
         for(int i = 0; i < id_elemento.size(); i++){
-            this.seleccion.add(false);
+            arr[i] = false;
         }
 
         cargarElementos();
@@ -145,23 +145,22 @@ public class TablaAsignarInventarios {
             txtMod.setPadding(30, 30, 30, 30);
             txtMod.setBackgroundResource(R.drawable.tabla_celda);
             txtMod.setLayoutParams(layoutMod);
+            txtMod.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
             txtMod.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     boolean isChecked = ((CheckBox)view).isChecked();
 
                     if (isChecked) {
-                        Log.v("Aqui", view.getId() + " Checkbox marcado!");
-                        seleccion.add(view.getId(), true);
+                        arr[view.getId()] = true;
                     }
                     else {
-                        Log.v("Aqui", view.getId() + "Checkbox desmarcado!");
-                        seleccion.add(view.getId(), false);
+                        arr[view.getId()] = false;
                     }
                 }
             });
 
-            if(seleccion.get(inicio + 1) == true){
+            if(arr[(inicio + i)] == true){
                 txtMod.setChecked(true);
             }else{
                 txtMod.setChecked(false);
