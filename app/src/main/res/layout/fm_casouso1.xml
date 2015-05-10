@@ -73,6 +73,7 @@
                 <AutoCompleteTextView
                     style="@style/buttonTextArkaMovil"
                     android:inputType="number"
+                    android:enabled="false"
                     android:maxLength="15"
                     android:id="@+id/cedularesponsable_c1" />
 
@@ -86,7 +87,7 @@
                     android:inputType="textMultiLine"
                     android:lines="5"
                     android:maxLines = "5"
-                    android:maxLength="100"
+                    android:maxLength="240"
                     android:scrollbars = "vertical"
                     android:gravity="left|top"
                     style="@style/textViewArkaMovil"/>
@@ -99,7 +100,7 @@
                 <AutoCompleteTextView
                     style="@style/buttonTextArkaMovil"
                     android:inputType="number"
-                    android:editable="false"
+                    android:enabled="false"
                     android:id="@+id/numerovisita" />
 
                 <TextView

@@ -18,16 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TablaModificarInventario {
-    TableLayout tabla;
-    TableLayout cabecera;
-
-    TableRow.LayoutParams layoutFila;
-    TableRow.LayoutParams layoutId;
-    TableRow.LayoutParams layoutTexto;
-    TableRow.LayoutParams layoutMod;
-
-    private static Activity act;
-    private static View vista;
 
     public void cerrarDialog() {
         dialog.dismiss();
@@ -35,62 +25,56 @@ public class TablaModificarInventario {
 
     private static Modificar_Informacion_Elementos dialog;
 
-    Resources rs;
+    private static TableLayout tabla;
+    private static TableLayout cabecera;
+
+    private static TableRow.LayoutParams layoutFila;
+    private static TableRow.LayoutParams layoutId;
+    private static TableRow.LayoutParams layoutTexto;
+    private static TableRow.LayoutParams layoutMod;
+
+    private static Activity actividad;
+    private static View rootView;
+
+    private static final int factor = 5;
+
+
     private static List<String> id_elemento;
     private static List<String> descripcion;
+    private static  boolean[] arr;
 
-    private static int inicio = -5;
-    private static int contador = 0;
+    private static int inicio;
 
-    private int tamanoPantalla;
+    private static int tamanoPantalla;
 
 
-    private int MAX_FILAS = 0;
+    private static int MAX_FILAS = 0;
 
 
     public void crear(View rootView, Activity actividad, List<String> id, List<String> desc) {
 
-        this.act = actividad;
-        this.MAX_FILAS = 5;
+        this.actividad = actividad;
+        this.rootView = rootView;
+
+        this.tamanoPantalla = rootView.getWidth();
+
 
         this.id_elemento = id;
         this.descripcion = desc;
 
-        tamanoPantalla = rootView.getWidth();
-
-        rs = actividad.getResources();
-        tabla = (TableLayout) rootView.findViewById(R.id.tabla_6);
-        cabecera = (TableLayout) rootView.findViewById(R.id.cabecera_6);
-        layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
-                TableRow.LayoutParams.WRAP_CONTENT);
-        layoutId = new TableRow.LayoutParams((int) (tamanoPantalla*0.2), TableRow.LayoutParams.MATCH_PARENT);
-        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla*0.4), TableRow.LayoutParams.MATCH_PARENT);
-        layoutMod = new TableRow.LayoutParams((int) (tamanoPantalla*0.3), TableRow.LayoutParams.MATCH_PARENT);
-
-        int val1 = 0;
-        int val2 = 0;
-
-        if (id_elemento.size() > 0) {
-            val1 = ((int) id_elemento.size() / 5);
-            val2 = id_elemento.size() % 5;
+        if(id_elemento.size() < this.factor){
+            this.MAX_FILAS = id_elemento.size();
+        }else{
+            this.MAX_FILAS = this.factor;
         }
 
-        if (contador < val1) {
-            this.inicio = this.inicio + 5;
-            tabla.removeAllViews();
-            cabecera.removeAllViews();
-            agregarCabecera();
-            agregarFilasTabla();
-        } else if (contador == val1) {
-            this.inicio = this.inicio + 5;
-            MAX_FILAS = val2;
-            tabla.removeAllViews();
-            cabecera.removeAllViews();
-            agregarCabecera();
-            agregarFilasTabla();
-        }
+        this.inicio = 0;
 
-        contador++;
+        cargarElementos();
+
+        agregarCabecera();
+
+        agregarFilasTabla();
     }
 
     public void agregarCabecera() {
@@ -100,28 +84,28 @@ public class TablaModificarInventario {
         TextView txtInfo;
 
 
-        fila = new TableRow(act);
+        fila = new TableRow(actividad);
         fila.setLayoutParams(layoutFila);
 
-        txtId = new TextView(act);
-        txtDescripcion = new TextView(act);
-        txtInfo = new TextView(act);
+        txtId = new TextView(actividad);
+        txtDescripcion = new TextView(actividad);
+        txtInfo = new TextView(actividad);
 
         txtId.setText("Id");
         txtId.setGravity(Gravity.CENTER_HORIZONTAL);
-        txtId.setTextAppearance(act, R.style.etiqueta);
+        txtId.setTextAppearance(actividad, R.style.etiqueta);
         txtId.setBackgroundResource(R.drawable.tabla_celda_cabecera);
         txtId.setLayoutParams(layoutId);
 
         txtDescripcion.setText("Descripción");
         txtDescripcion.setGravity(Gravity.CENTER_HORIZONTAL);
-        txtDescripcion.setTextAppearance(act, R.style.etiqueta);
+        txtDescripcion.setTextAppearance(actividad, R.style.etiqueta);
         txtDescripcion.setBackgroundResource(R.drawable.tabla_celda_cabecera);
         txtDescripcion.setLayoutParams(layoutTexto);
 
         txtInfo.setText("Modificar");
         txtInfo.setGravity(Gravity.CENTER_HORIZONTAL);
-        txtInfo.setTextAppearance(act, R.style.etiqueta);
+        txtInfo.setTextAppearance(actividad, R.style.etiqueta);
         txtInfo.setBackgroundResource(R.drawable.tabla_celda_cabecera);
         txtInfo.setLayoutParams(layoutMod);
 
@@ -139,22 +123,22 @@ public class TablaModificarInventario {
         ImageView txtMod;
 
         for (int i = 0; i < MAX_FILAS; i++) {
-            fila = new TableRow(act);
+            fila = new TableRow(actividad);
             fila.setLayoutParams(layoutFila);
 
-            txtId = new TextView(act);
-            txtDescripcion = new TextView(act);
-            txtMod = new ImageView(act);
+            txtId = new TextView(actividad);
+            txtDescripcion = new TextView(actividad);
+            txtMod = new ImageView(actividad);
 
             txtId.setText(id_elemento.get(this.inicio + i));
             txtId.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL);
-            txtId.setTextAppearance(act, R.style.etiqueta);
+            txtId.setTextAppearance(actividad, R.style.etiqueta);
             txtId.setBackgroundResource(R.drawable.tabla_celda);
             txtId.setLayoutParams(layoutId);
 
             txtDescripcion.setText(descripcion.get(this.inicio + i));
             txtDescripcion.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL);
-            txtDescripcion.setTextAppearance(act, R.style.etiqueta);
+            txtDescripcion.setTextAppearance(actividad, R.style.etiqueta);
             txtDescripcion.setBackgroundResource(R.drawable.tabla_celda);
             txtDescripcion.setLayoutParams(layoutTexto);
 
@@ -169,7 +153,7 @@ public class TablaModificarInventario {
             txtMod.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    dialog = new Modificar_Informacion_Elementos(act, v.getId());
+                    dialog = new Modificar_Informacion_Elementos(actividad, v.getId());
                     dialog.show();
                 }
             });
@@ -183,105 +167,48 @@ public class TablaModificarInventario {
         }
     }
 
-    public void bajar(View rootView, Activity actividad) {
+    public void cargarElementos() {
 
-        this.act = actividad;
-        this.MAX_FILAS = 5;
+        tabla.removeAllViews();
 
-        rs = actividad.getResources();
         tabla = (TableLayout) rootView.findViewById(R.id.tabla_6);
         cabecera = (TableLayout) rootView.findViewById(R.id.cabecera_6);
         layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT);
-        layoutId = new TableRow.LayoutParams((int) (tamanoPantalla*0.2), TableRow.LayoutParams.MATCH_PARENT);
-        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla*0.4), TableRow.LayoutParams.MATCH_PARENT);
-        layoutMod = new TableRow.LayoutParams((int) (tamanoPantalla*0.3), TableRow.LayoutParams.MATCH_PARENT);
+        layoutId = new TableRow.LayoutParams((int) (tamanoPantalla * 0.2), TableRow.LayoutParams.MATCH_PARENT);
+        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla * 0.4), TableRow.LayoutParams.MATCH_PARENT);
+        layoutMod = new TableRow.LayoutParams((int) (tamanoPantalla * 0.3), TableRow.LayoutParams.MATCH_PARENT);
 
-        int val1 = 0;
-        int val2 = 0;
+    }
 
-        if (this.id_elemento.size() > 0) {
-            val1 = ((int) this.id_elemento.size() / 5);
-            val2 = this.id_elemento.size() % 5;
-        }
+    public void bajar(View rootView, Activity actividad) {
 
-        if (contador < val1) {
-            this.inicio = this.inicio + 5;
-            tabla.removeAllViews();
-            cabecera.removeAllViews();
-            agregarCabecera();
+        if (this.inicio <= (id_elemento.size() - (factor + 1))) {
+            cargarElementos();
+            this.inicio++;
             agregarFilasTabla();
-            contador++;
-        } else if (contador == val1) {
-            this.inicio = this.inicio + 5;
-            MAX_FILAS = val2;
-            tabla.removeAllViews();
-            cabecera.removeAllViews();
-            agregarCabecera();
-            agregarFilasTabla();
-            contador++;
         }
     }
 
     public void subir(View rootView, Activity actividad) {
 
-        this.act = actividad;
-        this.MAX_FILAS = 5;
-
-        rs = actividad.getResources();
-        tabla = (TableLayout) rootView.findViewById(R.id.tabla_6);
-        cabecera = (TableLayout) rootView.findViewById(R.id.cabecera_6);
-        layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
-                TableRow.LayoutParams.WRAP_CONTENT);
-        layoutId = new TableRow.LayoutParams((int) (tamanoPantalla*0.2), TableRow.LayoutParams.MATCH_PARENT);
-        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla*0.4), TableRow.LayoutParams.MATCH_PARENT);
-        layoutMod = new TableRow.LayoutParams((int) (tamanoPantalla*0.3), TableRow.LayoutParams.MATCH_PARENT);
-
-        int val1 = 0;
-        int val2 = 0;
-
-        if (this.id_elemento.size() > 0) {
-            val1 = ((int) this.id_elemento.size() / 5);
-            val2 = this.id_elemento.size() % 5;
-        }
-
-        if (contador > 1) {
-            this.inicio = this.inicio - 5;
-            tabla.removeAllViews();
-            cabecera.removeAllViews();
-            agregarCabecera();
+        if (this.inicio > 0) {
+            cargarElementos();
+            this.inicio--;
             agregarFilasTabla();
-            contador--;
-        } else if (contador == val1) {
-            this.inicio = this.inicio - 5;
-            MAX_FILAS = val2;
-            tabla.removeAllViews();
-            cabecera.removeAllViews();
-            agregarCabecera();
-            agregarFilasTabla();
-            contador--;
         }
     }
 
     public void borrarTabla(View rootView, Activity actividad) {
 
-        this.act = actividad;
-        this.MAX_FILAS = 5;
 
-        rs = actividad.getResources();
         tabla = (TableLayout) rootView.findViewById(R.id.tabla_6);
         cabecera = (TableLayout) rootView.findViewById(R.id.cabecera_6);
         layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT);
-        layoutId = new TableRow.LayoutParams((int) (tamanoPantalla*0.2), TableRow.LayoutParams.MATCH_PARENT);
-        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla*0.4), TableRow.LayoutParams.MATCH_PARENT);
-        layoutMod = new TableRow.LayoutParams((int) (tamanoPantalla*0.3), TableRow.LayoutParams.MATCH_PARENT);
-
-        inicio = -5;
-        contador = 0;
-
-        id_elemento = new ArrayList<String>();
-        descripcion = new ArrayList<String>();
+        layoutId = new TableRow.LayoutParams((int) (tamanoPantalla * 0.2), TableRow.LayoutParams.MATCH_PARENT);
+        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla * 0.4), TableRow.LayoutParams.MATCH_PARENT);
+        layoutMod = new TableRow.LayoutParams((int) (tamanoPantalla * 0.3), TableRow.LayoutParams.MATCH_PARENT);
 
         tabla.removeAllViews();
         cabecera.removeAllViews();

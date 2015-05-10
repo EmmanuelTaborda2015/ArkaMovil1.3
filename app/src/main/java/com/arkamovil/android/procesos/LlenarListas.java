@@ -31,7 +31,8 @@ public class LlenarListas extends Fragment{
         toSpin.add("--Seleccione una opción--");
         toSpin.add("Existente y Activo");
         toSpin.add("Sobrante");
-        toSpin.add("Faltante");
+        toSpin.add("Faltante por Hurto");
+        toSpin.add("Faltante Dependencia");
         toSpin.add("Baja");
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(act,android.R.layout.simple_spinner_item,toSpin);
         spin.setAdapter(adapter);

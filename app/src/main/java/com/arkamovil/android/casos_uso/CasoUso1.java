@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.text.format.Time;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +21,8 @@ import com.arkamovil.android.R;
 import com.arkamovil.android.herramientas.Despliegue;
 import com.arkamovil.android.procesos.GenerarPDF_ActaVisita;
 import com.arkamovil.android.servicios_web.WS_Dependencia;
-import com.arkamovil.android.servicios_web.WS_Facultad;
+import com.arkamovil.android.servicios_web.WS_Elemento;
+import com.arkamovil.android.servicios_web.WS_Funcionario_Oracle;
 import com.arkamovil.android.servicios_web.WS_NumeroVisitas;
 import com.arkamovil.android.servicios_web.WS_RegistroActaVisita;
 import com.arkamovil.android.servicios_web.WS_Sede;
@@ -43,7 +45,7 @@ public class CasoUso1 extends Fragment {
 
     private AutoCompleteTextView sede;
     private AutoCompleteTextView dependencia;
-    private AutoCompleteTextView nombRes;
+    private AutoCompleteTextView funcionario;
     private AutoCompleteTextView docRes;
     private EditText observacion;
     private AutoCompleteTextView numVisita;
@@ -52,7 +54,6 @@ public class CasoUso1 extends Fragment {
     private String proxVisita;
     private String fecha;
     private String sede_s;
-    private String facultad_s;
     private String dependencia_s;
     private String nombRes_s;
     private String docRes_s;
@@ -73,8 +74,12 @@ public class CasoUso1 extends Fragment {
 
     private List<String> lista_sede = new ArrayList<String>();
     private List<String> lista_dependencia = new ArrayList<String>();
+    private List<String> lista_funcionario = new ArrayList<String>();
+    private List<String> lista_documento = new ArrayList<String>();
 
     private int seleccion1 = 0;
+    private int seleccion2 = 0;
+    private int seleccion3 = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -109,6 +114,8 @@ public class CasoUso1 extends Fragment {
                 //Se eliminan los items seleccionados anteriormente.
 
                 dependencia.setText("");
+                funcionario.setText("");
+                docRes.setText("");
                 dependencia.requestFocus();
 
                 //Se despliegan los datos obtenidos de la dependencia.
@@ -129,9 +136,44 @@ public class CasoUso1 extends Fragment {
         dependencia.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                nombRes.requestFocus();
+
+                for (int i = 0; i < lista_dependencia.size(); i++) {
+                    if (String.valueOf(dependencia.getText()).equals(lista_dependencia.get(i))) {
+                        seleccion2 = i;
+                    }
+                }
+                WS_Funcionario_Oracle ws_funcionario = new WS_Funcionario_Oracle();
+                ws_funcionario.startWebAccess(getActivity(), funcionario, lista_dependencia.get(seleccion2));
+
+                lista_funcionario = ws_funcionario.getFun_nombre();
+                lista_documento = ws_funcionario.getFun_identificacion();
+
+                funcionario.setText("");
+                docRes.setText("");
+                funcionario.requestFocus();
+
+                new Despliegue(funcionario);
             }
         });
+
+        funcionario.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                for (int i = 0; i < lista_funcionario.size(); i++) {
+                    if (String.valueOf(funcionario.getText()).equals(lista_funcionario.get(i))) {
+                        seleccion3 = i;
+                    }
+                }
+
+                docRes.setText(lista_documento.get(seleccion3));
+
+                observacion.requestFocus();
+
+            }
+        });
+
+
         Time today = new Time(Time.getCurrentTimezone());
         today.setToNow();
 
@@ -195,7 +237,7 @@ public class CasoUso1 extends Fragment {
                     proxVisita = String.valueOf(day2) + "-" + String.valueOf(month2 + 1) + "-" + String.valueOf(year2);
                     sede_s = String.valueOf(sede.getText());
                     dependencia_s = String.valueOf(dependencia.getText());
-                    nombRes_s = String.valueOf(nombRes.getText());
+                    nombRes_s = String.valueOf(funcionario.getText());
                     docRes_s = String.valueOf(docRes.getText());
                     observacion_s = String.valueOf(observacion.getText());
                     numVisita_s = String.valueOf(numVisita.getText());
@@ -296,7 +338,7 @@ public class CasoUso1 extends Fragment {
 
         sede = (AutoCompleteTextView) rootView.findViewById(R.id.sede_c1);
         dependencia = (AutoCompleteTextView) rootView.findViewById(R.id.dependencia_c1);
-        nombRes = (AutoCompleteTextView) rootView.findViewById(R.id.nombreresponsable_c1);
+        funcionario = (AutoCompleteTextView) rootView.findViewById(R.id.nombreresponsable_c1);
         docRes = (AutoCompleteTextView) rootView.findViewById(R.id.cedularesponsable_c1);
         observacion = (EditText) rootView.findViewById(R.id.observacion_c1);
         numVisita = (AutoCompleteTextView) rootView.findViewById(R.id.numerovisita);
@@ -314,7 +356,7 @@ public class CasoUso1 extends Fragment {
         } else if ("".equals(String.valueOf(dependencia.getText())) && validador == 0) {
             Toast.makeText(getActivity(), "Porfavor ingrese la Dependencia", Toast.LENGTH_LONG).show();
             validador++;
-        } else if ("".equals(String.valueOf(nombRes.getText())) && validador == 0) {
+        } else if ("".equals(String.valueOf(funcionario.getText())) && validador == 0) {
             Toast.makeText(getActivity(), "Porfavor ingrese el Nombre del responsable", Toast.LENGTH_LONG).show();
             validador++;
         } else if ("".equals(String.valueOf(docRes.getText())) && validador == 0) {
@@ -336,7 +378,7 @@ public class CasoUso1 extends Fragment {
     public void limpiar(){
         sede.setText("");
         dependencia.setText("");
-        nombRes.setText("");
+        funcionario.setText("");
         docRes.setText("");
         observacion.setText("");
         numVisita.setText("");

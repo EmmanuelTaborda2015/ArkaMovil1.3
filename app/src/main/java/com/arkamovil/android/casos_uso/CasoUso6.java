@@ -37,7 +37,7 @@ public class CasoUso6 extends Fragment {
     private List<String> lista_sede = new ArrayList<String>();
     private List<String> lista_dependencia = new ArrayList<String>();
     private List<String> lista_funcionario = new ArrayList<String>();
-
+    private List<String> lista_documento = new ArrayList<String>();
 
 
     private ImageView bajar;
@@ -48,6 +48,7 @@ public class CasoUso6 extends Fragment {
     private View rootView;
 
     private int seleccion = 0;
+    private int seleccion2 = 0;
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -116,7 +117,8 @@ public class CasoUso6 extends Fragment {
                 WS_Funcionario_Oracle ws_funcionario = new WS_Funcionario_Oracle();
                 ws_funcionario.startWebAccess(getActivity(), funcionario, lista_dependencia.get(seleccion));
 
-                lista_funcionario = ws_funcionario.getFuncionario();
+                lista_funcionario = ws_funcionario.getFun_nombre();
+                lista_documento = ws_funcionario.getFun_identificacion();
 
                 funcionario.setText("");
                 funcionario.requestFocus();
@@ -131,10 +133,16 @@ public class CasoUso6 extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                    limpiarTabla();
+                for (int i = 0; i < lista_funcionario.size(); i++) {
+                    if (String.valueOf(funcionario.getText()).equals(lista_funcionario.get(i))) {
+                        seleccion2 = i;
+                    }
+                }
 
-                    elem = new WS_Elemento();
-                    elem.startWebAccess(rootView, getActivity(), String.valueOf(funcionario.getText()), 2);
+                limpiarTabla();
+
+                elem = new WS_Elemento();
+                elem.startWebAccess(rootView, getActivity(), lista_documento.get(seleccion2), 2);
             }
         });
 
@@ -193,7 +201,7 @@ public class CasoUso6 extends Fragment {
 
     }
 
-    public void limpiarTabla(){
+    public void limpiarTabla() {
 
         TablaModificarInventario borrar = new TablaModificarInventario();
         borrar.borrarTabla(rootView, getActivity());

@@ -28,13 +28,16 @@ public class WS_Funcionario_Oracle {
     Activity act;
     AutoCompleteTextView spin;
 
-    List<String> funcionario = new ArrayList<String>();
+     List<String> fun_identificacion = new ArrayList<String>();
+     List<String> fun_nombre = new ArrayList<String>();
 
-
-    public List<String> getFuncionario() {
-        return funcionario;
+    public List<String> getFun_nombre() {
+        return fun_nombre;
     }
 
+    public List<String> getFun_identificacion() {
+        return fun_identificacion;
+    }
 
     public void startWebAccess(final Activity act, final AutoCompleteTextView spin, final String dependencia) {
 
@@ -45,7 +48,7 @@ public class WS_Funcionario_Oracle {
             public void run() {
                 SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 
-                request.addProperty("dependencia", dependencia);
+                request.addProperty("id_objeto", dependencia);
 
                 SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
                 envelope.setOutputSoapObject(request);
@@ -55,10 +58,13 @@ public class WS_Funcionario_Oracle {
                 try {
 
                     httpTransport.call(SOAP_ACTION, envelope);
-                    SoapObject response = (SoapObject) envelope.getResponse();
 
-                    for (int i = 0; i < response.getPropertyCount(); i++) {
-                        funcionario.add(response.getProperty(i).toString());
+                    SoapObject obj1 = (SoapObject) envelope.getResponse();
+
+                    for (int i = 0; i < obj1.getPropertyCount(); i++) {
+                        SoapObject obj2 = (SoapObject) obj1.getProperty(i);
+                        fun_identificacion.add(obj2.getProperty("id").toString());
+                        fun_nombre.add(obj2.getProperty("nombre").toString());
                     }
 
                 } catch (Exception exception) {
@@ -74,7 +80,7 @@ public class WS_Funcionario_Oracle {
     final Runnable createUI = new Runnable() {
 
         public void run() {
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(act, android.R.layout.simple_spinner_item, funcionario);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(act, android.R.layout.simple_spinner_item, fun_nombre);
             spin.setAdapter(adapter);
         }
     };

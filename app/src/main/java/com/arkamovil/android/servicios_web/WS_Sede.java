@@ -28,7 +28,11 @@ public class WS_Sede {
     private AutoCompleteTextView spin;
 
     private List<String> sede = new ArrayList<String>();
+    private List<String> id_sede = new ArrayList<String>();
 
+    public List<String> getId_sede() {
+        return id_sede;
+    }
 
     public void startWebAccess(final Activity act, final AutoCompleteTextView spin) {
 
@@ -47,9 +51,13 @@ public class WS_Sede {
                 try {
 
                     httpTransport.call(SOAP_ACTION, envelope);
-                    SoapObject response = (SoapObject) envelope.getResponse();
-                    for (int i = 0; i < response.getPropertyCount(); i++) {
-                        sede.add(response.getProperty(i).toString());
+
+                    SoapObject obj1 = (SoapObject) envelope.getResponse();
+
+                    for (int i = 0; i < obj1.getPropertyCount(); i++) {
+                        SoapObject obj2 = (SoapObject) obj1.getProperty(i);
+                        id_sede.add(obj2.getProperty("id").toString());
+                        sede.add(obj2.getProperty("nombre").toString());
                     }
 
                 } catch (Exception exception) {

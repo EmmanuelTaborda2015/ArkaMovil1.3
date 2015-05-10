@@ -134,7 +134,7 @@ public class CasoUso4 extends Fragment {
                 WS_Funcionario_Oracle ws_funcionario = new WS_Funcionario_Oracle();
                 ws_funcionario.startWebAccess(getActivity(), funcionario, lista_dependencia.get(seleccion));
 
-                lista_funcionario = ws_funcionario.getFuncionario();
+                lista_funcionario = ws_funcionario.getFun_nombre();
 
                 funcionario.setText("");
                 funcionario.requestFocus();

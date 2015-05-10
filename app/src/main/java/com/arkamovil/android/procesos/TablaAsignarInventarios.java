@@ -54,12 +54,16 @@ public class TablaAsignarInventarios {
         this.tamanoPantalla = rootView.getWidth();
 
 
-        this.MAX_FILAS = this.factor;
-
-        this.inicio = 0;
-
         this.id_elemento = id;
         this.descripcion = desc;
+
+        if(id_elemento.size() < this.factor){
+            this.MAX_FILAS = id_elemento.size();
+        }else{
+            this.MAX_FILAS = this.factor;
+        }
+
+        this.inicio = 0;
 
         arr = new boolean[id_elemento.size()];
 

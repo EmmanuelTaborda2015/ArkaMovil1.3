@@ -16,8 +16,6 @@ public class Informacion_Elementos extends Dialog {
 
 
     public Activity c;
-    public Dialog d;
-    public Button cerrar;
     public int i;
 
     public Informacion_Elementos(Activity a, int i) {
