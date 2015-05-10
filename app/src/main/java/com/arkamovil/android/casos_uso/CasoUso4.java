@@ -246,7 +246,7 @@ public class CasoUso4 extends Fragment {
     public void limpiarTabla(){
 
         TablaModificarInventario borrar = new TablaModificarInventario();
-//        borrar.borrarTabla(rootView, getActivity());
+        //borrar.borrarTabla(rootView, getActivity());
         bajar.setVisibility(View.INVISIBLE);
         subir.setVisibility(View.INVISIBLE);
     }

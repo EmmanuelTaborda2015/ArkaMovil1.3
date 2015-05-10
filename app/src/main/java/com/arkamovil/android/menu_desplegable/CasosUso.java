@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.arkamovil.android.R;
 import com.arkamovil.android.casos_uso.CasoUso1;
+import com.arkamovil.android.casos_uso.CasoUso2;
 import com.arkamovil.android.casos_uso.CasoUso4;
 import com.arkamovil.android.casos_uso.CasoUso5;
 import com.arkamovil.android.casos_uso.CasoUso6;
@@ -68,7 +69,7 @@ public class CasosUso extends ActionBarActivity
                 cont++;
                 break;
             case 2:
-                mTitle = getString(R.string.title_section2);
+                fragment = new CasoUso2();
                 break;
             case 3:
                 mTitle = getString(R.string.title_section3);
