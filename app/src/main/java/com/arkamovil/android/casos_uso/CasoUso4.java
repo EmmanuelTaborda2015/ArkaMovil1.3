@@ -19,6 +19,7 @@ import com.arkamovil.android.Informacion.Modificar_Informacion_Elementos_Scanner
 import com.arkamovil.android.R;
 import com.arkamovil.android.herramientas.Despliegue;
 import com.arkamovil.android.procesos.GenerarPDF_Inventarios;
+import com.arkamovil.android.procesos.TablaConsultarInventariosAsignados;
 import com.arkamovil.android.procesos.TablaModificarInventario;
 import com.arkamovil.android.servicios_web.WS_Asignaciones;
 import com.arkamovil.android.servicios_web.WS_Dependencia;
@@ -31,6 +32,7 @@ import com.arkamovil.android.servicios_web.WS_Sede;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 
 public class CasoUso4 extends Fragment {
 
@@ -38,6 +40,9 @@ public class CasoUso4 extends Fragment {
     private AutoCompleteTextView dependencia;
     private AutoCompleteTextView funcionario;
     private Button scanear;
+    private Button pdf;
+
+    private static WS_Elemento elem;
 
     private static String string_sede;
     private static String string_funcionario;
@@ -46,10 +51,16 @@ public class CasoUso4 extends Fragment {
 
     private Handler handler = new Handler();
 
-    private List<String> lista_sede = new ArrayList<String>();
-    private List<String> lista_dependencia = new ArrayList<String>();
+    private static List<String> lista_sede = new ArrayList<String>();
+    private static List<String> lista_dependencia = new ArrayList<String>();
     private static List<String> lista_funcionario = new ArrayList<String>();
+    private static List<String> lista_documentos = new ArrayList<String>();
+    private static List<String> id_elemento = new ArrayList<String>();
 
+
+    public static List<String> getLista_documentos() {
+        return lista_documentos;
+    }
 
     public static List<String> getLista_funcionario() {
         return lista_funcionario;
@@ -58,12 +69,12 @@ public class CasoUso4 extends Fragment {
     private ImageView bajar;
     private ImageView subir;
 
-    private WS_Elemento elem;
 
     private View rootView;
 
 
     private int seleccion = 0;
+    private int seleccion2 = 0;
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,11 +85,15 @@ public class CasoUso4 extends Fragment {
         sede = (AutoCompleteTextView) rootView.findViewById(R.id.sede_c4);
         dependencia = (AutoCompleteTextView) rootView.findViewById(R.id.dependencia_c4);
         funcionario = (AutoCompleteTextView) rootView.findViewById(R.id.funcionario_c4);
+        pdf = (Button) rootView.findViewById(R.id.generarpdf_c4);
         bajar = (ImageView) rootView.findViewById(R.id.bajar_c4);
         subir = (ImageView) rootView.findViewById(R.id.subir_c4);
+        scanear = (Button) rootView.findViewById(R.id.escanear_c4);
 
         bajar.setVisibility(View.INVISIBLE);
         subir.setVisibility(View.INVISIBLE);
+        pdf.setVisibility(View.INVISIBLE);
+        scanear.setVisibility(View.INVISIBLE);
 
         //Se envia parametros de vista y de dependencia seleccionada en el campo AutoComplete al web service de dependencias.
 
@@ -135,6 +150,7 @@ public class CasoUso4 extends Fragment {
                 ws_funcionario.startWebAccess(getActivity(), funcionario, lista_dependencia.get(seleccion));
 
                 lista_funcionario = ws_funcionario.getFun_nombre();
+                lista_documentos = ws_funcionario.getFun_identificacion();
 
                 funcionario.setText("");
                 funcionario.requestFocus();
@@ -149,10 +165,18 @@ public class CasoUso4 extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                for (int i = 0; i < lista_funcionario.size(); i++) {
+                    if (String.valueOf(funcionario.getText()).equals(lista_funcionario.get(i))) {
+                        seleccion2 = i;
+                    }
+                }
+
                 limpiarTabla();
 
                 elem = new WS_Elemento();
-                elem.startWebAccess(rootView, getActivity(), String.valueOf(funcionario.getText()), 3);
+                elem.startWebAccess(rootView, getActivity(), lista_documentos.get(seleccion2), 3);
+                id_elemento = elem.getId_elemento();
+
                 string_funcionario = String.valueOf(funcionario.getText());
             }
         });
@@ -161,7 +185,7 @@ public class CasoUso4 extends Fragment {
         bajar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TablaModificarInventario baj = new TablaModificarInventario();
+                TablaConsultarInventariosAsignados baj = new TablaConsultarInventariosAsignados();
                 baj.bajar(rootView, getActivity());
             }
         });
@@ -169,7 +193,7 @@ public class CasoUso4 extends Fragment {
         subir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TablaModificarInventario sub = new TablaModificarInventario();
+                TablaConsultarInventariosAsignados sub = new TablaConsultarInventariosAsignados();
                 sub.subir(rootView, getActivity());
             }
         });
@@ -178,18 +202,16 @@ public class CasoUso4 extends Fragment {
         //El proceso que se encarga de leer el código de barras  se encuentra en la clase casos de uso ya que es la actividad principal (Super) y solo desde allí se pueden generar los procesos.
 
 
-        scanear = (Button) rootView.findViewById(R.id.escanear_c4);
-        scanear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent("com.arkamovil.android.SCAN");
-                startActivityForResult(intent, 0);
-            }
-        });
+//        scanear = (Button) rootView.findViewById(R.id.escanear_c4);
+//        scanear.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent("com.arkamovil.android.SCAN");
+//                startActivityForResult(intent, 0);
+//            }
+//        });
 
-        Button guardar;
-        guardar = (Button) rootView.findViewById(R.id.generarpdf_c4);
-        guardar.setOnClickListener(new View.OnClickListener() {
+        pdf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -200,15 +222,8 @@ public class CasoUso4 extends Fragment {
 
 
                         GenerarPDF_Inventarios generar = new GenerarPDF_Inventarios();
-                        generar.generar(getResources(),"uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho");
-//                            String id_elementoGuardar = datos.getId_elemento().get(i);
-//                            String elementoGuardar = String.valueOf(elemento.getText());
-//                            String placaGuardar = String.valueOf(placa.getText());
-//                            String serieGuardar = String.valueOf(serie.getText());
-//                            String estadoGuardar = String.valueOf(estadoSpin.getSelectedItem());
-//                            String observacionGuardar = String.valueOf(observacion.getText());
-//                            WS_ActualizarInventario ws_actualizarInventario = new WS_ActualizarInventario();
-//                            ws_actualizarInventario.startWebAccess(c, id_elementoGuardar, serieGuardar, placaGuardar,estadoGuardar,observacionGuardar);
+                        generar.generar(getResources(), getActivity(), id_elemento, String.valueOf(sede.getText()), String.valueOf(dependencia.getText()), String.valueOf(funcionario.getText()));
+//
 
                         handler.post(createUI);
                     }
@@ -224,29 +239,29 @@ public class CasoUso4 extends Fragment {
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //En esta función se llama a la libreria encargada de leer y obtener la información de los códigos de barras despues de que se ha generado el intent.
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-
-        if (resultCode == getActivity().RESULT_OK) {
-            String contenido = intent.getStringExtra("SCAN_RESULT");
-            String formato = intent.getStringExtra("SCAN_RESULT_FORMAT");
-
-            //scanear.setText(contenido);
-
-            WS_Placa ws_placa = new WS_Placa();
-            ws_placa.startWebAccess(rootView, getActivity(), contenido);
-
-        } else if (resultCode == getActivity().RESULT_CANCELED) {
-            // Si se cancelo la captura.
-        }
-
-    }
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+//        super.onActivityResult(requestCode, resultCode, intent);
+//
+//        if (resultCode == getActivity().RESULT_OK) {
+//            String contenido = intent.getStringExtra("SCAN_RESULT");
+//            String formato = intent.getStringExtra("SCAN_RESULT_FORMAT");
+//
+//            //scanear.setText(contenido);
+//
+//            WS_Placa ws_placa = new WS_Placa();
+//            ws_placa.startWebAccess(rootView, getActivity(), contenido);
+//
+//        } else if (resultCode == getActivity().RESULT_CANCELED) {
+//            // Si se cancelo la captura.
+//        }
+//
+//    }
 
     public void limpiarTabla(){
 
-        TablaModificarInventario borrar = new TablaModificarInventario();
-        //borrar.borrarTabla(rootView, getActivity());
+        TablaConsultarInventariosAsignados borrar = new TablaConsultarInventariosAsignados();
+        borrar.borrarTabla(rootView, getActivity());
         bajar.setVisibility(View.INVISIBLE);
         subir.setVisibility(View.INVISIBLE);
     }

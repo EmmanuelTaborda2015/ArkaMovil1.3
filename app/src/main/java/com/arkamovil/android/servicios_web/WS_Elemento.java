@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.arkamovil.android.R;
@@ -172,8 +173,10 @@ public class WS_Elemento {
                 crear.crear(rootView, act, id_elemento, descripcion);
                 ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_c4);
                 ImageView subir = (ImageView) rootView.findViewById(R.id.subir_c4);
+                Button pdf = (Button) rootView.findViewById(R.id.generarpdf_c4);
                 bajar.setVisibility(View.VISIBLE);
                 subir.setVisibility(View.VISIBLE);
+                pdf.setVisibility(View.VISIBLE);
             }
 
 

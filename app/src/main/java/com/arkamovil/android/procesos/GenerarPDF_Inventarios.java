@@ -7,6 +7,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Activity;
 import android.content.res.Resources;
@@ -21,6 +23,8 @@ import android.view.View.OnClickListener;
 
 import com.arkamovil.android.R;
 import com.arkamovil.android.casos_uso.CasoUso4;
+import com.arkamovil.android.servicios_web.WS_Asignaciones;
+import com.arkamovil.android.servicios_web.WS_Elemento;
 import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
@@ -47,10 +51,16 @@ public class GenerarPDF_Inventarios{
     private static String NOMBRE_DOCUMENTO = "prueba.pdf";
     private final static String ETIQUETA_ERROR = "ERROR";
 
+    private static Activity actividad;
+    private static List<String> id_elemento;
 
-    public  void generar(Resources resources, String fecha, String sede, String dependencia, String nomres, String cedres, String obser, String numvis, String proxVisita){
 
-        NOMBRE_DOCUMENTO = "Actavisita"+numvis+".pdf";
+    public  void generar(Resources resources, Activity actividad, List<String> elem, String sede, String dependencia, String funcionario){
+
+        this.actividad = actividad;
+        this.id_elemento = elem;
+
+        NOMBRE_DOCUMENTO = "Actavisita"+1+".pdf";
 
         // Creamos el documento.
         Document documento = new Document();
@@ -85,7 +95,7 @@ public class GenerarPDF_Inventarios{
 
             // se añade el titulo
 
-            Paragraph titulo = new Paragraph("UNIVERSIDAD DISTRITAL \"FRANCISCO JOSE DE CALDAS\" \n ALMACEN GENERAL E INVENTARIOS");
+            Paragraph titulo = new Paragraph("UNIVERSIDAD DISTRITAL \"FRANCISCO JOSE DE CALDAS\" ");
 
             Font font1 = FontFactory.getFont(FontFactory.HELVETICA, 40,
                     Font.BOLD, Color.BLACK);
@@ -97,7 +107,7 @@ public class GenerarPDF_Inventarios{
 
             // se añade el subtitulo
 
-            Paragraph subtitulo2 = new Paragraph("VISITA DE LEVANTAMIENTO FISICO DE INVENTARIOS");
+            Paragraph subtitulo2 = new Paragraph("LEVANTAMIENTO FISICO DE INVENTARIOS");
 
 
             Font font2 = FontFactory.getFont(FontFactory.HELVETICA, 38,
@@ -191,7 +201,7 @@ public class GenerarPDF_Inventarios{
 
             tablaDatos.addCell(cell);
 
-            cell = new PdfPCell(new Phrase(""));
+            cell = new PdfPCell(new Phrase(sede));
             cell.setPaddingBottom(5);
             cell.setPaddingTop(5);
             cell.setPaddingLeft(5);
@@ -210,7 +220,7 @@ public class GenerarPDF_Inventarios{
 
             tablaDatos.addCell(cell);
 
-            cell = new PdfPCell(new Phrase(""));
+            cell = new PdfPCell(new Phrase(dependencia));
             cell.setPaddingBottom(5);
             cell.setPaddingTop(5);
             cell.setPaddingLeft(5);
@@ -229,7 +239,7 @@ public class GenerarPDF_Inventarios{
 
             tablaDatos.addCell(cell);
 
-            cell = new PdfPCell(new Phrase(""));
+            cell = new PdfPCell(new Phrase(funcionario));
             cell.setPaddingBottom(5);
             cell.setPaddingTop(5);
             cell.setPaddingLeft(5);
@@ -338,52 +348,66 @@ public class GenerarPDF_Inventarios{
 
             //-----------------TABLA-----------------//
 
-            cell = new PdfPCell(new Phrase(""));
-            cell.setRowspan(4);
-            cell.setPaddingBottom(5);
-            cell.setPaddingTop(5);
-            cell.setPaddingLeft(5);
-            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            cell.setVerticalAlignment(Element.ALIGN_CENTER);
+            WS_Asignaciones ws_asignaciones = new WS_Asignaciones();
 
-            tablaCargada.addCell(cell);
+            for(int i=0; i< id_elemento.size(); i++) {
 
-            cell = new PdfPCell(new Phrase(""));
-            cell.setPaddingBottom(5);
-            cell.setPaddingTop(5);
-            cell.setPaddingLeft(5);
-            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            cell.setVerticalAlignment(Element.ALIGN_CENTER);
+                ws_asignaciones.startWebAccess(this.actividad, id_elemento.get(i));
 
-            tablaCargada.addCell(cell);
+                String id = ws_asignaciones.getId_elemento().get(0);
+                String placa = ws_asignaciones.getPlaca().get(0);
+                String estado_act = ws_asignaciones.getEstado_Actualizacion().get(0);
+                String estado = ws_asignaciones.getEstado().get(0);
+                String observaciones = ws_asignaciones.getObservaciones().get(0);
 
-            cell = new PdfPCell(new Phrase(""));
-            cell.setPaddingBottom(5);
-            cell.setPaddingTop(5);
-            cell.setPaddingLeft(5);
-            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            cell.setVerticalAlignment(Element.ALIGN_CENTER);
 
-            tablaCargada.addCell(cell);
+                cell = new PdfPCell(new Phrase(id));
+                cell.setRowspan(4);
+                cell.setPaddingBottom(5);
+                cell.setPaddingTop(5);
+                cell.setPaddingLeft(5);
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell.setVerticalAlignment(Element.ALIGN_CENTER);
 
-            cell = new PdfPCell(new Phrase(""));
-            cell.setPaddingBottom(5);
-            cell.setPaddingTop(5);
-            cell.setPaddingLeft(5);
-            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            cell.setVerticalAlignment(Element.ALIGN_CENTER);
+                tablaCargada.addCell(cell);
 
-            tablaCargada.addCell(cell);
+                cell = new PdfPCell(new Phrase(placa));
+                cell.setPaddingBottom(5);
+                cell.setPaddingTop(5);
+                cell.setPaddingLeft(5);
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell.setVerticalAlignment(Element.ALIGN_CENTER);
 
-            cell = new PdfPCell(new Phrase(""));
-            cell.setPaddingBottom(5);
-            cell.setPaddingTop(5);
-            cell.setPaddingLeft(5);
-            cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-            cell.setVerticalAlignment(Element.ALIGN_CENTER);
+                tablaCargada.addCell(cell);
 
-            tablaCargada.addCell(cell);
+                cell = new PdfPCell(new Phrase(estado_act));
+                cell.setPaddingBottom(5);
+                cell.setPaddingTop(5);
+                cell.setPaddingLeft(5);
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell.setVerticalAlignment(Element.ALIGN_CENTER);
 
+                tablaCargada.addCell(cell);
+
+                cell = new PdfPCell(new Phrase(estado));
+                cell.setPaddingBottom(5);
+                cell.setPaddingTop(5);
+                cell.setPaddingLeft(5);
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell.setVerticalAlignment(Element.ALIGN_CENTER);
+
+                tablaCargada.addCell(cell);
+
+                cell = new PdfPCell(new Phrase(observaciones));
+                cell.setPaddingBottom(5);
+                cell.setPaddingTop(5);
+                cell.setPaddingLeft(5);
+                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cell.setVerticalAlignment(Element.ALIGN_CENTER);
+
+                tablaCargada.addCell(cell);
+
+            }
             //----------------------------------------//
 
             documento.add(tablaCargada);

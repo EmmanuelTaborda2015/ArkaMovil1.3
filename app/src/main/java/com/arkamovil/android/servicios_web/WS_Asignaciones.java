@@ -22,7 +22,6 @@ import java.util.List;
 
 public class WS_Asignaciones {
 
-    private static Asignaciones dialog;
 
     private final String NAMESPACE = "arkaurn:arka";
     //private final String URL = "http://10.0.2.2/ws/servicio.php?wsdl";
@@ -30,12 +29,6 @@ public class WS_Asignaciones {
     private final String SOAP_ACTION = "arkaurn:arka/consultar_asignaciones";
     private final String METHOD_NAME = "consultar_asignaciones";
 
-    public Thread getThread() {
-        return thread;
-    }
-
-    private Thread thread;
-    private Handler handler = new Handler();
 
     private Activity act;
 
@@ -72,56 +65,39 @@ public class WS_Asignaciones {
         id_elemento = new ArrayList<String>();
         placa = new ArrayList<String>();
         estado = new ArrayList<String>();
+        estado_actualizacion = new ArrayList<String>();
         observaciones = new ArrayList<String>();
 
-        thread = new Thread() {
-            public void run() {
-                SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
+        SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 
-                request.addProperty("id_elemento", id_elem);
+        request.addProperty("id_elemento", id_elem);
 
-                SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-                envelope.setOutputSoapObject(request);
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        envelope.setOutputSoapObject(request);
 
-                HttpTransportSE httpTransport = new HttpTransportSE(URL);
+        HttpTransportSE httpTransport = new HttpTransportSE(URL);
 
-                try {
+        try {
 
-                    httpTransport.call(SOAP_ACTION, envelope);
+            httpTransport.call(SOAP_ACTION, envelope);
 
-                    SoapObject obj1 = (SoapObject) envelope.getResponse();
+            SoapObject obj1 = (SoapObject) envelope.getResponse();
 
-                    for (int i = 0; i < obj1.getPropertyCount(); i++) {
-                        SoapObject obj2 = (SoapObject) obj1.getProperty(i);
-                        id_elemento.add(obj2.getProperty("id_elemento").toString());
-                        placa.add(obj2.getProperty("placa").toString());
-                        estado.add(obj2.getProperty("estado").toString());
-                        estado_actualizacion.add(obj2.getProperty("estado_actualizacion").toString());
-                        observaciones.add(obj2.getProperty("observacion").toString());
+            for (int i = 0; i < obj1.getPropertyCount(); i++) {
+                SoapObject obj2 = (SoapObject) obj1.getProperty(i);
+                id_elemento.add(obj2.getProperty("id_elemento").toString());
+                placa.add(obj2.getProperty("placa").toString());
+                estado.add(obj2.getProperty("estado").toString());
+                estado_actualizacion.add(obj2.getProperty("estado_actualizacion").toString());
+                observaciones.add(obj2.getProperty("observacion").toString());
 
-                        Log.v("Emmanuel", estado.get(i));
+                Log.v("Emmanuel", estado.get(i));
 
-                    }
-
-                } catch (Exception exception) {
-                }
-                handler.post(createUI);
             }
-        };
-
-        thread.start();
-    }
-
-    final Runnable createUI = new Runnable() {
-
-        public void run() {
-            dialog = new Asignaciones(act);
-            dialog.show();
+        } catch (Exception exception) {
         }
-    };
 
-    public void cerrarDialog() {
-        dialog.dismiss();
     }
+
 
 }
