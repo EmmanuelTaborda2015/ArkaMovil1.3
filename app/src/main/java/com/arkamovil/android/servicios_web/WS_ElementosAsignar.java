@@ -3,6 +3,7 @@ package com.arkamovil.android.servicios_web;
 import android.app.Activity;
 import android.os.Handler;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.arkamovil.android.R;
@@ -122,6 +123,9 @@ public class WS_ElementosAsignar {
             ImageView subir = (ImageView) rootView.findViewById(R.id.subir_c2);
             bajar.setVisibility(View.VISIBLE);
             subir.setVisibility(View.VISIBLE);
+            Button asignar = (Button) rootView.findViewById(R.id.asignar_c2);
+            asignar.setVisibility(View.VISIBLE);
+
         }
     };
 

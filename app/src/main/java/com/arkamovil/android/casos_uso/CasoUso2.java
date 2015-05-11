@@ -3,19 +3,24 @@ package com.arkamovil.android.casos_uso;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.arkamovil.android.R;
 import com.arkamovil.android.herramientas.Despliegue;
 import com.arkamovil.android.procesos.TablaAsignarInventarios;
+import com.arkamovil.android.procesos.TablaConsultarInventario;
 import com.arkamovil.android.servicios_web.WS_Dependencia;
 import com.arkamovil.android.servicios_web.WS_ElementosAsignar;
+import com.arkamovil.android.servicios_web.WS_EnviarElementosAsignar;
 import com.arkamovil.android.servicios_web.WS_Funcionario_Oracle;
 import com.arkamovil.android.servicios_web.WS_Sede;
 
@@ -31,8 +36,7 @@ public class CasoUso2 extends Fragment {
     private static String string_sede;
     private static String string_funcionario;
 
-    private Thread thread_actualizarregistro;
-
+    private Thread thread;
     private Handler handler = new Handler();
 
     private List<String> lista_sede = new ArrayList<String>();
@@ -41,6 +45,7 @@ public class CasoUso2 extends Fragment {
 
     private ImageView bajar;
     private ImageView subir;
+    private Button asignar;
 
     private WS_ElementosAsignar elem;
 
@@ -60,6 +65,9 @@ public class CasoUso2 extends Fragment {
         funcionario = (AutoCompleteTextView) rootView.findViewById(R.id.funcionario_c2);
         bajar = (ImageView) rootView.findViewById(R.id.bajar_c2);
         subir = (ImageView) rootView.findViewById(R.id.subir_c2);
+
+        asignar = (Button) rootView.findViewById(R.id.asignar_c2);
+        asignar.setVisibility(View.INVISIBLE);
 
         bajar.setVisibility(View.INVISIBLE);
         subir.setVisibility(View.INVISIBLE);
@@ -158,6 +166,33 @@ public class CasoUso2 extends Fragment {
             }
         });
 
+        asignar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                thread = new Thread() {
+                    public void run() {
+
+                        TablaAsignarInventarios seleccion = new TablaAsignarInventarios();
+                        for (int i = 0; i < elem.getId_elemento().size(); i++) {
+
+                            if (seleccion.getArr()[i] == true) {
+                                WS_EnviarElementosAsignar ws_enviarElementosAsignar = new WS_EnviarElementosAsignar();
+                                String a = ws_enviarElementosAsignar.startWebAccess(String.valueOf(sede.getText()), String.valueOf(dependencia.getText()), String.valueOf(funcionario.getText()), String.valueOf(elem.getId_elemento().get(i)));
+                                Log.v("Aqui", a + "");
+                            }
+                        }
+
+                        handler.post(createUI);
+                    }
+                };
+
+                thread.start();
+
+
+            }
+        });
 
         return rootView;
     }
@@ -173,7 +208,12 @@ public class CasoUso2 extends Fragment {
     final Runnable createUI = new Runnable() {
 
         public void run() {
-            Toast.makeText(getActivity(), "Se ha generado el pdf en la carpeta -> Download -> Inventarios", Toast.LENGTH_LONG).show();
+            asignar.setVisibility(View.INVISIBLE);
+            limpiarTabla();
+            elem = new WS_ElementosAsignar();
+            elem.startWebAccess(rootView, getActivity());
+            string_funcionario = String.valueOf(funcionario.getText());
+            Toast.makeText(getActivity(), "Han sido asignados los elementos", Toast.LENGTH_LONG).show();
         }
     };
 

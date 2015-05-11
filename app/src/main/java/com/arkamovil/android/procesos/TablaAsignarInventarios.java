@@ -38,6 +38,11 @@ public class TablaAsignarInventarios {
     private static List<String> descripcion;
     private static  boolean[] arr;
 
+
+    public static boolean[] getArr() {
+        return arr;
+    }
+
     private static int inicio;
 
     private static int tamanoPantalla;

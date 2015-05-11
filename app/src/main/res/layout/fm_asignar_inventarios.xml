@@ -71,6 +71,13 @@
                 android:src="@drawable/bajar"
                 android:layout_gravity="center_horizontal" />
 
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ASIGNAR"
+                android:id="@+id/asignar_c2"/>
+
+
         </LinearLayout>
     </RelativeLayout>
 </ScrollView>
