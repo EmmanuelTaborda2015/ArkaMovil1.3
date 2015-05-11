@@ -42,6 +42,7 @@ public class CasoUso2 extends Fragment {
     private List<String> lista_sede = new ArrayList<String>();
     private List<String> lista_dependencia = new ArrayList<String>();
     private static List<String> lista_funcionario = new ArrayList<String>();
+    private List<String> lista_documento = new ArrayList<String>();
 
     private ImageView bajar;
     private ImageView subir;
@@ -53,6 +54,7 @@ public class CasoUso2 extends Fragment {
 
 
     private int seleccion = 0;
+    private int seleccion2 = 0;
 
 
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
@@ -127,6 +129,7 @@ public class CasoUso2 extends Fragment {
                 ws_funcionario.startWebAccess(getActivity(), funcionario, lista_dependencia.get(seleccion));
 
                 lista_funcionario = ws_funcionario.getFun_nombre();
+                lista_documento = ws_funcionario.getFun_identificacion();
 
                 funcionario.setText("");
                 funcionario.requestFocus();
@@ -140,6 +143,12 @@ public class CasoUso2 extends Fragment {
         funcionario.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                for (int i = 0; i < lista_funcionario.size(); i++) {
+                    if (String.valueOf(funcionario.getText()).equals(lista_funcionario.get(i))) {
+                        seleccion2 = i;
+                    }
+                }
 
                 limpiarTabla();
 
@@ -179,8 +188,7 @@ public class CasoUso2 extends Fragment {
 
                             if (seleccion.getArr()[i] == true) {
                                 WS_EnviarElementosAsignar ws_enviarElementosAsignar = new WS_EnviarElementosAsignar();
-                                String a = ws_enviarElementosAsignar.startWebAccess(String.valueOf(sede.getText()), String.valueOf(dependencia.getText()), String.valueOf(funcionario.getText()), String.valueOf(elem.getId_elemento().get(i)));
-                                Log.v("Aqui", a + "");
+                                String a = ws_enviarElementosAsignar.startWebAccess(String.valueOf(sede.getText()), String.valueOf(dependencia.getText()), String.valueOf(lista_documento.get(seleccion2)), String.valueOf(elem.getId_elemento().get(i)));
                             }
                         }
 

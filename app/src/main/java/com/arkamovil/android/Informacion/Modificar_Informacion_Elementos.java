@@ -18,6 +18,7 @@ import com.arkamovil.android.procesos.LlenarListas;
 import com.arkamovil.android.procesos.TablaModificarInventario;
 import com.arkamovil.android.servicios_web.WS_ActualizarInventario;
 import com.arkamovil.android.servicios_web.WS_Elemento;
+import com.arkamovil.android.servicios_web.WS_Estado;
 import com.arkamovil.android.servicios_web.WS_RegistroActaVisita;
 
 public class Modificar_Informacion_Elementos extends Dialog {
@@ -25,6 +26,7 @@ public class Modificar_Informacion_Elementos extends Dialog {
 
     private Activity c;
     private int i;
+    private static int estado = 0;
     private TextView elemento;
     private TextView placa;
     private TextView serie;
@@ -37,12 +39,12 @@ public class Modificar_Informacion_Elementos extends Dialog {
 
     private Handler handler = new Handler();
 
-    public Modificar_Informacion_Elementos(Activity a, int i) {
+    public Modificar_Informacion_Elementos(Activity a, final int i, int estado) {
         super(a);
         // TODO Auto-generated constructor stub
         this.c = a;
         this.i = i;
-
+        this.estado = estado;
     }
 
     @Override
@@ -63,6 +65,13 @@ public class Modificar_Informacion_Elementos extends Dialog {
         elemento.setText(datos.getDescripcion().get(i));
         placa.setText(datos.getPlaca().get(i));
         serie.setText(datos.getSerie().get(i));
+
+        LlenarListas estadoList = new LlenarListas();
+        estadoList.llenarSpinnerEstado1(c, estadoSpin);
+
+        estadoSpin.setSelection(estado);
+
+        estado = 0;
 
         Button cancelar;
         cancelar = (Button) findViewById(R.id.cancelar_61);
@@ -104,8 +113,6 @@ public class Modificar_Informacion_Elementos extends Dialog {
             }
         });
 
-        LlenarListas estado = new LlenarListas();
-        estado.llenarSpinnerEstado1(c, estadoSpin);
     }
 
     final Runnable createUI = new Runnable() {

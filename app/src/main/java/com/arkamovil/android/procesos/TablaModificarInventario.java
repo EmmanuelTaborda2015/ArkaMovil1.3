@@ -3,6 +3,8 @@ package com.arkamovil.android.procesos;
 import android.app.Activity;
 import android.content.res.Resources;
 import android.media.Image;
+import android.os.Handler;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 import com.arkamovil.android.Informacion.Informacion_Elementos;
 import com.arkamovil.android.Informacion.Modificar_Informacion_Elementos;
 import com.arkamovil.android.R;
+import com.arkamovil.android.servicios_web.WS_Estado;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +38,15 @@ public class TablaModificarInventario {
 
     private static Activity actividad;
     private static View rootView;
+
+    private static int estado = 0;
+    private static int id = 0;
+
+    private Thread thread_estado;
+
+    private Handler handler = new Handler();
+
+
 
     private static final int factor = 5;
 
@@ -152,9 +164,34 @@ public class TablaModificarInventario {
 
             txtMod.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
-                    dialog = new Modificar_Informacion_Elementos(actividad, v.getId());
-                    dialog.show();
+                public void onClick(final View v) {
+                    thread_estado = new Thread() {
+                        public void run() {
+
+                            id = v.getId();
+                            WS_Estado ws_estado = new WS_Estado();
+
+                            String est= ws_estado.startWebAccess(String.valueOf(id_elemento.get(v.getId())));
+                            Log.v("Hola", est);
+                            if("Existente y Activo".equalsIgnoreCase(est)){
+                                estado = 1;
+                            }else if("Sobrante".equalsIgnoreCase(est)){
+                                estado = 2;
+                            }else if("Faltante por Hurto".equalsIgnoreCase(est)){
+                                estado = 3;
+                            }else if("Faltante Dependencia".equalsIgnoreCase(est)){
+                                estado = 4;
+                            }else if("Baja".equalsIgnoreCase(est)){
+                                estado = 5;
+                            }
+
+                            handler.post(createESTADO);
+                        }
+
+                    };
+
+                    thread_estado.start();
+
                 }
             });
 
@@ -213,4 +250,12 @@ public class TablaModificarInventario {
         tabla.removeAllViews();
         cabecera.removeAllViews();
     }
+
+    final Runnable createESTADO = new Runnable() {
+
+        public void run() {
+            dialog = new Modificar_Informacion_Elementos(actividad, id, estado);
+            dialog.show();
+        }
+    };
 }

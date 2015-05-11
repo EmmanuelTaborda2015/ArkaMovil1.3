@@ -72,21 +72,14 @@ public class CasosUso extends ActionBarActivity
                 fragment = new CasoUso2();
                 break;
             case 3:
-                mTitle = getString(R.string.title_section3);
-                break;
-            case 4:
                 fragment = new CasoUso4();
                 break;
-            case 5:
+            case 4:
                 fragment = new CasoUso5();
                 break;
-            case 6:
+            case 5:
                 fragment = new CasoUso6();
                 break;
-            case 7:
-                mTitle = getString(R.string.title_section3);
-                break;
-
         }
 
         if (fragment != null) {

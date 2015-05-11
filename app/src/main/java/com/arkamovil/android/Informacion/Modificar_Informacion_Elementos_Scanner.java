@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -17,6 +18,7 @@ import com.arkamovil.android.procesos.LlenarListas;
 import com.arkamovil.android.procesos.TablaModificarInventario;
 import com.arkamovil.android.servicios_web.WS_ActualizarInventario;
 import com.arkamovil.android.servicios_web.WS_Elemento;
+import com.arkamovil.android.servicios_web.WS_Estado;
 import com.arkamovil.android.servicios_web.WS_Placa;
 
 public class Modificar_Informacion_Elementos_Scanner extends Dialog {
@@ -29,17 +31,22 @@ public class Modificar_Informacion_Elementos_Scanner extends Dialog {
     private TextView serie;
     private TextView observacion;
     private Spinner estadoSpin;
+    private static int estado = 0;
 
     private WS_Elemento datos;
+    WS_Placa ws_placa = new WS_Placa();
+
+    private Thread thread_estado;
 
     private Thread thread_actualizarregistro;
 
     private Handler handler = new Handler();
 
-    public Modificar_Informacion_Elementos_Scanner(Activity a) {
+    public Modificar_Informacion_Elementos_Scanner(Activity a, int estado) {
         super(a);
         // TODO Auto-generated constructor stub
         this.c = a;
+        this.estado = estado;
     }
 
     @Override
@@ -55,7 +62,7 @@ public class Modificar_Informacion_Elementos_Scanner extends Dialog {
 
         estadoSpin = (Spinner) findViewById(R.id.estado_61s);
 
-        WS_Placa ws_placa = new WS_Placa();
+        ws_placa = new WS_Placa();
         placa.setText(ws_placa.getPlaca().get(0));
         elemento.setText(ws_placa.getId_elemento().get(0));
         serie.setText(ws_placa.getSerie().get(0));
@@ -84,8 +91,8 @@ public class Modificar_Informacion_Elementos_Scanner extends Dialog {
                     thread_actualizarregistro = new Thread() {
                         public void run() {
 
-                            String id_elementoGuardar = datos.getId_elemento().get(i);
-                            String elementoGuardar = String.valueOf(elemento.getText());
+                            //String id_elementoGuardar = datos.getId_elemento().get(i);
+                            String id_elementoGuardar = String.valueOf(elemento.getText());
                             String placaGuardar = String.valueOf(placa.getText());
                             String serieGuardar = String.valueOf(serie.getText());
                             String estadoGuardar = String.valueOf(estadoSpin.getSelectedItem());
@@ -102,8 +109,13 @@ public class Modificar_Informacion_Elementos_Scanner extends Dialog {
             }
         });
 
-        LlenarListas estado = new LlenarListas();
-        estado.llenarSpinnerEstado2(c, estadoSpin);
+        LlenarListas estadoList = new LlenarListas();
+        estadoList.llenarSpinnerEstado1(c, estadoSpin);
+
+        estadoSpin.setSelection(estado);
+
+        estado= 0;
+
     }
     final Runnable createUI = new Runnable() {
 
@@ -111,6 +123,13 @@ public class Modificar_Informacion_Elementos_Scanner extends Dialog {
             Toast.makeText(c, "Se ha actualizado el estado del elemento asignado", Toast.LENGTH_LONG).show();
             WS_Placa cerrar = new WS_Placa();
             cerrar.cerrarDialog();
+        }
+    };
+
+    final Runnable createESTADO = new Runnable() {
+
+        public void run() {
+
         }
     };
 

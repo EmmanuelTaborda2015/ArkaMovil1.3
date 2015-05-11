@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.arkamovil.android.Informacion.Modificar_Informacion_Elementos;
 import com.arkamovil.android.Informacion.Modificar_Informacion_Elementos_Scanner;
 import com.arkamovil.android.R;
 import com.arkamovil.android.procesos.TablaConsultarInventario;
@@ -35,7 +36,11 @@ public class WS_Placa {
     }
 
     private Thread thread;
+    private Thread thread_estado;
+
     private Handler handler = new Handler();
+
+    private static int estado = 0;
 
     private Activity act;
     private View rootView;
@@ -153,11 +158,44 @@ public class WS_Placa {
 
         public void run() {
             if(id_elemento.size()>0){
-                dialog = new Modificar_Informacion_Elementos_Scanner(act);
-                dialog.show();
+
+                thread_estado = new Thread() {
+                    public void run() {
+
+                        WS_Estado ws_estado = new WS_Estado();
+
+                        String est= ws_estado.startWebAccess(String.valueOf(id_elemento.get(0)));
+                        Log.v("Hola", est);
+                        if("Existente y Activo".equalsIgnoreCase(est)){
+                            estado = 1;
+                        }else if("Sobrante".equalsIgnoreCase(est)){
+                            estado = 2;
+                        }else if("Faltante por Hurto".equalsIgnoreCase(est)){
+                            estado = 3;
+                        }else if("Faltante Dependencia".equalsIgnoreCase(est)){
+                            estado = 4;
+                        }else if("Baja".equalsIgnoreCase(est)){
+                            estado = 5;
+                        }
+
+                        handler.post(createESTADO);
+                    }
+
+                };
+
+                thread_estado.start();
+
             }else{
                 Toast.makeText(act, "No se ha encontrado ningún registro con la placa escaneada", Toast.LENGTH_LONG).show();
             }
+        }
+    };
+
+    final Runnable createESTADO = new Runnable() {
+
+        public void run() {
+            dialog = new Modificar_Informacion_Elementos_Scanner(act, estado);
+            dialog.show();
         }
     };
 
