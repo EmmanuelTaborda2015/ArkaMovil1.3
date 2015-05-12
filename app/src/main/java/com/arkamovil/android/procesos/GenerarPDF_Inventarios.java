@@ -60,7 +60,7 @@ public class GenerarPDF_Inventarios{
         this.actividad = actividad;
         this.id_elemento = elem;
 
-        NOMBRE_DOCUMENTO = "inventario"+ "_" + funcionario +".pdf";
+        NOMBRE_DOCUMENTO = funcionario +".pdf";
 
         // Creamos el documento.
         Document documento = new Document();
@@ -95,7 +95,7 @@ public class GenerarPDF_Inventarios{
 
             // se añade el titulo
 
-            Paragraph titulo = new Paragraph("\n UNIVERSIDAD DISTRITAL \"FRANCISCO JOSE DE CALDAS\" \n");
+            Paragraph titulo = new Paragraph("\n UNIVERSIDAD DISTRITAL \"FRANCISCO JOSE DE CALDAS\" \n\n");
 
             Font font1 = FontFactory.getFont(FontFactory.HELVETICA, 40,
                     Font.BOLD, Color.BLACK);

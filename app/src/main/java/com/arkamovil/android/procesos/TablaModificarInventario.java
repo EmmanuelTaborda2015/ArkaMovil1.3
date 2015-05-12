@@ -171,6 +171,7 @@ public class TablaModificarInventario {
 
                             WS_Asignaciones ws_asignaciones = new WS_Asignaciones();
                             ws_asignaciones.startWebAccess(actividad, id_elemento.get(v.getId()));
+                            id = v.getId();
 
                             handler.post(createESTADO);
                         }

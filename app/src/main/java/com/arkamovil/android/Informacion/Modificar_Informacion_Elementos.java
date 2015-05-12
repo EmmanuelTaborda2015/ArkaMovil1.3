@@ -63,8 +63,8 @@ public class Modificar_Informacion_Elementos extends Dialog {
 
         datos = new WS_Asignaciones();
 
-        elemento.setText(ws_elemento.getId_elemento().get(0));
-        placa.setText(ws_elemento.getPlaca().get(0));
+        elemento.setText(ws_elemento.getId_elemento().get(i));
+        placa.setText(ws_elemento.getPlaca().get(i));
         serie.setText(ws_elemento.getSerie().get(i));
 
         if(datos.getEstado().size() > 0) {
@@ -115,7 +115,7 @@ public class Modificar_Informacion_Elementos extends Dialog {
                 } else {
                     thread_actualizarregistro = new Thread() {
                         public void run() {
-                            String id_elementoGuardar = ws_elemento.getId_elemento().get(i);
+                            String id_elementoGuardar = String.valueOf(elemento.getText());
                             String elementoGuardar = String.valueOf(elemento.getText());
                             String placaGuardar = String.valueOf(placa.getText());
                             String serieGuardar = String.valueOf(serie.getText());
