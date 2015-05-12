@@ -11,10 +11,12 @@ import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.arkamovil.android.Informacion.Informacion_Elementos;
 import com.arkamovil.android.Informacion.Modificar_Informacion_Elementos;
 import com.arkamovil.android.R;
+import com.arkamovil.android.servicios_web.WS_Asignaciones;
 import com.arkamovil.android.servicios_web.WS_Estado;
 
 import java.util.ArrayList;
@@ -47,13 +49,12 @@ public class TablaModificarInventario {
     private Handler handler = new Handler();
 
 
-
     private static final int factor = 5;
 
 
     private static List<String> id_elemento;
     private static List<String> descripcion;
-    private static  boolean[] arr;
+    private static boolean[] arr;
 
     private static int inicio;
 
@@ -74,9 +75,9 @@ public class TablaModificarInventario {
         this.id_elemento = id;
         this.descripcion = desc;
 
-        if(id_elemento.size() < this.factor){
+        if (id_elemento.size() < this.factor) {
             this.MAX_FILAS = id_elemento.size();
-        }else{
+        } else {
             this.MAX_FILAS = this.factor;
         }
 
@@ -143,13 +144,13 @@ public class TablaModificarInventario {
             txtMod = new ImageView(actividad);
 
             txtId.setText(id_elemento.get(this.inicio + i));
-            txtId.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL);
+            txtId.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
             txtId.setTextAppearance(actividad, R.style.etiqueta);
             txtId.setBackgroundResource(R.drawable.tabla_celda);
             txtId.setLayoutParams(layoutId);
 
             txtDescripcion.setText(descripcion.get(this.inicio + i));
-            txtDescripcion.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL);
+            txtDescripcion.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
             txtDescripcion.setTextAppearance(actividad, R.style.etiqueta);
             txtDescripcion.setBackgroundResource(R.drawable.tabla_celda);
             txtDescripcion.setLayoutParams(layoutTexto);
@@ -158,7 +159,7 @@ public class TablaModificarInventario {
 
             txtMod.setId(this.inicio + i);
             txtMod.setImageResource(R.drawable.modificar);
-            txtMod.setPadding(30,30,30,30);
+            txtMod.setPadding(30, 30, 30, 30);
             txtMod.setBackgroundResource(R.drawable.tabla_celda);
             txtMod.setLayoutParams(layoutMod);
 
@@ -168,22 +169,8 @@ public class TablaModificarInventario {
                     thread_estado = new Thread() {
                         public void run() {
 
-                            id = v.getId();
-                            WS_Estado ws_estado = new WS_Estado();
-
-                            String est= ws_estado.startWebAccess(String.valueOf(id_elemento.get(v.getId())));
-                            Log.v("Hola", est);
-                            if("Existente y Activo".equalsIgnoreCase(est)){
-                                estado = 1;
-                            }else if("Sobrante".equalsIgnoreCase(est)){
-                                estado = 2;
-                            }else if("Faltante por Hurto".equalsIgnoreCase(est)){
-                                estado = 3;
-                            }else if("Faltante Dependencia".equalsIgnoreCase(est)){
-                                estado = 4;
-                            }else if("Baja".equalsIgnoreCase(est)){
-                                estado = 5;
-                            }
+                            WS_Asignaciones ws_asignaciones = new WS_Asignaciones();
+                            ws_asignaciones.startWebAccess(actividad, id_elemento.get(v.getId()));
 
                             handler.post(createESTADO);
                         }
@@ -254,7 +241,8 @@ public class TablaModificarInventario {
     final Runnable createESTADO = new Runnable() {
 
         public void run() {
-            dialog = new Modificar_Informacion_Elementos(actividad, id, estado);
+            WS_Asignaciones ws_asignaciones = new WS_Asignaciones();
+            dialog = new Modificar_Informacion_Elementos(actividad, id);
             dialog.show();
         }
     };

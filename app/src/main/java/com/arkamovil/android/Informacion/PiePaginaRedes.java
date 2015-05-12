@@ -26,7 +26,7 @@ public class PiePaginaRedes extends Fragment {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_VIEW);
                 intent.addCategory(Intent.CATEGORY_BROWSABLE);
-                intent.setData(Uri.parse("http://www.twitter.com"));
+                intent.setData(Uri.parse("https://twitter.com/udistrital"));
                 startActivity(intent);
             }
         });
@@ -39,7 +39,7 @@ public class PiePaginaRedes extends Fragment {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_VIEW);
                 intent.addCategory(Intent.CATEGORY_BROWSABLE);
-                intent.setData(Uri.parse("http://www.google.com"));
+                intent.setData(Uri.parse("https://plus.google.com/113894084434773117580/about?gl=co&hl=es"));
                 startActivity(intent);
             }
         });
@@ -52,7 +52,7 @@ public class PiePaginaRedes extends Fragment {
                 Intent intent = new Intent();
                 intent.setAction(Intent.ACTION_VIEW);
                 intent.addCategory(Intent.CATEGORY_BROWSABLE);
-                intent.setData(Uri.parse("http://www.facebook.com"));
+                intent.setData(Uri.parse("https://www.facebook.com/UniversidadDistrital.SedeIngenieria/info?tab=overview"));
                 startActivity(intent);
             }
         });

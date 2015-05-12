@@ -45,7 +45,13 @@ public class CasoUso4 extends Fragment {
     private static WS_Elemento elem;
 
     private static String string_sede;
+    private static String string_dependencia;
     private static String string_funcionario;
+
+
+    public static String getString_dependencia() {
+        return string_dependencia;
+    }
 
     private Thread thread_actualizarregistro;
 
@@ -70,7 +76,7 @@ public class CasoUso4 extends Fragment {
     private ImageView subir;
 
 
-    private View rootView;
+    private static View rootView;
 
 
     private int seleccion = 0;
@@ -151,6 +157,8 @@ public class CasoUso4 extends Fragment {
 
                 lista_funcionario = ws_funcionario.getFun_nombre();
                 lista_documentos = ws_funcionario.getFun_identificacion();
+
+                string_dependencia = String.valueOf(dependencia.getText());
 
                 funcionario.setText("");
                 funcionario.requestFocus();
@@ -266,6 +274,10 @@ public class CasoUso4 extends Fragment {
         subir.setVisibility(View.INVISIBLE);
     }
 
+    public void actualizarTabla(){
+
+
+    }
     final Runnable createUI = new Runnable() {
 
         public void run() {

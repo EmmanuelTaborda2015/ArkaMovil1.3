@@ -17,6 +17,7 @@ import com.arkamovil.android.casos_uso.CasoUso6;
 import com.arkamovil.android.procesos.LlenarListas;
 import com.arkamovil.android.procesos.TablaModificarInventario;
 import com.arkamovil.android.servicios_web.WS_ActualizarInventario;
+import com.arkamovil.android.servicios_web.WS_Asignaciones;
 import com.arkamovil.android.servicios_web.WS_Elemento;
 import com.arkamovil.android.servicios_web.WS_Estado;
 import com.arkamovil.android.servicios_web.WS_Placa;
@@ -32,9 +33,11 @@ public class Modificar_Informacion_Elementos_Scanner extends Dialog {
     private TextView observacion;
     private Spinner estadoSpin;
     private static int estado = 0;
+    private static String obser;
 
     private WS_Elemento datos;
     WS_Placa ws_placa = new WS_Placa();
+    WS_Asignaciones ws_asignaciones = new WS_Asignaciones();
 
     private Thread thread_estado;
 
@@ -42,11 +45,12 @@ public class Modificar_Informacion_Elementos_Scanner extends Dialog {
 
     private Handler handler = new Handler();
 
-    public Modificar_Informacion_Elementos_Scanner(Activity a, int estado) {
+    public Modificar_Informacion_Elementos_Scanner(Activity a) {
         super(a);
         // TODO Auto-generated constructor stub
         this.c = a;
         this.estado = estado;
+        this.obser = obser;
     }
 
     @Override
@@ -62,11 +66,38 @@ public class Modificar_Informacion_Elementos_Scanner extends Dialog {
 
         estadoSpin = (Spinner) findViewById(R.id.estado_61s);
 
+
         ws_placa = new WS_Placa();
         placa.setText(ws_placa.getPlaca().get(0));
         elemento.setText(ws_placa.getId_elemento().get(0));
         serie.setText(ws_placa.getSerie().get(0));
 
+        if(ws_asignaciones.getEstado().size() > 0) {
+
+            observacion.setText(ws_asignaciones.getObservaciones().get(0));
+
+            String est = ws_asignaciones.getEstado().get(0);
+
+            if ("Existente y Activo".equalsIgnoreCase(est)) {
+                estado = 1;
+            } else if ("Sobrante".equalsIgnoreCase(est)) {
+                estado = 2;
+            } else if ("Faltante por Hurto".equalsIgnoreCase(est)) {
+                estado = 3;
+            } else if ("Faltante Dependencia".equalsIgnoreCase(est)) {
+                estado = 4;
+            } else if ("Baja".equalsIgnoreCase(est)) {
+                estado = 5;
+            }
+
+            LlenarListas estadoList = new LlenarListas();
+            estadoList.llenarSpinnerEstado1(c, estadoSpin);
+        }else{
+            LlenarListas estadoList = new LlenarListas();
+            estadoList.llenarSpinnerEstado1(c, estadoSpin);
+        }
+
+        estadoSpin.setSelection(estado);
         Button cancelar;
         cancelar = (Button) findViewById(R.id.cancelar_61s);
         cancelar.setOnClickListener(new View.OnClickListener() {
@@ -108,13 +139,6 @@ public class Modificar_Informacion_Elementos_Scanner extends Dialog {
                 }
             }
         });
-
-        LlenarListas estadoList = new LlenarListas();
-        estadoList.llenarSpinnerEstado1(c, estadoSpin);
-
-        estadoSpin.setSelection(estado);
-
-        estado= 0;
 
     }
     final Runnable createUI = new Runnable() {

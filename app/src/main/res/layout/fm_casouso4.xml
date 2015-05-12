@@ -42,15 +42,6 @@
                 style="@style/buttonTextArkaMovil"
                 android:id="@+id/funcionario_c4" />
 
-
-            <Button
-                style="@style/buttonTextArkaMovil"
-                android:id="@+id/escanear_c4"
-                android:editable="false"
-                android:text="Escanear Placa"
-                android:layout_marginTop="20dp"
-                android:onClick="escanear"/>
-
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
@@ -86,6 +77,13 @@
                 android:text="Generar PDF"
                 android:id="@+id/generarpdf_c4"/>
 
+            <Button
+                style="@style/buttonTextArkaMovil"
+                android:id="@+id/escanear_c4"
+                android:editable="false"
+                android:text="Escanear Placa"
+                android:layout_marginTop="20dp"
+                android:onClick="escanear"/>
         </LinearLayout>
     </RelativeLayout>
 </ScrollView>

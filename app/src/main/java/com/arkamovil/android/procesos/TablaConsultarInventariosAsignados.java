@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.arkamovil.android.Informacion.Asignaciones;
 import com.arkamovil.android.Informacion.Informacion_Elementos;
@@ -46,7 +47,7 @@ public class TablaConsultarInventariosAsignados {
 
     private static List<String> id_elemento;
     private static List<String> descripcion;
-    private static  boolean[] arr;
+    private static boolean[] arr;
 
     private static int inicio;
 
@@ -66,9 +67,9 @@ public class TablaConsultarInventariosAsignados {
         this.id_elemento = id;
         this.descripcion = desc;
 
-        if(id_elemento.size() < this.factor){
+        if (id_elemento.size() < this.factor) {
             this.MAX_FILAS = id_elemento.size();
-        }else{
+        } else {
             this.MAX_FILAS = this.factor;
         }
 
@@ -135,13 +136,13 @@ public class TablaConsultarInventariosAsignados {
             txtVer = new ImageView(actividad);
 
             txtId.setText(id_elemento.get(this.inicio + i));
-            txtId.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL);
+            txtId.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
             txtId.setTextAppearance(actividad, R.style.etiqueta);
             txtId.setBackgroundResource(R.drawable.tabla_celda);
             txtId.setLayoutParams(layoutId);
 
             txtDescripcion.setText(descripcion.get(this.inicio + i));
-            txtId.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL);
+            txtId.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
             txtDescripcion.setTextAppearance(actividad, R.style.etiqueta);
             txtDescripcion.setBackgroundResource(R.drawable.tabla_celda);
             txtDescripcion.setLayoutParams(layoutTexto);
@@ -155,15 +156,15 @@ public class TablaConsultarInventariosAsignados {
                 public void onClick(final View v) {
                     thread = new Thread() {
                         public void run() {
-                    WS_Asignaciones ws_asignaciones = new WS_Asignaciones();
-                    ws_asignaciones.startWebAccess(actividad, id_elemento.get(v.getId()));
+                            WS_Asignaciones ws_asignaciones = new WS_Asignaciones();
+                            ws_asignaciones.startWebAccess(actividad, id_elemento.get(v.getId()));
 
 
-                        handler.post(createUI);
-                    }
-                };
+                            handler.post(createUI);
+                        }
+                    };
 
-                thread.start();
+                    thread.start();
                 }
             });
 
@@ -186,7 +187,7 @@ public class TablaConsultarInventariosAsignados {
                 TableRow.LayoutParams.WRAP_CONTENT);
         layoutId = new TableRow.LayoutParams((int) (tamanoPantalla * 0.2), TableRow.LayoutParams.MATCH_PARENT);
         layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla * 0.4), TableRow.LayoutParams.MATCH_PARENT);
-        layoutVer = new TableRow.LayoutParams((int) (tamanoPantalla*0.30), TableRow.LayoutParams.MATCH_PARENT);
+        layoutVer = new TableRow.LayoutParams((int) (tamanoPantalla * 0.30), TableRow.LayoutParams.MATCH_PARENT);
     }
 
     public void bajar(View rootView, Activity actividad) {
@@ -216,7 +217,7 @@ public class TablaConsultarInventariosAsignados {
                 TableRow.LayoutParams.WRAP_CONTENT);
         layoutId = new TableRow.LayoutParams((int) (tamanoPantalla * 0.2), TableRow.LayoutParams.MATCH_PARENT);
         layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla * 0.4), TableRow.LayoutParams.MATCH_PARENT);
-        layoutVer = new TableRow.LayoutParams((int) (tamanoPantalla*0.30), TableRow.LayoutParams.MATCH_PARENT);
+        layoutVer = new TableRow.LayoutParams((int) (tamanoPantalla * 0.30), TableRow.LayoutParams.MATCH_PARENT);
 
         tabla.removeAllViews();
         cabecera.removeAllViews();
@@ -225,8 +226,13 @@ public class TablaConsultarInventariosAsignados {
     final Runnable createUI = new Runnable() {
 
         public void run() {
-            dialog = new Asignaciones(actividad);
-            dialog.show();
+            WS_Asignaciones ws_asignaciones = new WS_Asignaciones();
+            if (ws_asignaciones.getId_elemento().size() > 0) {
+                dialog = new Asignaciones(actividad);
+                dialog.show();
+            } else {
+                Toast.makeText(actividad, "No se han generado actualizaciones para este elemento", Toast.LENGTH_LONG).show();
+            }
         }
     };
 

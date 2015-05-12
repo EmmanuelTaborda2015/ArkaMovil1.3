@@ -27,6 +27,8 @@ import com.arkamovil.android.procesos.TablaModificarInventario;
 import com.arkamovil.android.servicios_web.WS_ActualizarInventario;
 import com.arkamovil.android.servicios_web.WS_Asignaciones;
 import com.arkamovil.android.servicios_web.WS_Elemento;
+import com.arkamovil.android.servicios_web.WS_ElementosAsignar;
+import com.arkamovil.android.servicios_web.WS_EnviarElementosAsignar;
 import com.arkamovil.android.servicios_web.WS_Funcionario;
 import com.arkamovil.android.servicios_web.WS_Funcionario_Oracle;
 import com.arkamovil.android.servicios_web.WS_RegistroActaVisita;
@@ -51,6 +53,10 @@ public class Asignaciones extends Dialog {
     private Button cerrar;
 
     private int seleccion2;
+    private String documento;
+
+    private Thread thread;
+    private Handler handler = new Handler();
 
     private WS_Asignaciones datos;
 
@@ -76,49 +82,25 @@ public class Asignaciones extends Dialog {
 
         funcionario.setEnabled(false);
 
-        modificar= (Button) findViewById(R.id.modificar_c4);
+        modificar = (Button) findViewById(R.id.modificar_c4);
         cerrar = (Button) findViewById(R.id.cancelar_c4);
 
         datos = new WS_Asignaciones();
 
         final CasoUso4 casoUso4 = new CasoUso4();
 
-        funcionario.setText(casoUso4.getString_funcionario());
-        elemento.setText(datos.getId_elemento().get(0));
-        placa.setText(datos.getPlaca().get(0));
-        estado.setText(datos.getEstado().get(0));
-        estadoAct.setText(datos.getEstado_Actualizacion().get(0));
-        observacion.setText(datos.getObservaciones().get(0));
+            funcionario.setText(casoUso4.getString_funcionario());
+            elemento.setText(datos.getId_elemento().get(0));
+            placa.setText(datos.getPlaca().get(0));
+            estado.setText(datos.getEstado().get(0));
+            estadoAct.setText(datos.getEstado_Actualizacion().get(0));
+            observacion.setText(datos.getObservaciones().get(0));
 
         cerrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 TablaConsultarInventariosAsignados cerrarDialog = new TablaConsultarInventariosAsignados();
                 cerrarDialog.cerrarDialog();
-            }
-        });
-
-
-        modificar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if("MODIFICAR".equalsIgnoreCase(String.valueOf(modificar.getText()))){
-                    funcionario.setEnabled(true);
-                    funcionario.requestFocus();
-                    funcionario.setText("");
-
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, casoUso4.getLista_funcionario());
-                    funcionario.setAdapter(adapter);
-
-                    modificar.setText("Guardar");
-                    cerrar.setText("Cancelar");
-
-                    new Despliegue(funcionario);
-                }else if("GUARDAR".equalsIgnoreCase(String.valueOf(modificar.getText()))){
-
-                }
-
             }
         });
 
@@ -132,13 +114,57 @@ public class Asignaciones extends Dialog {
                     }
                 }
 
-                String documento = casoUso4.getLista_documentos().get(seleccion2);
-                Log.v("Aqui Emmanuel", documento);
+                documento = casoUso4.getLista_documentos().get(seleccion2);
+            }
+        });
+
+        modificar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if ("MODIFICAR".equalsIgnoreCase(String.valueOf(modificar.getText()))) {
+                    funcionario.setEnabled(true);
+                    funcionario.requestFocus();
+                    funcionario.setText("");
+
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, casoUso4.getLista_funcionario());
+                    funcionario.setAdapter(adapter);
+
+                    modificar.setText("Guardar");
+                    cerrar.setText("Cancelar");
+
+                    new Despliegue(funcionario);
+                } else if ("GUARDAR".equalsIgnoreCase(String.valueOf(modificar.getText()))) {
+
+                    thread = new Thread() {
+                        public void run() {
+                            WS_EnviarElementosAsignar ws_enviarElementosAsignar = new WS_EnviarElementosAsignar();
+
+                            casoUso4.getString_sede();
+                            ws_enviarElementosAsignar.startWebAccess(String.valueOf(casoUso4.getString_sede()), casoUso4.getString_dependencia(), documento, String.valueOf(elemento.getText()));
+
+                            handler.post(createUI);
+                        }
+                    };
+
+                    thread.start();
+
+                }
 
             }
         });
 
-
     }
+
+    final Runnable createUI = new Runnable() {
+
+        public void run() {
+            Toast.makeText(c, "Ha sido Reasignado el elemento", Toast.LENGTH_LONG).show();
+            TablaConsultarInventariosAsignados tablaConsultarInventariosAsignados = new TablaConsultarInventariosAsignados();
+            tablaConsultarInventariosAsignados.cerrarDialog();
+            CasoUso4 casoUso4 = new CasoUso4();
+            casoUso4.actualizarTabla();
+        }
+    };
 
 }

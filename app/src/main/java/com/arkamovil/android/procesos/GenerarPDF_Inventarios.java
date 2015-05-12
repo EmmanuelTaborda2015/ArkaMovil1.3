@@ -60,7 +60,7 @@ public class GenerarPDF_Inventarios{
         this.actividad = actividad;
         this.id_elemento = elem;
 
-        NOMBRE_DOCUMENTO = "Actavisita"+1+".pdf";
+        NOMBRE_DOCUMENTO = "inventario"+ "_" + funcionario +".pdf";
 
         // Creamos el documento.
         Document documento = new Document();
@@ -95,7 +95,7 @@ public class GenerarPDF_Inventarios{
 
             // se añade el titulo
 
-            Paragraph titulo = new Paragraph("UNIVERSIDAD DISTRITAL \"FRANCISCO JOSE DE CALDAS\" ");
+            Paragraph titulo = new Paragraph("\n UNIVERSIDAD DISTRITAL \"FRANCISCO JOSE DE CALDAS\" \n");
 
             Font font1 = FontFactory.getFont(FontFactory.HELVETICA, 40,
                     Font.BOLD, Color.BLACK);
@@ -182,7 +182,7 @@ public class GenerarPDF_Inventarios{
 
             tablaDatos.addCell(cell);
 
-            cell = new PdfPCell(new Phrase(today.monthDay + "/" + today.month + "/" + today.year));
+            cell = new PdfPCell(new Phrase(today.monthDay + "/" + (today.month + 1) + "/" + today.year));
             cell.setPaddingBottom(5);
             cell.setPaddingTop(5);
             cell.setPaddingLeft(5);
@@ -344,7 +344,7 @@ public class GenerarPDF_Inventarios{
             //--------LOS ELEMENTOS EN LA TABLA------//
 
 
-            PdfPTable tablaCargada = new PdfPTable(5);
+
 
             //-----------------TABLA-----------------//
 
@@ -354,63 +354,67 @@ public class GenerarPDF_Inventarios{
 
                 ws_asignaciones.startWebAccess(this.actividad, id_elemento.get(i));
 
-                String id = ws_asignaciones.getId_elemento().get(0);
-                String placa = ws_asignaciones.getPlaca().get(0);
-                String estado_act = ws_asignaciones.getEstado_Actualizacion().get(0);
-                String estado = ws_asignaciones.getEstado().get(0);
-                String observaciones = ws_asignaciones.getObservaciones().get(0);
+                if (ws_asignaciones.getId_elemento().size() > 0) {
 
+                    String id = ws_asignaciones.getId_elemento().get(0);
+                    String placa = ws_asignaciones.getPlaca().get(0);
+                    String estado_act = ws_asignaciones.getEstado_Actualizacion().get(0);
+                    String estado = ws_asignaciones.getEstado().get(0);
+                    String observaciones = ws_asignaciones.getObservaciones().get(0);
 
-                cell = new PdfPCell(new Phrase(id));
-                cell.setRowspan(4);
-                cell.setPaddingBottom(5);
-                cell.setPaddingTop(5);
-                cell.setPaddingLeft(5);
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                cell.setVerticalAlignment(Element.ALIGN_CENTER);
+                    PdfPTable tablaCargada = new PdfPTable(5);
 
-                tablaCargada.addCell(cell);
+                    cell = new PdfPCell(new Phrase(id));
+                    cell.setRowspan(4);
+                    cell.setPaddingBottom(5);
+                    cell.setPaddingTop(5);
+                    cell.setPaddingLeft(5);
+                    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    cell.setVerticalAlignment(Element.ALIGN_CENTER);
 
-                cell = new PdfPCell(new Phrase(placa));
-                cell.setPaddingBottom(5);
-                cell.setPaddingTop(5);
-                cell.setPaddingLeft(5);
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                cell.setVerticalAlignment(Element.ALIGN_CENTER);
+                    tablaCargada.addCell(cell);
 
-                tablaCargada.addCell(cell);
+                    cell = new PdfPCell(new Phrase(placa));
+                    cell.setPaddingBottom(5);
+                    cell.setPaddingTop(5);
+                    cell.setPaddingLeft(5);
+                    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    cell.setVerticalAlignment(Element.ALIGN_CENTER);
 
-                cell = new PdfPCell(new Phrase(estado_act));
-                cell.setPaddingBottom(5);
-                cell.setPaddingTop(5);
-                cell.setPaddingLeft(5);
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                cell.setVerticalAlignment(Element.ALIGN_CENTER);
+                    tablaCargada.addCell(cell);
 
-                tablaCargada.addCell(cell);
+                    cell = new PdfPCell(new Phrase(estado_act));
+                    cell.setPaddingBottom(5);
+                    cell.setPaddingTop(5);
+                    cell.setPaddingLeft(5);
+                    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    cell.setVerticalAlignment(Element.ALIGN_CENTER);
 
-                cell = new PdfPCell(new Phrase(estado));
-                cell.setPaddingBottom(5);
-                cell.setPaddingTop(5);
-                cell.setPaddingLeft(5);
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                cell.setVerticalAlignment(Element.ALIGN_CENTER);
+                    tablaCargada.addCell(cell);
 
-                tablaCargada.addCell(cell);
+                    cell = new PdfPCell(new Phrase(estado));
+                    cell.setPaddingBottom(5);
+                    cell.setPaddingTop(5);
+                    cell.setPaddingLeft(5);
+                    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    cell.setVerticalAlignment(Element.ALIGN_CENTER);
 
-                cell = new PdfPCell(new Phrase(observaciones));
-                cell.setPaddingBottom(5);
-                cell.setPaddingTop(5);
-                cell.setPaddingLeft(5);
-                cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-                cell.setVerticalAlignment(Element.ALIGN_CENTER);
+                    tablaCargada.addCell(cell);
 
-                tablaCargada.addCell(cell);
+                    cell = new PdfPCell(new Phrase(observaciones));
+                    cell.setPaddingBottom(5);
+                    cell.setPaddingTop(5);
+                    cell.setPaddingLeft(5);
+                    cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                    cell.setVerticalAlignment(Element.ALIGN_CENTER);
 
+                    tablaCargada.addCell(cell);
+
+                    documento.add(tablaCargada);
+
+                }
             }
             //----------------------------------------//
-
-            documento.add(tablaCargada);
 
             //-------------///////////---------------//
 

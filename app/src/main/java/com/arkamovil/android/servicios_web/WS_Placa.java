@@ -40,11 +40,8 @@ public class WS_Placa {
 
     private Handler handler = new Handler();
 
-    private static int estado = 0;
-
     private Activity act;
     private View rootView;
-    private int caso;
 
     private static List<String> descripcion = new ArrayList<String>();
     private static List<String> id_elemento = new ArrayList<String>();
@@ -157,26 +154,12 @@ public class WS_Placa {
     final Runnable createUI = new Runnable() {
 
         public void run() {
-            if(id_elemento.size()>0){
+            if (id_elemento.size() > 0) {
 
                 thread_estado = new Thread() {
                     public void run() {
-
-                        WS_Estado ws_estado = new WS_Estado();
-
-                        String est= ws_estado.startWebAccess(String.valueOf(id_elemento.get(0)));
-                        Log.v("Hola", est);
-                        if("Existente y Activo".equalsIgnoreCase(est)){
-                            estado = 1;
-                        }else if("Sobrante".equalsIgnoreCase(est)){
-                            estado = 2;
-                        }else if("Faltante por Hurto".equalsIgnoreCase(est)){
-                            estado = 3;
-                        }else if("Faltante Dependencia".equalsIgnoreCase(est)){
-                            estado = 4;
-                        }else if("Baja".equalsIgnoreCase(est)){
-                            estado = 5;
-                        }
+                        WS_Asignaciones ws_asignaciones = new WS_Asignaciones();
+                        ws_asignaciones.startWebAccess(act, id_elemento.get(0));
 
                         handler.post(createESTADO);
                     }
@@ -185,7 +168,7 @@ public class WS_Placa {
 
                 thread_estado.start();
 
-            }else{
+            } else {
                 Toast.makeText(act, "No se ha encontrado ningún registro con la placa escaneada", Toast.LENGTH_LONG).show();
             }
         }
@@ -194,7 +177,8 @@ public class WS_Placa {
     final Runnable createESTADO = new Runnable() {
 
         public void run() {
-            dialog = new Modificar_Informacion_Elementos_Scanner(act, estado);
+            WS_Asignaciones ws_asignaciones = new WS_Asignaciones();
+            dialog = new Modificar_Informacion_Elementos_Scanner(act);
             dialog.show();
         }
     };

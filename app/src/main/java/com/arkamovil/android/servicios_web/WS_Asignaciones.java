@@ -90,9 +90,6 @@ public class WS_Asignaciones {
                 estado.add(obj2.getProperty("estado").toString());
                 estado_actualizacion.add(obj2.getProperty("estado_actualizacion").toString());
                 observaciones.add(obj2.getProperty("observacion").toString());
-
-                Log.v("Emmanuel", estado.get(i));
-
             }
         } catch (Exception exception) {
         }
