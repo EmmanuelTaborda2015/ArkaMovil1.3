@@ -1,7 +1,5 @@
 package com.arkamovil.android.casos_uso;
 
-import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -10,29 +8,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.arkamovil.android.Informacion.Modificar_Informacion_Elementos_Scanner;
 import com.arkamovil.android.R;
 import com.arkamovil.android.herramientas.Despliegue;
 import com.arkamovil.android.procesos.GenerarPDF_Inventarios;
 import com.arkamovil.android.procesos.TablaConsultarInventariosAsignados;
-import com.arkamovil.android.procesos.TablaModificarInventario;
-import com.arkamovil.android.servicios_web.WS_Asignaciones;
 import com.arkamovil.android.servicios_web.WS_Dependencia;
-import com.arkamovil.android.servicios_web.WS_Dependencia_Postgres;
 import com.arkamovil.android.servicios_web.WS_Elemento;
-import com.arkamovil.android.servicios_web.WS_Funcionario;
+import com.arkamovil.android.servicios_web.WS_EnviarElementosAsignar;
 import com.arkamovil.android.servicios_web.WS_Funcionario_Oracle;
-import com.arkamovil.android.servicios_web.WS_Placa;
 import com.arkamovil.android.servicios_web.WS_Sede;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 
 public class CasoUso4 extends Fragment {
 
@@ -54,6 +47,14 @@ public class CasoUso4 extends Fragment {
     }
 
     private Thread thread_actualizarregistro;
+    public Thread thread_actualizar;
+
+    private static int actualizacion = 0;
+
+    public static void setActualizacion(int actualizacion) {
+        CasoUso4.actualizacion = actualizacion;
+    }
+
 
     private Handler handler = new Handler();
 
@@ -75,9 +76,7 @@ public class CasoUso4 extends Fragment {
     private ImageView bajar;
     private ImageView subir;
 
-
     private static View rootView;
-
 
     private int seleccion = 0;
     private int seleccion2 = 0;
@@ -186,8 +185,24 @@ public class CasoUso4 extends Fragment {
                 id_elemento = elem.getId_elemento();
 
                 string_funcionario = String.valueOf(funcionario.getText());
+
+                // !importante¡ -> Hilo para actualizar la tabla del funcionario a la hora de reasignar elemento a otro funcionario.
+                thread_actualizar = new Thread() {
+                    public void run() {
+                        do {
+                            if (actualizacion == 1) {
+                                actualizarTabla();
+                                actualizacion = 0;
+                            }
+                        } while (true);
+                    }
+                };
+
+                thread_actualizar.start();
+
             }
         });
+
 
         //boton para bajar los elementos
         bajar.setOnClickListener(new View.OnClickListener() {
@@ -226,12 +241,8 @@ public class CasoUso4 extends Fragment {
                 thread_actualizarregistro = new Thread() {
                     public void run() {
 
-                        //CasoUso4 casoUso4 = new CasoUso4();
-
-
                         GenerarPDF_Inventarios generar = new GenerarPDF_Inventarios();
                         generar.generar(getResources(), getActivity(), id_elemento, String.valueOf(sede.getText()), String.valueOf(dependencia.getText()), String.valueOf(funcionario.getText()));
-//
 
                         handler.post(createUI);
                     }
@@ -240,7 +251,6 @@ public class CasoUso4 extends Fragment {
                 thread_actualizarregistro.start();
             }
         });
-
 
         return rootView;
     }
@@ -266,7 +276,7 @@ public class CasoUso4 extends Fragment {
 //
 //    }
 
-    public void limpiarTabla(){
+    public void limpiarTabla() {
 
         TablaConsultarInventariosAsignados borrar = new TablaConsultarInventariosAsignados();
         borrar.borrarTabla(rootView, getActivity());
@@ -274,10 +284,13 @@ public class CasoUso4 extends Fragment {
         subir.setVisibility(View.INVISIBLE);
     }
 
-    public void actualizarTabla(){
+    //se Actualiza la tabla en dado caso que se reasigne un elemento
+    public void actualizarTabla() {
 
-
+        elem.startWebAccess(rootView, getActivity(), lista_documentos.get(seleccion2), 3);
+        id_elemento = elem.getId_elemento();
     }
+
     final Runnable createUI = new Runnable() {
 
         public void run() {

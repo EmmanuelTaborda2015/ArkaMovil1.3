@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -77,9 +78,18 @@ public class TablaConsultarInventariosAsignados {
 
         cargarElementos();
 
-        agregarCabecera();
-
-        agregarFilasTabla();
+        if (id_elemento.size() > 0) {
+            agregarCabecera();
+            agregarFilasTabla();
+        } else {
+            Toast.makeText(actividad, "No registran elementos para el funcionario", Toast.LENGTH_LONG).show();
+            ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_c4);
+            ImageView subir = (ImageView) rootView.findViewById(R.id.subir_c4);
+            Button pdf = (Button) rootView.findViewById(R.id.generarpdf_c4);
+            bajar.setVisibility(View.INVISIBLE);
+            subir.setVisibility(View.INVISIBLE);
+            pdf.setVisibility(View.INVISIBLE);
+        }
     }
 
     public void agregarCabecera() {

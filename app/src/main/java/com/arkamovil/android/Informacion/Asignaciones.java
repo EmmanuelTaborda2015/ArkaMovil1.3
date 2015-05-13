@@ -40,6 +40,7 @@ public class Asignaciones extends Dialog {
 
 
     private Activity c;
+    private View roorView;
 
     private AutoCompleteTextView funcionario;
 
@@ -60,10 +61,11 @@ public class Asignaciones extends Dialog {
 
     private WS_Asignaciones datos;
 
-    public Asignaciones(Activity a) {
+    public Asignaciones(View rootView, Activity a) {
         super(a);
         // TODO Auto-generated constructor stub
         this.c = a;
+        this.roorView = rootView;
     }
 
     @Override
@@ -89,12 +91,12 @@ public class Asignaciones extends Dialog {
 
         final CasoUso4 casoUso4 = new CasoUso4();
 
-            funcionario.setText(casoUso4.getString_funcionario());
-            elemento.setText(datos.getId_elemento().get(0));
-            placa.setText(datos.getPlaca().get(0));
-            estado.setText(datos.getEstado().get(0));
-            estadoAct.setText(datos.getEstado_Actualizacion().get(0));
-            observacion.setText(datos.getObservaciones().get(0));
+        funcionario.setText(casoUso4.getString_funcionario());
+        elemento.setText(datos.getId_elemento().get(0));
+        placa.setText(datos.getPlaca().get(0));
+        estado.setText(datos.getEstado().get(0));
+        estadoAct.setText(datos.getEstado_Actualizacion().get(0));
+        observacion.setText(datos.getObservaciones().get(0));
 
         cerrar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,8 +136,12 @@ public class Asignaciones extends Dialog {
                     cerrar.setText("Cancelar");
 
                     new Despliegue(funcionario);
+
                 } else if ("GUARDAR".equalsIgnoreCase(String.valueOf(modificar.getText()))) {
 
+                    //if (!"".equalsIgnoreCase(String.valueOf(funcionario.getText()))) {
+                    //for (int i = 0; i < casoUso4.getLista_funcionario().size(); i++) {
+                    //  if (casoUso4.getLista_funcionario().get(i).equals(String.valueOf(funcionario.getText()))) {
                     thread = new Thread() {
                         public void run() {
                             WS_EnviarElementosAsignar ws_enviarElementosAsignar = new WS_EnviarElementosAsignar();
@@ -143,13 +149,26 @@ public class Asignaciones extends Dialog {
                             casoUso4.getString_sede();
                             ws_enviarElementosAsignar.startWebAccess(String.valueOf(casoUso4.getString_sede()), casoUso4.getString_dependencia(), documento, String.valueOf(elemento.getText()));
 
+                            casoUso4.setActualizacion(1);
+
                             handler.post(createUI);
                         }
                     };
 
                     thread.start();
 
+
+
+                    //    i = casoUso4.getLista_funcionario().size();
+
+                    //}else if(i == casoUso4.getLista_funcionario().size() - 1){
+                    //    Toast.makeText(c, "El funcionario ingresado no es valido", Toast.LENGTH_LONG).show();
+                    //}
                 }
+                //}else {
+                // Toast.makeText(c, "Seleccione el funcionario a asignar el elemento", Toast.LENGTH_LONG).show();
+                // }
+                //}
 
             }
         });
@@ -162,8 +181,6 @@ public class Asignaciones extends Dialog {
             Toast.makeText(c, "Ha sido Reasignado el elemento", Toast.LENGTH_LONG).show();
             TablaConsultarInventariosAsignados tablaConsultarInventariosAsignados = new TablaConsultarInventariosAsignados();
             tablaConsultarInventariosAsignados.cerrarDialog();
-            CasoUso4 casoUso4 = new CasoUso4();
-            casoUso4.actualizarTabla();
         }
     };
 
