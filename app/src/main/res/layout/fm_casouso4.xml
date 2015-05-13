@@ -84,6 +84,8 @@
                 android:text="Escanear Placa"
                 android:layout_marginTop="20dp"
                 android:onClick="escanear"/>
+
+
         </LinearLayout>
     </RelativeLayout>
 </ScrollView>

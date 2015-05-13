@@ -180,6 +180,7 @@ public class TablaConsultarInventariosAsignados {
     public void cargarElementos() {
 
         tabla.removeAllViews();
+        cabecera.removeAllViews();
 
         tabla = (TableLayout) rootView.findViewById(R.id.tabla_c4);
         cabecera = (TableLayout) rootView.findViewById(R.id.cabecera_c4);
@@ -228,7 +229,7 @@ public class TablaConsultarInventariosAsignados {
         public void run() {
             WS_Asignaciones ws_asignaciones = new WS_Asignaciones();
             if (ws_asignaciones.getId_elemento().size() > 0) {
-                dialog = new Asignaciones(actividad);
+                dialog = new Asignaciones(rootView, actividad);
                 dialog.show();
             } else {
                 Toast.makeText(actividad, "No se han generado actualizaciones para este elemento", Toast.LENGTH_LONG).show();
