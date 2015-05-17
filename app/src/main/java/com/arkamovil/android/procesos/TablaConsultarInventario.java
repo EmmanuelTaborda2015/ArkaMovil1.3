@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.arkamovil.android.Informacion.Informacion_Elementos;
 import com.arkamovil.android.R;
@@ -39,7 +40,7 @@ public class TablaConsultarInventario {
 
     private static List<String> id_elemento;
     private static List<String> descripcion;
-    private static  boolean[] arr;
+    private static boolean[] arr;
 
     private static int inicio;
 
@@ -59,9 +60,9 @@ public class TablaConsultarInventario {
         this.id_elemento = id;
         this.descripcion = desc;
 
-        if(id_elemento.size() < this.factor){
+        if (id_elemento.size() < this.factor) {
             this.MAX_FILAS = id_elemento.size();
-        }else{
+        } else {
             this.MAX_FILAS = this.factor;
         }
 
@@ -70,9 +71,16 @@ public class TablaConsultarInventario {
 
         cargarElementos();
 
-        agregarCabecera();
-
-        agregarFilasTabla();
+        if (id_elemento.size() > 0) {
+            agregarCabecera();
+            agregarFilasTabla();
+        } else {
+            Toast.makeText(actividad, "No registran elementos para el funcionario", Toast.LENGTH_LONG).show();
+            ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar);
+            ImageView subir = (ImageView) rootView.findViewById(R.id.subir);
+            bajar.setVisibility(View.INVISIBLE);
+            subir.setVisibility(View.INVISIBLE);
+        }
     }
 
     public void agregarCabecera() {
@@ -129,13 +137,13 @@ public class TablaConsultarInventario {
             txtVer = new ImageView(actividad);
 
             txtId.setText(id_elemento.get(this.inicio + i));
-            txtId.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL);
+            txtId.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
             txtId.setTextAppearance(actividad, R.style.etiqueta);
             txtId.setBackgroundResource(R.drawable.tabla_celda);
             txtId.setLayoutParams(layoutId);
 
             txtDescripcion.setText(descripcion.get(this.inicio + i));
-            txtId.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL);
+            txtId.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
             txtDescripcion.setTextAppearance(actividad, R.style.etiqueta);
             txtDescripcion.setBackgroundResource(R.drawable.tabla_celda);
             txtDescripcion.setLayoutParams(layoutTexto);
@@ -171,7 +179,7 @@ public class TablaConsultarInventario {
                 TableRow.LayoutParams.WRAP_CONTENT);
         layoutId = new TableRow.LayoutParams((int) (tamanoPantalla * 0.2), TableRow.LayoutParams.MATCH_PARENT);
         layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla * 0.4), TableRow.LayoutParams.MATCH_PARENT);
-        layoutVer = new TableRow.LayoutParams((int) (tamanoPantalla*0.3), TableRow.LayoutParams.MATCH_PARENT);
+        layoutVer = new TableRow.LayoutParams((int) (tamanoPantalla * 0.3), TableRow.LayoutParams.MATCH_PARENT);
 
     }
 
@@ -202,7 +210,7 @@ public class TablaConsultarInventario {
                 TableRow.LayoutParams.WRAP_CONTENT);
         layoutId = new TableRow.LayoutParams((int) (tamanoPantalla * 0.2), TableRow.LayoutParams.MATCH_PARENT);
         layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla * 0.4), TableRow.LayoutParams.MATCH_PARENT);
-        layoutVer = new TableRow.LayoutParams((int) (tamanoPantalla*0.3), TableRow.LayoutParams.MATCH_PARENT);
+        layoutVer = new TableRow.LayoutParams((int) (tamanoPantalla * 0.3), TableRow.LayoutParams.MATCH_PARENT);
 
         tabla.removeAllViews();
         cabecera.removeAllViews();

@@ -157,39 +157,34 @@ public class WS_Elemento {
             //Clase para crear Tablas, se envian como parametros la Vista, La Actividad y los valores para cada una de las columnas (ArrayList)
 
             if (caso == 1) {
+                TablaConsultarInventario crear = new TablaConsultarInventario();
+                crear.crear(rootView, act, id_elemento, descripcion);
                 if (id_elemento.size() > 0) {
-                    TablaConsultarInventario crear = new TablaConsultarInventario();
-
-                    crear.crear(rootView, act, id_elemento, descripcion);
                     ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar);
                     ImageView subir = (ImageView) rootView.findViewById(R.id.subir);
                     bajar.setVisibility(View.VISIBLE);
                     subir.setVisibility(View.VISIBLE);
-                } else {
-                    Toast.makeText(act, "No registran elementos para el funcionario", Toast.LENGTH_LONG).show();
                 }
             } else if (caso == 2) {
+                TablaModificarInventario crear = new TablaModificarInventario();
+                crear.crear(rootView, act, id_elemento, descripcion);
                 if (id_elemento.size() > 0) {
-                    TablaModificarInventario crear = new TablaModificarInventario();
-                    crear.crear(rootView, act, id_elemento, descripcion);
                     ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_6);
                     ImageView subir = (ImageView) rootView.findViewById(R.id.subir_6);
                     bajar.setVisibility(View.VISIBLE);
                     subir.setVisibility(View.VISIBLE);
-                } else {
-                    Toast.makeText(act, "No registran elementos para el funcionario", Toast.LENGTH_LONG).show();
                 }
             } else if (caso == 3) {
-                    TablaConsultarInventariosAsignados crear = new TablaConsultarInventariosAsignados();
-                    //crear.borrarTabla(rootView, act);
-                    crear.crear(rootView, act, id_elemento, descripcion);
+                TablaConsultarInventariosAsignados crear = new TablaConsultarInventariosAsignados();
+                crear.crear(rootView, act, id_elemento, descripcion);
+                if (id_elemento.size() > 0) {
                     ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_c4);
                     ImageView subir = (ImageView) rootView.findViewById(R.id.subir_c4);
                     Button pdf = (Button) rootView.findViewById(R.id.generarpdf_c4);
                     bajar.setVisibility(View.VISIBLE);
                     subir.setVisibility(View.VISIBLE);
                     pdf.setVisibility(View.VISIBLE);
-
+                }
             }
 
 

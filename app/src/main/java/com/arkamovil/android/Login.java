@@ -27,12 +27,12 @@ public class Login extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        usuario = (EditText)findViewById(R.id.user);
-        contrasena = (EditText)findViewById(R.id.contrasenna_usuario);
+        usuario = (EditText) findViewById(R.id.user);
+        contrasena = (EditText) findViewById(R.id.contrasenna_usuario);
 
-        boton = (Button)findViewById(R.id.botonlogin);
+        boton = (Button) findViewById(R.id.botonlogin);
 
-        boton.setOnClickListener( new View.OnClickListener() {
+        boton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
 
@@ -40,15 +40,15 @@ public class Login extends ActionBarActivity {
 
                 int contador = 0;
                 //Se realizan validaciones previas antes de consultar la base de datos.
-                if("".equals(String.valueOf(usuario.getText())) || "Usuario".equals(String.valueOf(usuario.getText()))) {
+                if ("".equals(String.valueOf(usuario.getText())) || "Usuario".equals(String.valueOf(usuario.getText()))) {
                     Toast.makeText(getApplicationContext(), "Porfavor ingrese su usuario", Toast.LENGTH_LONG).show();
                     contador++;
                 }
-                if(("".equals(String.valueOf(contrasena.getText())) || "Contraseña".equals(String.valueOf(contrasena.getText()))) && contador == 0){
+                if (("".equals(String.valueOf(contrasena.getText())) || "Contraseña".equals(String.valueOf(contrasena.getText()))) && contador == 0) {
                     Toast.makeText(getApplicationContext(), "Porfavor ingrese su contraseña", Toast.LENGTH_LONG).show();
                     contador++;
                 }
-                if(contador == 0){
+                if (contador == 0) {
 
                     thread = new Thread() {
                         public void run() {
@@ -61,35 +61,33 @@ public class Login extends ActionBarActivity {
 
                     thread.start();
 
-                }else{
+                } else {
                     boton.setEnabled(true);
                 }
             }
         });
 
-        usuario.setOnFocusChangeListener(new View.OnFocusChangeListener(){
-                                             public void onFocusChange(View v, boolean hasFocus){
+        usuario.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                                             public void onFocusChange(View v, boolean hasFocus) {
                                                  if (hasFocus) {
                                                      try {
                                                          usuario.setText("");
                                                          usuario.setTextColor(getResources().getColor(R.color.NEGRO));
-                                                     }
-                                                     catch (NumberFormatException e) {
+                                                     } catch (NumberFormatException e) {
                                                      }
                                                  }
                                              }
                                          }
         );
 
-        contrasena.setOnFocusChangeListener(new View.OnFocusChangeListener(){
-                                                public void onFocusChange(View v, boolean hasFocus){
+        contrasena.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                                                public void onFocusChange(View v, boolean hasFocus) {
                                                     if (hasFocus) {
                                                         try {
                                                             contrasena.setText("");
                                                             contrasena.setTextColor(getResources().getColor(R.color.NEGRO));
-                                                            contrasena.setInputType(InputType. TYPE_CLASS_TEXT |  InputType . TYPE_TEXT_VARIATION_PASSWORD );
-                                                        }
-                                                        catch (NumberFormatException e) {
+                                                            contrasena.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                                                        } catch (NumberFormatException e) {
                                                         }
                                                     }
                                                 }
@@ -100,14 +98,14 @@ public class Login extends ActionBarActivity {
     final Runnable createUI = new Runnable() {
 
         public void run() {
-           //if("true".equals(webResponse)){
-            if("true".equals("true")){
+            if ("true".equals(webResponse)) {
+                //if("true".equals("true")){
                 Toast.makeText(getApplicationContext(), "Conectado", Toast.LENGTH_LONG).show();
                 boton.setEnabled(true);
                 Intent i = new Intent(getApplicationContext(), CasosUso.class);
                 startActivity(i);
 
-            }else if("false".equals(webResponse)){
+            } else if ("false".equals(webResponse)) {
                 Toast.makeText(getApplicationContext(), "Usuario y/o Contraseña invalida", Toast.LENGTH_LONG).show();
                 boton.setEnabled(true);
             }

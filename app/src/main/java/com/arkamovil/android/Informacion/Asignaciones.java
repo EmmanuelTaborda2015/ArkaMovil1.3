@@ -139,36 +139,35 @@ public class Asignaciones extends Dialog {
 
                 } else if ("GUARDAR".equalsIgnoreCase(String.valueOf(modificar.getText()))) {
 
-                    //if (!"".equalsIgnoreCase(String.valueOf(funcionario.getText()))) {
-                    //for (int i = 0; i < casoUso4.getLista_funcionario().size(); i++) {
-                    //  if (casoUso4.getLista_funcionario().get(i).equals(String.valueOf(funcionario.getText()))) {
-                    thread = new Thread() {
-                        public void run() {
-                            WS_EnviarElementosAsignar ws_enviarElementosAsignar = new WS_EnviarElementosAsignar();
+                    if (!"".equalsIgnoreCase(String.valueOf(funcionario.getText()))) {
+                        for (int i = 0; i < casoUso4.getLista_funcionario().size(); i++) {
+                            if (casoUso4.getLista_funcionario().get(i).equals(String.valueOf(funcionario.getText()))) {
+                                thread = new Thread() {
+                                    public void run() {
+                                        WS_EnviarElementosAsignar ws_enviarElementosAsignar = new WS_EnviarElementosAsignar();
 
-                            casoUso4.getString_sede();
-                            ws_enviarElementosAsignar.startWebAccess(String.valueOf(casoUso4.getString_sede()), casoUso4.getString_dependencia(), documento, String.valueOf(elemento.getText()));
+                                        casoUso4.getString_sede();
+                                        ws_enviarElementosAsignar.startWebAccess(String.valueOf(casoUso4.getString_sede()), casoUso4.getString_dependencia(), documento, String.valueOf(elemento.getText()));
 
-                            casoUso4.setActualizacion(1);
+                                        casoUso4.setActualizacion(1);
 
-                            handler.post(createUI);
+                                        handler.post(createUI);
+                                    }
+                                };
+
+                                thread.start();
+
+
+                                i = casoUso4.getLista_funcionario().size();
+
+                            } else if (i == casoUso4.getLista_funcionario().size() - 1) {
+                                Toast.makeText(c, "El funcionario ingresado no es valido", Toast.LENGTH_LONG).show();
+                            }
                         }
-                    };
-
-                    thread.start();
-
-
-
-                    //    i = casoUso4.getLista_funcionario().size();
-
-                    //}else if(i == casoUso4.getLista_funcionario().size() - 1){
-                    //    Toast.makeText(c, "El funcionario ingresado no es valido", Toast.LENGTH_LONG).show();
-                    //}
+                    } else {
+                        Toast.makeText(c, "Seleccione el funcionario a asignar el elemento", Toast.LENGTH_LONG).show();
+                    }
                 }
-                //}else {
-                // Toast.makeText(c, "Seleccione el funcionario a asignar el elemento", Toast.LENGTH_LONG).show();
-                // }
-                //}
 
             }
         });
