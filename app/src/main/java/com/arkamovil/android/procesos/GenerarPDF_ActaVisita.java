@@ -41,7 +41,7 @@ import org.w3c.dom.Text;
 
 public class GenerarPDF_ActaVisita{
 
-    private final static String NOMBRE_DIRECTORIO = "Acta de Visita";
+    private final static String NOMBRE_DIRECTORIO = "Actas de Visitas";
     private static String NOMBRE_DOCUMENTO = "prueba.pdf";
     private final static String ETIQUETA_ERROR = "ERROR";
 

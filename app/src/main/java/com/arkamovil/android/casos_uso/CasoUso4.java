@@ -47,7 +47,7 @@ public class CasoUso4 extends Fragment {
     }
 
     private Thread thread_actualizarregistro;
-    public Thread thread_actualizar;
+    private Thread thread_actualizar;
 
     private static int actualizacion = 0;
 
