@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -158,6 +160,10 @@ public class CasoUso2 extends Fragment {
                 elem = new WS_ElementosAsignar();
                 elem.startWebAccess(rootView, getActivity());
                 string_funcionario = String.valueOf(funcionario.getText());
+
+                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+
             }
         });
 
