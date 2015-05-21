@@ -32,11 +32,14 @@ public class Login extends ActionBarActivity {
 
         boton = (Button) findViewById(R.id.botonlogin);
 
+        boton.setTextColor(getResources().getColor(R.color.NEGRO));
+
         boton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
 
                 boton.setEnabled(false);
+                boton.setTextColor(getResources().getColor(R.color.BLANCO));
 
                 int contador = 0;
                 //Se realizan validaciones previas antes de consultar la base de datos.
@@ -63,6 +66,8 @@ public class Login extends ActionBarActivity {
 
                 } else {
                     boton.setEnabled(true);
+
+                    boton.setTextColor(getResources().getColor(R.color.NEGRO));
                 }
             }
         });
@@ -98,6 +103,9 @@ public class Login extends ActionBarActivity {
     final Runnable createUI = new Runnable() {
 
         public void run() {
+
+            boton.setTextColor(getResources().getColor(R.color.NEGRO));
+
             if ("true".equals(webResponse)) {
                 //if("true".equals("true")){
                 Toast.makeText(getApplicationContext(), "Conectado", Toast.LENGTH_LONG).show();
@@ -109,6 +117,8 @@ public class Login extends ActionBarActivity {
                 Toast.makeText(getApplicationContext(), "Usuario y/o Contraseña invalida", Toast.LENGTH_LONG).show();
                 boton.setEnabled(true);
             }
+
+
         }
     };
 }

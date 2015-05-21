@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -13,13 +12,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arkamovil.android.R;
-import com.arkamovil.android.casos_uso.CasoUso6;
 import com.arkamovil.android.procesos.LlenarListas;
-import com.arkamovil.android.procesos.TablaModificarInventario;
 import com.arkamovil.android.servicios_web.WS_ActualizarInventario;
 import com.arkamovil.android.servicios_web.WS_Asignaciones;
 import com.arkamovil.android.servicios_web.WS_Elemento;
-import com.arkamovil.android.servicios_web.WS_Estado;
 import com.arkamovil.android.servicios_web.WS_Placa;
 
 public class Modificar_Informacion_Elementos_Scanner extends Dialog {

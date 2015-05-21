@@ -2,21 +2,34 @@ package com.arkamovil.android.Informacion;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.arkamovil.android.R;
 import com.arkamovil.android.procesos.TablaConsultarInventario;
+import com.arkamovil.android.servicios_web.WS_CargarImagen;
 import com.arkamovil.android.servicios_web.WS_Elemento;
+import com.arkamovil.android.servicios_web.WS_Imagen;
 
 public class Informacion_Elementos extends Dialog {
 
 
     public Activity c;
     public int i;
+    WS_Elemento datos;
+    private Thread thread;
+    private Handler handler = new Handler();
+    private String img;
 
     public Informacion_Elementos(Activity a, int i) {
         super(a);
@@ -41,17 +54,29 @@ public class Informacion_Elementos extends Dialog {
         TextView iva = (TextView) findViewById(R.id.info_iva);
         TextView total = (TextView) findViewById(R.id.info_total);
 
-        WS_Elemento datos = new WS_Elemento();
+        datos = new WS_Elemento();
 
-        id.setText(id.getText() +  "            " + datos.getId_elemento().get(i));
-        nivel.setText(nivel.getText() +  "       " + datos.getNivel().get(i));
-        marca.setText(marca.getText() +  "     " + datos.getMarca().get(i));
-        placa.setText(placa.getText() +  "      " + datos.getPlaca().get(i));
-        serie.setText(serie.getText() +  "       " + datos.getSerie().get(i));
-        valor.setText(valor.getText() +  "       " + datos.getValor().get(i));
-        subtotal.setText(subtotal.getText() +  "  " + datos.getSubtotal().get(i));
-        iva.setText(iva.getText() +  "           " + datos.getIva().get(i));
-        total.setText(total.getText() +  "        " + datos.getTotal().get(i));
+        id.setText(datos.getId_elemento().get(i));
+        nivel.setText(datos.getNivel().get(i));
+        marca.setText(datos.getMarca().get(i));
+        placa.setText(datos.getPlaca().get(i));
+        serie.setText(datos.getSerie().get(i));
+        valor.setText(datos.getValor().get(i));
+        subtotal.setText(datos.getSubtotal().get(i));
+        iva.setText(datos.getIva().get(i));
+        total.setText(datos.getTotal().get(i));
+
+        thread = new Thread() {
+            public void run() {
+
+                WS_Imagen ws_imagen = new WS_Imagen();
+                img =  ws_imagen.startWebAccess(datos.getId_elemento().get(i));
+
+                handler.post(createUI);
+            }
+        };
+
+        thread.start();
 
         Button cerrar;
         cerrar = (Button) findViewById(R.id.cerrar_infoelem);
@@ -64,4 +89,15 @@ public class Informacion_Elementos extends Dialog {
         });
     }
 
+    final Runnable createUI = new Runnable() {
+
+        public void run() {
+
+            byte[] byteData = Base64.decode(img, Base64.DEFAULT);
+            Bitmap photo = BitmapFactory.decodeByteArray(byteData, 0, byteData.length);
+
+            ImageView imagen = (ImageView) findViewById(R.id.imagen_inf);
+            imagen.setImageBitmap(photo);
+        }
+    };
 }

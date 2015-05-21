@@ -26,6 +26,8 @@ public class WS_CargarImagen {
         request.addProperty("id_elemento", id_elemento);
         request.addProperty("imagen", imagen);
 
+        Log.v("imagen", imagen);
+
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         envelope.setOutputSoapObject(request);
 

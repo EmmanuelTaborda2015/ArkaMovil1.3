@@ -48,7 +48,7 @@
 
     <!--Caso uso 1-->
 
-    <string name="formatofecha">dd:mm:aa</string>
+    <string name="formatofecha">DD/MM/AAAA</string>
     <string name="String_facultad">Facultad</string>
 
     <!--Caso uso 5-->

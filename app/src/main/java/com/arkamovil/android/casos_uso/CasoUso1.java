@@ -174,6 +174,61 @@ public class CasoUso1 extends Fragment {
         });
 
 
+        sede.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean b1) {
+                Log.v("Aqui", R.id.sede_c1 + "   " + v.getId());
+                if (v.getId() == R.id.sede_c1) {
+                    sede.setText("");
+                }
+            }
+        });
+
+        funcionario.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean b1) {
+                Log.v("Aqui", R.id.sede_c1 + "   " + v.getId());
+                if (R.id.nombreresponsable_c1 == v.getId()) {
+
+                    if ("".equals(String.valueOf(dependencia.getText()))) {
+                        Toast.makeText(getActivity(), "Por favor seleccione la dependencia a consultar", Toast.LENGTH_LONG).show();
+                        dependencia.requestFocus();
+                    } else {
+                        if (lista_funcionario.size() == 0) {
+                            Toast.makeText(getActivity(), "La dependencia seleccionada no registra funcionarios asociados", Toast.LENGTH_LONG).show();
+                            dependencia.requestFocus();
+                        } else {
+                            funcionario.setText("");
+                            new Despliegue(funcionario);
+                        }
+                    }
+                }
+            }
+        });
+
+        dependencia.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean b1) {
+                Log.v("Aqui", R.id.dependencia_c1 + "   " + v.getId());
+
+                if (R.id.dependencia_c1 == v.getId()) {
+                    if ("".equals(String.valueOf(sede.getText()))) {
+                        Toast.makeText(getActivity(), "Por favor seleccione la sede a consultar", Toast.LENGTH_LONG).show();
+                        sede.requestFocus();
+                    } else {
+                        if (lista_dependencia.size() == 0) {
+                            Toast.makeText(getActivity(), "La sede seleccionada no registra dependencias asociadas", Toast.LENGTH_LONG).show();
+                            sede.requestFocus();
+                        } else {
+                            dependencia.setText("");
+                            new Despliegue(dependencia);
+                        }
+                    }
+                }
+            }
+        });
+
+
         Time today = new Time(Time.getCurrentTimezone());
         today.setToNow();
 
@@ -197,7 +252,7 @@ public class CasoUso1 extends Fragment {
         tvDisplayDate2 = (TextView) rootView.findViewById(R.id.proxvis_c1);
 
         tvDisplayDate1.setTextColor(getResources().getColor(R.color.NEGRO));
-        tvDisplayDate1.setText(val1 + day1 + "-" + val2 + (month1 + 1) + "-" + year1);
+        tvDisplayDate1.setText(val1 + day1 + "/" + val2 + (month1 + 1) + "/" + year1);
 
         contador++;
 
@@ -233,8 +288,8 @@ public class CasoUso1 extends Fragment {
 
                 if (validador == 0) {
 
-                    fecha = String.valueOf(day1) + "-" + String.valueOf(month1 + 1) + "-" + String.valueOf(year1);
-                    proxVisita = String.valueOf(day2) + "-" + String.valueOf(month2 + 1) + "-" + String.valueOf(year2);
+                    fecha = String.valueOf(day1) + "/" + String.valueOf(month1 + 1) + "/" + String.valueOf(year1);
+                    proxVisita = String.valueOf(day2) + "/" + String.valueOf(month2 + 1) + "/" + String.valueOf(year2);
                     sede_s = String.valueOf(sede.getText());
                     dependencia_s = String.valueOf(dependencia.getText());
                     nombRes_s = String.valueOf(funcionario.getText());
@@ -258,7 +313,7 @@ public class CasoUso1 extends Fragment {
 
                     sede.requestFocus();
 
-                    Toast.makeText(getActivity(), "Se ha generado el acta de visita en -> Download -> Acta de Visita -> Actavisita"+numVisita_s, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Se ha generado el acta de visita en -> Download -> Acta de Visita -> Actavisita" + numVisita_s, Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -296,7 +351,7 @@ public class CasoUso1 extends Fragment {
                     val2 = "0";
                 }
 
-                tvDisplayDate2.setText(val1 + day2 + "-" + val2 + (month2 + 1) + "-" + year2);
+                tvDisplayDate2.setText(val1 + day2 + "/" + val2 + (month2 + 1) + "/" + year2);
                 tvDisplayDate2.setTextColor(getResources().getColor(R.color.NEGRO));
 
             } else {
@@ -334,7 +389,7 @@ public class CasoUso1 extends Fragment {
         }
     };
 
-    public void establecerCampos(){
+    public void establecerCampos() {
 
         sede = (AutoCompleteTextView) rootView.findViewById(R.id.sede_c1);
         dependencia = (AutoCompleteTextView) rootView.findViewById(R.id.dependencia_c1);
@@ -375,7 +430,7 @@ public class CasoUso1 extends Fragment {
 
     }
 
-    public void limpiar(){
+    public void limpiar() {
         sede.setText("");
         dependencia.setText("");
         funcionario.setText("");

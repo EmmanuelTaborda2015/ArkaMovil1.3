@@ -1,26 +1,19 @@
 package com.arkamovil.android.procesos;
 
 import android.app.Activity;
-import android.content.res.Resources;
-import android.media.Image;
 import android.os.Handler;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.arkamovil.android.Informacion.Informacion_Elementos;
 import com.arkamovil.android.Informacion.Modificar_Informacion_Elementos;
 import com.arkamovil.android.R;
 import com.arkamovil.android.servicios_web.WS_Asignaciones;
-import com.arkamovil.android.servicios_web.WS_Estado;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class TablaModificarInventario {

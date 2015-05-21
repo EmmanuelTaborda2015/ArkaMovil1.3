@@ -1,90 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:focusableInTouchMode="true">
-
-    <LinearLayout
-        android:layout_width="300dp"
-        android:layout_height="340dp"
-        android:background="@color/CadeBlue"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:padding="30dp"
-        android:orientation="vertical">
+    android:layout_height="match_parent">
 
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Id:"
-            android:id="@+id/infor_id" />
+    <RelativeLayout
+        android:id="@+id/RelativeLayout01"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Nivel:"
-            android:id="@+id/info_nivel" />
+        <LinearLayout
+            android:id="@+id/LinearLayout02"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@color/DocgerBlue"
+            android:padding="20dp"
+            android:paddingBottom="20dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Marca:"
-            android:id="@+id/info_marca" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Placa:"
-            android:id="@+id/info_placa" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Serie:"
-            android:id="@+id/info_serie" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Valor:"
-            android:id="@+id/info_valor" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Subtotal:"
-            android:id="@+id/info_subtotal" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Iva:"
-            android:id="@+id/info_iva" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Total:"
-            android:id="@+id/info_total" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Cerrar"
-            android:id="@+id/cerrar_infoelem"
-            android:layout_gravity="center_horizontal" />
-    </LinearLayout>
+            </LinearLayout>
 
 
-</RelativeLayout>
+        <LinearLayout
+            android:id="@+id/LinearLayout01"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@color/DocgerBlue"
+            android:padding="20dp"
+            android:paddingBottom="20dp">
+
+            <ImageView
+                android:id="@+id/imagen_inf"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:paddingBottom="5dp" />
+
+            <TextView
+                android:id="@+id/label_inf_id"
+                android:text="Id Elemento"
+                style="@style/labelArkaMovil" />
+
+            <AutoCompleteTextView
+                style="@style/buttonTextArkaMovil"
+                android:editable="false"
+                android:id="@+id/infor_id" />
+
+
+            <TextView
+                android:id="@+id/label_inf_nivel"
+                android:text="Nivel"
+                style="@style/labelArkaMovil" />
+
+            <AutoCompleteTextView
+                style="@style/buttonTextArkaMovil"
+                android:editable="false"
+                android:id="@+id/info_nivel" />
+
+            <TextView
+                android:id="@+id/label_inf_marca"
+                android:text="Marca"
+                style="@style/labelArkaMovil" />
+
+            <AutoCompleteTextView
+                style="@style/buttonTextArkaMovil"
+                android:editable="false"
+                android:id="@+id/info_marca" />
+
+            <TextView
+                android:id="@+id/label_inf_placa"
+                android:text="Placa"
+                style="@style/labelArkaMovil" />
+
+            <AutoCompleteTextView
+                style="@style/buttonTextArkaMovil"
+                android:editable="false"
+                android:id="@+id/info_placa" />
+
+            <TextView
+                android:id="@+id/label_inf_serie"
+                android:text="Serie"
+                style="@style/labelArkaMovil" />
+
+            <AutoCompleteTextView
+                style="@style/buttonTextArkaMovil"
+                android:editable="false"
+                android:id="@+id/info_serie" />
+
+            <TextView
+                android:id="@+id/label_inf_valor"
+                android:text="Valor"
+                style="@style/labelArkaMovil" />
+
+            <AutoCompleteTextView
+                style="@style/buttonTextArkaMovil"
+                android:editable="false"
+                android:id="@+id/info_valor" />
+
+            <TextView
+                android:id="@+id/label_inf_subtotal"
+                android:text="Subtotal"
+                style="@style/labelArkaMovil" />
+
+            <AutoCompleteTextView
+                style="@style/buttonTextArkaMovil"
+                android:editable="false"
+                android:id="@+id/info_subtotal" />
+
+            <TextView
+                android:id="@+id/label_inf_iva"
+                android:text="Iva"
+                style="@style/labelArkaMovil" />
+
+            <AutoCompleteTextView
+                style="@style/buttonTextArkaMovil"
+                android:editable="false"
+                android:id="@+id/info_iva" />
+
+            <TextView
+                android:id="@+id/label_inf_total"
+                android:text="Total"
+                style="@style/labelArkaMovil" />
+
+            <AutoCompleteTextView
+                style="@style/buttonTextArkaMovil"
+                android:editable="false"
+                android:id="@+id/info_total" />
+
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cerrar"
+                android:id="@+id/cerrar_infoelem"
+                android:layout_gravity="center_horizontal" />
+
+        </LinearLayout>
+    </RelativeLayout>
+</ScrollView>
