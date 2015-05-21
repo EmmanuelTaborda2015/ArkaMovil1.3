@@ -62,6 +62,9 @@ public class CasoUso6 extends Fragment {
         bajar = (ImageView) rootView.findViewById(R.id.bajar_6);
         subir = (ImageView) rootView.findViewById(R.id.subir_6);
 
+        dependencia.setEnabled(false);
+        funcionario.setEnabled(false);
+
         bajar.setVisibility(View.INVISIBLE);
         subir.setVisibility(View.INVISIBLE);
 

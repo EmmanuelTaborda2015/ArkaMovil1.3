@@ -90,6 +90,9 @@ public class CasoUso1 extends Fragment {
         //Se definen los campos a utilizar en la clase.
         establecerCampos();
 
+        dependencia.setEnabled(false);
+        funcionario.setEnabled(false);
+
         //Se cargar los datos del web service sede.
         WS_Sede ws_sede = new WS_Sede();
         ws_sede.startWebAccess(getActivity(), sede);
@@ -172,62 +175,6 @@ public class CasoUso1 extends Fragment {
 
             }
         });
-
-
-        sede.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean b1) {
-                Log.v("Aqui", R.id.sede_c1 + "   " + v.getId());
-                if (v.getId() == R.id.sede_c1) {
-                    sede.setText("");
-                }
-            }
-        });
-
-        funcionario.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean b1) {
-                Log.v("Aqui", R.id.sede_c1 + "   " + v.getId());
-                if (R.id.nombreresponsable_c1 == v.getId()) {
-
-                    if ("".equals(String.valueOf(dependencia.getText()))) {
-                        Toast.makeText(getActivity(), "Por favor seleccione la dependencia a consultar", Toast.LENGTH_LONG).show();
-                        dependencia.requestFocus();
-                    } else {
-                        if (lista_funcionario.size() == 0) {
-                            Toast.makeText(getActivity(), "La dependencia seleccionada no registra funcionarios asociados", Toast.LENGTH_LONG).show();
-                            dependencia.requestFocus();
-                        } else {
-                            funcionario.setText("");
-                            new Despliegue(funcionario);
-                        }
-                    }
-                }
-            }
-        });
-
-        dependencia.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean b1) {
-                Log.v("Aqui", R.id.dependencia_c1 + "   " + v.getId());
-
-                if (R.id.dependencia_c1 == v.getId()) {
-                    if ("".equals(String.valueOf(sede.getText()))) {
-                        Toast.makeText(getActivity(), "Por favor seleccione la sede a consultar", Toast.LENGTH_LONG).show();
-                        sede.requestFocus();
-                    } else {
-                        if (lista_dependencia.size() == 0) {
-                            Toast.makeText(getActivity(), "La sede seleccionada no registra dependencias asociadas", Toast.LENGTH_LONG).show();
-                            sede.requestFocus();
-                        } else {
-                            dependencia.setText("");
-                            new Despliegue(dependencia);
-                        }
-                    }
-                }
-            }
-        });
-
 
         Time today = new Time(Time.getCurrentTimezone());
         today.setToNow();
@@ -411,7 +358,7 @@ public class CasoUso1 extends Fragment {
         } else if ("".equals(String.valueOf(dependencia.getText())) && validador == 0) {
             Toast.makeText(getActivity(), "Porfavor ingrese la Dependencia", Toast.LENGTH_LONG).show();
             validador++;
-        } else if ("".equals(String.valueOf(funcionario.getText())) && validador == 0) {
+        } else if (("".equals(String.valueOf(funcionario.getText())) || "no existen funcionarios relacionados".equalsIgnoreCase(String.valueOf(funcionario.getText()))) && validador == 0) {
             Toast.makeText(getActivity(), "Porfavor ingrese el Nombre del responsable", Toast.LENGTH_LONG).show();
             validador++;
         } else if ("".equals(String.valueOf(docRes.getText())) && validador == 0) {

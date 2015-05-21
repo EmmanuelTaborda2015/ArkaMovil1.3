@@ -5,6 +5,9 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Toast;
+
+import com.arkamovil.android.R;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
@@ -25,11 +28,11 @@ public class WS_Funcionario_Oracle {
     private Thread thread;
     private Handler handler = new Handler();
 
-    Activity act;
-    AutoCompleteTextView spin;
+    private Activity act;
+    private AutoCompleteTextView spin;
 
-     List<String> fun_identificacion = new ArrayList<String>();
-     List<String> fun_nombre = new ArrayList<String>();
+     private List<String> fun_identificacion = new ArrayList<String>();
+     private List<String> fun_nombre = new ArrayList<String>();
 
     public List<String> getFun_nombre() {
         return fun_nombre;
@@ -82,6 +85,16 @@ public class WS_Funcionario_Oracle {
         public void run() {
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(act, android.R.layout.simple_spinner_item, fun_nombre);
             spin.setAdapter(adapter);
+
+            if(fun_identificacion.size() == 0){
+                Toast.makeText(act, "La dependencia seleccionada no tiene funcionarios relacionados", Toast.LENGTH_LONG).show();
+                spin.setText("No existen funcionarios relacionados");
+                spin.setEnabled(false);
+                spin.setTextColor(act.getResources().getColor(R.color.GRIS));
+            }else{
+                spin.setEnabled(true);
+                spin.setTextColor(act.getResources().getColor(R.color.NEGRO));
+            }
         }
     };
 

@@ -5,6 +5,9 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Toast;
+
+import com.arkamovil.android.R;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
@@ -69,6 +72,16 @@ public class WS_Dependencia {
         public void run() {
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(act, android.R.layout.simple_spinner_item, dependencia);
             spin.setAdapter(adapter);
+
+            if (dependencia.size() == 0) {
+                Toast.makeText(act, "La sede seleccionada no tiene dependencias relacionadas", Toast.LENGTH_LONG).show();
+                spin.setText("No existen dependencias relacionadas");
+                spin.setEnabled(false);
+                spin.setTextColor(act.getResources().getColor(R.color.GRIS));
+            } else {
+                spin.setEnabled(true);
+                spin.setTextColor(act.getResources().getColor(R.color.NEGRO));
+            }
         }
     };
 

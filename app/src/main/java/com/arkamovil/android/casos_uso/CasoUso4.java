@@ -95,6 +95,9 @@ public class CasoUso4 extends Fragment {
         subir = (ImageView) rootView.findViewById(R.id.subir_c4);
         scanear = (Button) rootView.findViewById(R.id.escanear_c4);
 
+        dependencia.setEnabled(false);
+        funcionario.setEnabled(false);
+
         bajar.setVisibility(View.INVISIBLE);
         subir.setVisibility(View.INVISIBLE);
         pdf.setVisibility(View.INVISIBLE);
