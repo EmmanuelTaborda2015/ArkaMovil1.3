@@ -76,10 +76,10 @@ public class TablaConsultarInventario {
             agregarFilasTabla();
         } else {
             Toast.makeText(actividad, "No registran elementos para el funcionario", Toast.LENGTH_LONG).show();
-            ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar);
-            ImageView subir = (ImageView) rootView.findViewById(R.id.subir);
-            bajar.setVisibility(View.INVISIBLE);
-            subir.setVisibility(View.INVISIBLE);
+            ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_c5);
+            ImageView subir = (ImageView) rootView.findViewById(R.id.subir_c5);
+            bajar.setVisibility(View.GONE);
+            subir.setVisibility(View.GONE);
         }
     }
 
@@ -173,8 +173,8 @@ public class TablaConsultarInventario {
 
         tabla.removeAllViews();
 
-        tabla = (TableLayout) rootView.findViewById(R.id.tabla);
-        cabecera = (TableLayout) rootView.findViewById(R.id.cabecera);
+        tabla = (TableLayout) rootView.findViewById(R.id.tabla_c5);
+        cabecera = (TableLayout) rootView.findViewById(R.id.cabecera_c5);
         layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT);
         layoutId = new TableRow.LayoutParams((int) (tamanoPantalla * 0.2), TableRow.LayoutParams.MATCH_PARENT);
@@ -204,8 +204,8 @@ public class TablaConsultarInventario {
     public void borrarTabla(View rootView, Activity actividad) {
 
 
-        tabla = (TableLayout) rootView.findViewById(R.id.tabla);
-        cabecera = (TableLayout) rootView.findViewById(R.id.cabecera);
+        tabla = (TableLayout) rootView.findViewById(R.id.tabla_c5);
+        cabecera = (TableLayout) rootView.findViewById(R.id.cabecera_c5);
         layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT);
         layoutId = new TableRow.LayoutParams((int) (tamanoPantalla * 0.2), TableRow.LayoutParams.MATCH_PARENT);

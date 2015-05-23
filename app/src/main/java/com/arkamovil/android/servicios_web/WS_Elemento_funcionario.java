@@ -166,8 +166,8 @@ public class WS_Elemento_funcionario {
                 TablaConsultarInventario crear = new TablaConsultarInventario();
                 crear.crear(rootView, act, id_elemento, descripcion);
                 if (id_elemento.size() > 0) {
-                    ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar);
-                    ImageView subir = (ImageView) rootView.findViewById(R.id.subir);
+                    ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_c5);
+                    ImageView subir = (ImageView) rootView.findViewById(R.id.subir_c5);
                     bajar.setVisibility(View.VISIBLE);
                     subir.setVisibility(View.VISIBLE);
                 }

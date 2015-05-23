@@ -15,7 +15,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arkamovil.android.R;
+import com.arkamovil.android.casos_uso.CasoUso5;
 import com.arkamovil.android.procesos.TablaConsultarInventario;
+import com.arkamovil.android.servicios_web.WS_Elemento_dependencia;
 import com.arkamovil.android.servicios_web.WS_Elemento_funcionario;
 import com.arkamovil.android.servicios_web.WS_Imagen;
 
@@ -24,7 +26,6 @@ public class Informacion_Elementos extends Dialog {
 
     private Activity c;
     private int i;
-    private WS_Elemento_funcionario datos;
     private Thread thread;
     private Handler handler = new Handler();
     private String img;
@@ -57,72 +58,50 @@ public class Informacion_Elementos extends Dialog {
         TextView iva = (TextView) findViewById(R.id.info_iva);
         TextView total = (TextView) findViewById(R.id.info_total);
 
-        datos = new WS_Elemento_funcionario();
 
-        if("anytype{}".equalsIgnoreCase(String.valueOf(datos.getId_elemento().get(i)))){
-            id.setText("");
-        }else{
+        if(new CasoUso5().getFuncion() == 1){
+            final WS_Elemento_dependencia datos = new WS_Elemento_dependencia();
             id.setText(datos.getId_elemento().get(i));
-        }
-        if("anytype{}".equalsIgnoreCase(String.valueOf(datos.getNivel().get(i)))){
-            nivel.setText("");
-        }else{
             nivel.setText(datos.getNivel().get(i));
-        }
-        if("anytype{}".equalsIgnoreCase(String.valueOf(datos.getMarca().get(i)))){
-            marca.setText("");
-        }else{
             marca.setText(datos.getMarca().get(i));
-        }
-
-        if("anytype{}".equalsIgnoreCase(String.valueOf(datos.getPlaca().get(i)))){
-            placa.setText("");
-        }else{
             placa.setText(datos.getPlaca().get(i));
-        }
-
-
-        if("anytype{}".equalsIgnoreCase(String.valueOf(datos.getSerie().get(i)))){
-            serie.setText("");
-        }else{
             serie.setText(datos.getSerie().get(i));
-        }
-
-        if("anytype{}".equalsIgnoreCase(String.valueOf(datos.getValor().get(i)))){
-            valor.setText("");
-        }else{
             valor.setText(datos.getValor().get(i));
-        }
-
-        if("anytype{}".equalsIgnoreCase(String.valueOf(datos.getSubtotal().get(i)))){
-            subtotal.setText("");
-        }else{
             subtotal.setText(datos.getSubtotal().get(i));
-        }
-
-        if("anytype{}".equalsIgnoreCase(String.valueOf(datos.getIva().get(i)))){
-            iva.setText("");
-        }else{
             iva.setText(datos.getIva().get(i));
-        }
-
-        if("anytype{}".equalsIgnoreCase(String.valueOf(datos.getTotal().get(i)))){
-            total.setText("");
-        }else{
             total.setText(datos.getTotal().get(i));
+
+            thread = new Thread() {
+                public void run() {
+                    WS_Imagen ws_imagen = new WS_Imagen();
+                    img = ws_imagen.startWebAccess(datos.getId_elemento().get(i));
+                    handler.post(createUI);
+                }
+            };
+
+            thread.start();
+        }else{
+            final WS_Elemento_funcionario datos = new WS_Elemento_funcionario();
+            id.setText(datos.getId_elemento().get(i));
+            nivel.setText(datos.getNivel().get(i));
+            marca.setText(datos.getMarca().get(i));
+            placa.setText(datos.getPlaca().get(i));
+            serie.setText(datos.getSerie().get(i));
+            valor.setText(datos.getValor().get(i));
+            subtotal.setText(datos.getSubtotal().get(i));
+            iva.setText(datos.getIva().get(i));
+            total.setText(datos.getTotal().get(i));
+
+            thread = new Thread() {
+                public void run() {
+                    WS_Imagen ws_imagen = new WS_Imagen();
+                    img = ws_imagen.startWebAccess(datos.getId_elemento().get(i));
+                    handler.post(createUI);
+                }
+            };
+
+            thread.start();
         }
-
-        thread = new Thread() {
-            public void run() {
-
-                WS_Imagen ws_imagen = new WS_Imagen();
-                img = ws_imagen.startWebAccess(datos.getId_elemento().get(i));
-
-                handler.post(createUI);
-            }
-        };
-
-        thread.start();
 
         cerrar.setOnClickListener(new View.OnClickListener() {
             @Override
