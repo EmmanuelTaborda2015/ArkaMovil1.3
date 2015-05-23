@@ -32,6 +32,7 @@ public class WS_Dependencia {
     private AutoCompleteTextView spin;
 
     private List<String> dependencia = new ArrayList<String>();
+    private List<String> id_dependencia = new ArrayList<String>();
 
 
     public void startWebAccess(final Activity act, final AutoCompleteTextView spin, final String sede) {
@@ -43,7 +44,7 @@ public class WS_Dependencia {
             public void run() {
                 SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 
-                request.addProperty("sede", sede);
+                request.addProperty("id_objeto", sede);
 
                 SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
                 envelope.setOutputSoapObject(request);
@@ -53,9 +54,13 @@ public class WS_Dependencia {
                 try {
 
                     httpTransport.call(SOAP_ACTION, envelope);
-                    SoapObject response = (SoapObject) envelope.getResponse();
-                    for (int i = 0; i < response.getPropertyCount(); i++) {
-                        dependencia.add(response.getProperty(i).toString());
+
+                    SoapObject obj1 = (SoapObject) envelope.getResponse();
+
+                    for (int i = 0; i < obj1.getPropertyCount(); i++) {
+                        SoapObject obj2 = (SoapObject) obj1.getProperty(i);
+                        id_dependencia.add(obj2.getProperty("id").toString());
+                        dependencia.add(obj2.getProperty("nombre").toString());
                     }
 
                 } catch (Exception exception) {
@@ -87,5 +92,8 @@ public class WS_Dependencia {
 
     public List<String> getDependencia() {
         return dependencia;
+    }
+    public List<String> getId_dependencia() {
+        return id_dependencia;
     }
 }

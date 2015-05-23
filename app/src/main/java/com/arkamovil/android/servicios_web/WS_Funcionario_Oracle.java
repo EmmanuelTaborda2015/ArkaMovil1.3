@@ -83,17 +83,11 @@ public class WS_Funcionario_Oracle {
     final Runnable createUI = new Runnable() {
 
         public void run() {
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(act, android.R.layout.simple_spinner_item, fun_nombre);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(act, android.R.layout.simple_spinner_item, fun_identificacion);
             spin.setAdapter(adapter);
 
             if(fun_identificacion.size() == 0){
-                Toast.makeText(act, "La dependencia seleccionada no tiene funcionarios relacionados", Toast.LENGTH_LONG).show();
-                spin.setText("No existen funcionarios relacionados");
-                spin.setEnabled(false);
-                spin.setTextColor(act.getResources().getColor(R.color.GRIS));
-            }else{
-                spin.setEnabled(true);
-                spin.setTextColor(act.getResources().getColor(R.color.NEGRO));
+                Toast.makeText(act, "VERIFIQUE SU CONEXIÓN A INTERNET", Toast.LENGTH_LONG).show();
             }
         }
     };

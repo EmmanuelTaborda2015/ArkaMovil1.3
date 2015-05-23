@@ -3,24 +3,25 @@ package com.arkamovil.android.casos_uso;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.arkamovil.android.R;
 import com.arkamovil.android.herramientas.Despliegue;
 import com.arkamovil.android.procesos.GenerarPDF_Inventarios;
 import com.arkamovil.android.procesos.TablaConsultarInventariosAsignados;
 import com.arkamovil.android.servicios_web.WS_Dependencia;
-import com.arkamovil.android.servicios_web.WS_Elemento;
-import com.arkamovil.android.servicios_web.WS_EnviarElementosAsignar;
+import com.arkamovil.android.servicios_web.WS_Elemento_dependencia;
+import com.arkamovil.android.servicios_web.WS_Elemento_funcionario;
 import com.arkamovil.android.servicios_web.WS_Funcionario_Oracle;
 import com.arkamovil.android.servicios_web.WS_Sede;
 
@@ -35,7 +36,9 @@ public class CasoUso4 extends Fragment {
     private Button scanear;
     private Button pdf;
 
-    private static WS_Elemento elem;
+    private static WS_Elemento_funcionario elem_fun;
+
+    private static WS_Elemento_dependencia elem_dep;
 
     private static String string_sede;
     private static String string_dependencia;
@@ -60,13 +63,19 @@ public class CasoUso4 extends Fragment {
 
     private static List<String> lista_sede = new ArrayList<String>();
     private static List<String> lista_dependencia = new ArrayList<String>();
+    private static List<String> lista_id_dependencia = new ArrayList<String>();
     private static List<String> lista_funcionario = new ArrayList<String>();
+    private static List<String> lista_elemento_funcionario = new ArrayList<String>();
     private static List<String> lista_documentos = new ArrayList<String>();
     private static List<String> id_elemento = new ArrayList<String>();
 
 
     public static List<String> getLista_documentos() {
         return lista_documentos;
+    }
+
+    public static List<String> getLista_elemento_funcionario() {
+        return lista_elemento_funcionario;
     }
 
     public static List<String> getLista_funcionario() {
@@ -78,8 +87,9 @@ public class CasoUso4 extends Fragment {
 
     private static View rootView;
 
-    private int seleccion = 0;
-    private int seleccion2 = 0;
+    private int seleccion = -1;
+    private int seleccion1 = -1;
+    private int seleccion2 = -1;
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -96,12 +106,11 @@ public class CasoUso4 extends Fragment {
         scanear = (Button) rootView.findViewById(R.id.escanear_c4);
 
         dependencia.setEnabled(false);
-        funcionario.setEnabled(false);
 
-        bajar.setVisibility(View.INVISIBLE);
-        subir.setVisibility(View.INVISIBLE);
-        pdf.setVisibility(View.INVISIBLE);
-        scanear.setVisibility(View.INVISIBLE);
+        bajar.setVisibility(View.GONE);
+        subir.setVisibility(View.GONE);
+        pdf.setVisibility(View.GONE);
+        scanear.setVisibility(View.GONE);
 
         //Se envia parametros de vista y de dependencia seleccionada en el campo AutoComplete al web service de dependencias.
 
@@ -109,7 +118,53 @@ public class CasoUso4 extends Fragment {
         ws_sede.startWebAccess(getActivity(), sede);
         lista_sede = ws_sede.getSede();
 
+        final LinearLayout l1 = (LinearLayout) rootView.findViewById(R.id.dep_c4);
+        l1.setVisibility(View.GONE);
+
+        final LinearLayout l2 = (LinearLayout) rootView.findViewById(R.id.fun_c4);
+        l2.setVisibility(View.GONE);
+
+        //
+
+        Button des1 = (Button) rootView.findViewById(R.id.des_dep_c4);
+        des1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean on = ((ToggleButton) v).isChecked();
+
+                if (on) {
+                    l1.setVisibility(View.VISIBLE);
+                    l2.setVisibility(View.GONE);
+                } else {
+                    l1.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        Button des2 = (Button) rootView.findViewById(R.id.des_fun_c4);
+        des2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean on = ((ToggleButton) v).isChecked();
+                if (on) {
+                    l2.setVisibility(View.VISIBLE);
+                    l1.setVisibility(View.GONE);
+                } else {
+                    l2.setVisibility(View.GONE);
+                }
+            }
+        });
+
         new Despliegue(sede);
+
+        WS_Funcionario_Oracle ws_funcionario = new WS_Funcionario_Oracle();
+        ws_funcionario.startWebAccess(getActivity(), funcionario, "null");
+
+        lista_funcionario = ws_funcionario.getFun_nombre();
+        lista_documentos = ws_funcionario.getFun_identificacion();
+
+        //new Despliegue(funcionario);
+
 
         sede.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -127,8 +182,7 @@ public class CasoUso4 extends Fragment {
 //                ws_dependencia.startWebAccess(getActivity(), dependencia);
 
                 lista_dependencia = ws_dependencia.getDependencia();
-
-                string_sede = String.valueOf(sede.getText());
+                lista_id_dependencia = ws_dependencia.getId_dependencia();
 
                 dependencia.setText("");
                 dependencia.requestFocus();
@@ -140,69 +194,94 @@ public class CasoUso4 extends Fragment {
             }
         });
 
-        //Se genera esta función cuando se selecciona un item de la lista
-        dependencia.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        Button con_dep = (Button) rootView.findViewById(R.id.con_dep_c4);
+        con_dep.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                for (int i = 0; i < lista_dependencia.size(); i++) {
-                    if (String.valueOf(dependencia.getText()).equals(lista_dependencia.get(i))) {
-                        seleccion = i;
-                    }
-                }
-                //Se envia parametros de vista y de campo AutoComplete al web service de funcionarios.
-
-//                WS_Funcionario ws_funcionario = new WS_Funcionario();
-//                ws_funcionario.startWebAccess(getActivity(), funcionario, lista_dependencia.get(seleccion));
-
-                WS_Funcionario_Oracle ws_funcionario = new WS_Funcionario_Oracle();
-                ws_funcionario.startWebAccess(getActivity(), funcionario, lista_dependencia.get(seleccion));
-
-                lista_funcionario = ws_funcionario.getFun_nombre();
-                lista_documentos = ws_funcionario.getFun_identificacion();
-
-                string_dependencia = String.valueOf(dependencia.getText());
-
-                funcionario.setText("");
-                funcionario.requestFocus();
+            public void onClick(View v) {
 
                 limpiarTabla();
 
-                new Despliegue(funcionario);
+                int contador = 0;
+
+                for (int i = 0; i < lista_sede.size(); i++) {
+                    if (String.valueOf(sede.getText()).equalsIgnoreCase(lista_sede.get(i))) {
+                        seleccion = i;
+                    }
+                }
+
+                if (seleccion > -1) {
+                    string_sede = String.valueOf(sede.getText());
+                    for (int i = 0; i < lista_dependencia.size(); i++) {
+                        if (String.valueOf(dependencia.getText()).equalsIgnoreCase(lista_dependencia.get(i))) {
+                            seleccion1 = i;
+                        }
+                    }
+                    if(seleccion1 > -1){
+                        elem_dep = new WS_Elemento_dependencia();
+                        elem_dep.startWebAccess(rootView, getActivity(), lista_id_dependencia.get(seleccion1), 3);
+                        id_elemento = elem_dep.getId_elemento();
+                        lista_elemento_funcionario = elem_dep.getFuncionario();
+                        string_dependencia = String.valueOf(dependencia.getText());
+                    }else{
+                        Toast.makeText(getActivity(), "La Dependencia ingresada no es valida, verifeque e intente de nuevo.", Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Toast.makeText(getActivity(), "La Sede ingresada no es valida, verifeque e intente de nuevo.", Toast.LENGTH_LONG).show();
+                }
+
+                seleccion = -1;
+                seleccion1 = -1;
+
+                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
             }
         });
 
-        funcionario.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        Button con_fun = (Button) rootView.findViewById(R.id.con_fun_c4);
+        con_fun.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onClick(View v) {
+
+                limpiarTabla();
 
                 for (int i = 0; i < lista_funcionario.size(); i++) {
-                    if (String.valueOf(funcionario.getText()).equals(lista_funcionario.get(i))) {
+                    if (String.valueOf(funcionario.getText()).equalsIgnoreCase(lista_documentos.get(i))) {
                         seleccion2 = i;
                     }
                 }
 
-                limpiarTabla();
+                if (seleccion2 > -1) {
+                    elem_fun = new WS_Elemento_funcionario();
+                    elem_fun.startWebAccess(rootView, getActivity(), lista_documentos.get(seleccion2), 3);
+                    id_elemento = elem_fun.getId_elemento();
+                    lista_elemento_funcionario = elem_fun.getFuncionario();
+                    string_funcionario = String.valueOf(funcionario.getText());
 
-                elem = new WS_Elemento();
-                elem.startWebAccess(rootView, getActivity(), lista_documentos.get(seleccion2), 3);
-                id_elemento = elem.getId_elemento();
+                    // !importante¡ -> Hilo para actualizar la tabla del funcionario a la hora de reasignar elemento a otro funcionario.
 
-                string_funcionario = String.valueOf(funcionario.getText());
+                    thread_actualizar = new Thread() {
+                        public void run() {
+                            do {
+                                if (actualizacion == 1) {
+                                    actualizarTabla();
+                                    actualizacion = 0;
+                                }
+                            } while (true);
+                        }
+                    };
 
-                // !importante¡ -> Hilo para actualizar la tabla del funcionario a la hora de reasignar elemento a otro funcionario.
-                thread_actualizar = new Thread() {
-                    public void run() {
-                        do {
-                            if (actualizacion == 1) {
-                                actualizarTabla();
-                                actualizacion = 0;
-                            }
-                        } while (true);
-                    }
-                };
+                    thread_actualizar.start();
 
-                thread_actualizar.start();
+                    final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+                } else {
+                    Toast.makeText(getActivity(), "El documento ingresado no es valido, por favor verifiquelo e intente de nuevo.", Toast.LENGTH_LONG).show();
+                }
 
+                seleccion2 = -1;
+
+                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
             }
         });
 
@@ -283,15 +362,17 @@ public class CasoUso4 extends Fragment {
 
         TablaConsultarInventariosAsignados borrar = new TablaConsultarInventariosAsignados();
         borrar.borrarTabla(rootView, getActivity());
-        bajar.setVisibility(View.INVISIBLE);
-        subir.setVisibility(View.INVISIBLE);
+        bajar.setVisibility(View.GONE);
+        subir.setVisibility(View.GONE);
+        pdf.setVisibility(View.GONE);
+
     }
 
     //se Actualiza la tabla en dado caso que se reasigne un elemento
     public void actualizarTabla() {
 
-        elem.startWebAccess(rootView, getActivity(), lista_documentos.get(seleccion2), 3);
-        id_elemento = elem.getId_elemento();
+        elem_fun.startWebAccess(rootView, getActivity(), lista_documentos.get(seleccion2), 3);
+        id_elemento = elem_fun.getId_elemento();
     }
 
     final Runnable createUI = new Runnable() {

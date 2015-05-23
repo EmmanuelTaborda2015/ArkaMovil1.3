@@ -86,9 +86,9 @@ public class TablaConsultarInventariosAsignados {
             ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_c4);
             ImageView subir = (ImageView) rootView.findViewById(R.id.subir_c4);
             Button pdf = (Button) rootView.findViewById(R.id.generarpdf_c4);
-            bajar.setVisibility(View.INVISIBLE);
-            subir.setVisibility(View.INVISIBLE);
-            pdf.setVisibility(View.INVISIBLE);
+            bajar.setVisibility(View.GONE);
+            subir.setVisibility(View.GONE);
+            pdf.setVisibility(View.GONE);
         }
     }
 
@@ -167,7 +167,7 @@ public class TablaConsultarInventariosAsignados {
                     thread = new Thread() {
                         public void run() {
                             WS_Asignaciones ws_asignaciones = new WS_Asignaciones();
-                            ws_asignaciones.startWebAccess(actividad, id_elemento.get(v.getId()));
+                            ws_asignaciones.startWebAccess(actividad, id_elemento.get(v.getId()), v.getId());
 
 
                             handler.post(createUI);

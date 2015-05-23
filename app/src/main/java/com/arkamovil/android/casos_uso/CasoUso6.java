@@ -3,23 +3,20 @@ package com.arkamovil.android.casos_uso;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import com.arkamovil.android.Informacion.Modificar_Informacion_Elementos_Scanner;
 import com.arkamovil.android.R;
 import com.arkamovil.android.herramientas.Despliegue;
 import com.arkamovil.android.procesos.TablaModificarInventario;
 import com.arkamovil.android.servicios_web.WS_Dependencia;
-import com.arkamovil.android.servicios_web.WS_Dependencia_Postgres;
-import com.arkamovil.android.servicios_web.WS_Elemento;
-import com.arkamovil.android.servicios_web.WS_Funcionario;
+import com.arkamovil.android.servicios_web.WS_Elemento_funcionario;
 import com.arkamovil.android.servicios_web.WS_Funcionario_Oracle;
 import com.arkamovil.android.servicios_web.WS_Placa;
 import com.arkamovil.android.servicios_web.WS_Sede;
@@ -43,7 +40,7 @@ public class CasoUso6 extends Fragment {
     private ImageView bajar;
     private ImageView subir;
 
-    private WS_Elemento elem;
+    private WS_Elemento_funcionario elem;
 
     private View rootView;
 
@@ -144,8 +141,11 @@ public class CasoUso6 extends Fragment {
 
                 limpiarTabla();
 
-                elem = new WS_Elemento();
+                elem = new WS_Elemento_funcionario();
                 elem.startWebAccess(rootView, getActivity(), lista_documento.get(seleccion2), 2);
+
+                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
             }
         });
 

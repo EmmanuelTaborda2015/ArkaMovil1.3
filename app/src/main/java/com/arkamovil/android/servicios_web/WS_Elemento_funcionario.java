@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.arkamovil.android.R;
 import com.arkamovil.android.procesos.TablaConsultarInventario;
 import com.arkamovil.android.procesos.TablaConsultarInventariosAsignados;
+import com.arkamovil.android.procesos.TablaInventarioCedula;
 import com.arkamovil.android.procesos.TablaModificarInventario;
 
 import org.ksoap2.SoapEnvelope;
@@ -21,7 +22,7 @@ import org.ksoap2.transport.HttpTransportSE;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WS_Elemento {
+public class WS_Elemento_funcionario {
 
     private final String NAMESPACE = "arkaurn:arka";
     //private final String URL = "http://10.0.2.2/ws/servicio.php?wsdl";
@@ -52,7 +53,11 @@ public class WS_Elemento {
     private static List<String> subtotal = new ArrayList<String>();
     private static List<String> iva = new ArrayList<String>();
     private static List<String> total = new ArrayList<String>();
+    private static List<String> funcionario = new ArrayList<String>();
 
+    public static List<String> getFuncionario() {
+        return funcionario;
+    }
 
     public static List<String> getTotal() {
         return total;
@@ -140,6 +145,7 @@ public class WS_Elemento {
                         subtotal.add(obj2.getProperty("subtotal_sin_iva").toString());
                         iva.add(obj2.getProperty("total_iva").toString());
                         total.add(obj2.getProperty("total_iva_con").toString());
+                        funcionario.add(obj2.getProperty("funcionario").toString());
                     }
 
                 } catch (Exception exception) {
@@ -184,6 +190,15 @@ public class WS_Elemento {
                     bajar.setVisibility(View.VISIBLE);
                     subir.setVisibility(View.VISIBLE);
                     pdf.setVisibility(View.VISIBLE);
+                }
+            } else if (caso == 4) {
+                TablaInventarioCedula crear = new TablaInventarioCedula();
+                crear.crear(rootView, act, id_elemento, descripcion);
+                if (id_elemento.size() > 0) {
+                    ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_c7);
+                    ImageView subir = (ImageView) rootView.findViewById(R.id.subir_c7);
+                    bajar.setVisibility(View.VISIBLE);
+                    subir.setVisibility(View.VISIBLE);
                 }
             }
 

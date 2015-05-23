@@ -15,7 +15,7 @@ import com.arkamovil.android.R;
 import com.arkamovil.android.procesos.LlenarListas;
 import com.arkamovil.android.servicios_web.WS_ActualizarInventario;
 import com.arkamovil.android.servicios_web.WS_Asignaciones;
-import com.arkamovil.android.servicios_web.WS_Elemento;
+import com.arkamovil.android.servicios_web.WS_Elemento_funcionario;
 import com.arkamovil.android.servicios_web.WS_Placa;
 
 public class Modificar_Informacion_Elementos_Scanner extends Dialog {
@@ -31,7 +31,7 @@ public class Modificar_Informacion_Elementos_Scanner extends Dialog {
     private static int estado = 0;
     private static String obser;
 
-    private WS_Elemento datos;
+    private WS_Elemento_funcionario datos;
     WS_Placa ws_placa = new WS_Placa();
     WS_Asignaciones ws_asignaciones = new WS_Asignaciones();
 

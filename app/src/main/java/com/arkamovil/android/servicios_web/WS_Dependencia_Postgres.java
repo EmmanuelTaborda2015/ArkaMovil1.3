@@ -33,6 +33,7 @@ public class WS_Dependencia_Postgres {
     private AutoCompleteTextView spin;
 
     private List<String> dependencia = new ArrayList<String>();
+    private List<String> id_dependencia = new ArrayList<String>();
 
 
     public void startWebAccess(final Activity act, final AutoCompleteTextView spin) {

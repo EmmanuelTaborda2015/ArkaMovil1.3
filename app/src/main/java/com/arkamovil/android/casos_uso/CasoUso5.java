@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
@@ -12,11 +13,8 @@ import android.widget.ImageView;
 import com.arkamovil.android.R;
 import com.arkamovil.android.herramientas.Despliegue;
 import com.arkamovil.android.procesos.TablaConsultarInventario;
-import com.arkamovil.android.procesos.TablaModificarInventario;
 import com.arkamovil.android.servicios_web.WS_Dependencia;
-import com.arkamovil.android.servicios_web.WS_Dependencia_Postgres;
-import com.arkamovil.android.servicios_web.WS_Elemento;
-import com.arkamovil.android.servicios_web.WS_Funcionario;
+import com.arkamovil.android.servicios_web.WS_Elemento_funcionario;
 import com.arkamovil.android.servicios_web.WS_Funcionario_Oracle;
 import com.arkamovil.android.servicios_web.WS_Sede;
 
@@ -134,8 +132,11 @@ public class CasoUso5 extends Fragment {
 
                 limpiarTabla();
 
-                WS_Elemento elem = new WS_Elemento();
+                WS_Elemento_funcionario elem = new WS_Elemento_funcionario();
                 elem.startWebAccess(rootView, getActivity(), lista_documento.get(seleccion2), 1);
+
+                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
             }
         });
 

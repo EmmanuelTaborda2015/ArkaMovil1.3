@@ -32,6 +32,8 @@ public class WS_Asignaciones {
 
     private Activity act;
 
+    private static int seleccion;
+
     private static List<String> id_elemento = new ArrayList<String>();
     private static List<String> placa = new ArrayList<String>();
     private static List<String> estado = new ArrayList<String>();
@@ -58,9 +60,15 @@ public class WS_Asignaciones {
         return id_elemento;
     }
 
-    public void startWebAccess(Activity actividad, final String id_elem) {
+    public static int getSeleccion() {
+        return seleccion;
+    }
+
+    public void startWebAccess(Activity actividad, final String id_elem, int l) {
 
         this.act = actividad;
+
+        this.seleccion = l;
 
         id_elemento = new ArrayList<String>();
         placa = new ArrayList<String>();

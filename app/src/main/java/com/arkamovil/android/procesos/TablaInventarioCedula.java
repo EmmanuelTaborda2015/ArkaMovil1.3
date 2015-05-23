@@ -1,7 +1,6 @@
 package com.arkamovil.android.procesos;
 
 import android.app.Activity;
-import android.os.Handler;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -10,19 +9,13 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.arkamovil.android.Informacion.Modificar_Informacion_Elementos;
+import com.arkamovil.android.Informacion.Informacion_Elementos;
+import com.arkamovil.android.Informacion.Informacion_Elementos_Cedula;
 import com.arkamovil.android.R;
-import com.arkamovil.android.servicios_web.WS_Asignaciones;
 
 import java.util.List;
 
-public class TablaModificarInventario {
-
-    public void cerrarDialog() {
-        dialog.dismiss();
-    }
-
-    private static Modificar_Informacion_Elementos dialog;
+public class TablaInventarioCedula {
 
     private static TableLayout tabla;
     private static TableLayout cabecera;
@@ -30,18 +23,16 @@ public class TablaModificarInventario {
     private static TableRow.LayoutParams layoutFila;
     private static TableRow.LayoutParams layoutId;
     private static TableRow.LayoutParams layoutTexto;
-    private static TableRow.LayoutParams layoutMod;
+    private static TableRow.LayoutParams layoutVer;
+
+    public void cerrarDialog() {
+        dialog.dismiss();
+    }
+
+    private static Informacion_Elementos_Cedula dialog;
 
     private static Activity actividad;
     private static View rootView;
-
-    private static int estado = 0;
-    private static int id = 0;
-
-    private Thread thread_estado;
-
-    private Handler handler = new Handler();
-
 
     private static final int factor = 5;
 
@@ -65,7 +56,6 @@ public class TablaModificarInventario {
 
         this.tamanoPantalla = rootView.getWidth();
 
-
         this.id_elemento = id;
         this.descripcion = desc;
 
@@ -77,6 +67,7 @@ public class TablaModificarInventario {
 
         this.inicio = 0;
 
+
         cargarElementos();
 
         if (id_elemento.size() > 0) {
@@ -84,8 +75,8 @@ public class TablaModificarInventario {
             agregarFilasTabla();
         } else {
             Toast.makeText(actividad, "No registran elementos para el funcionario", Toast.LENGTH_LONG).show();
-            ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_6);
-            ImageView subir = (ImageView) rootView.findViewById(R.id.subir_6);
+            ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_c7);
+            ImageView subir = (ImageView) rootView.findViewById(R.id.subir_c7);
             bajar.setVisibility(View.INVISIBLE);
             subir.setVisibility(View.INVISIBLE);
         }
@@ -117,11 +108,11 @@ public class TablaModificarInventario {
         txtDescripcion.setBackgroundResource(R.drawable.tabla_celda_cabecera);
         txtDescripcion.setLayoutParams(layoutTexto);
 
-        txtInfo.setText("Modificar");
+        txtInfo.setText("Ver");
         txtInfo.setGravity(Gravity.CENTER_HORIZONTAL);
         txtInfo.setTextAppearance(actividad, R.style.etiqueta);
         txtInfo.setBackgroundResource(R.drawable.tabla_celda_cabecera);
-        txtInfo.setLayoutParams(layoutMod);
+        txtInfo.setLayoutParams(layoutVer);
 
         fila.addView(txtId);
         fila.addView(txtDescripcion);
@@ -134,7 +125,7 @@ public class TablaModificarInventario {
         TableRow fila;
         TextView txtId;
         TextView txtDescripcion;
-        ImageView txtMod;
+        ImageView txtVer;
 
         for (int i = 0; i < MAX_FILAS; i++) {
             fila = new TableRow(actividad);
@@ -142,7 +133,7 @@ public class TablaModificarInventario {
 
             txtId = new TextView(actividad);
             txtDescripcion = new TextView(actividad);
-            txtMod = new ImageView(actividad);
+            txtVer = new ImageView(actividad);
 
             txtId.setText(id_elemento.get(this.inicio + i));
             txtId.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
@@ -151,44 +142,26 @@ public class TablaModificarInventario {
             txtId.setLayoutParams(layoutId);
 
             txtDescripcion.setText(descripcion.get(this.inicio + i));
-            txtDescripcion.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
+            txtId.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
             txtDescripcion.setTextAppearance(actividad, R.style.etiqueta);
             txtDescripcion.setBackgroundResource(R.drawable.tabla_celda);
             txtDescripcion.setLayoutParams(layoutTexto);
 
-            //txtMod.setText("ver");
-
-            txtMod.setId(this.inicio + i);
-            txtMod.setImageResource(R.drawable.modificar);
-            txtMod.setPadding(30, 30, 30, 30);
-            txtMod.setBackgroundResource(R.drawable.tabla_celda);
-            txtMod.setLayoutParams(layoutMod);
-
-            txtMod.setOnClickListener(new View.OnClickListener() {
+            txtVer.setImageResource(R.drawable.ver);
+            txtVer.setId(this.inicio + i);
+            txtVer.setBackgroundResource(R.drawable.tabla_celda);
+            txtVer.setLayoutParams(layoutVer);
+            txtVer.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(final View v) {
-                    thread_estado = new Thread() {
-                        public void run() {
-
-                            id = v.getId();
-
-                            WS_Asignaciones ws_asignaciones = new WS_Asignaciones();
-                            ws_asignaciones.startWebAccess(actividad, id_elemento.get(v.getId()), id);
-
-
-                            handler.post(createESTADO);
-                        }
-
-                    };
-
-                    thread_estado.start();
-
+                public void onClick(View v) {
+                    dialog = new Informacion_Elementos_Cedula(actividad, v.getId());
+                    dialog.show();
                 }
             });
 
             fila.addView(txtId);
             fila.addView(txtDescripcion);
-            fila.addView(txtMod);
+            fila.addView(txtVer);
 
             tabla.addView(fila);
 
@@ -199,13 +172,13 @@ public class TablaModificarInventario {
 
         tabla.removeAllViews();
 
-        tabla = (TableLayout) rootView.findViewById(R.id.tabla_6);
-        cabecera = (TableLayout) rootView.findViewById(R.id.cabecera_6);
+        tabla = (TableLayout) rootView.findViewById(R.id.tabla_c7);
+        cabecera = (TableLayout) rootView.findViewById(R.id.cabecera_c7);
         layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT);
         layoutId = new TableRow.LayoutParams((int) (tamanoPantalla * 0.2), TableRow.LayoutParams.MATCH_PARENT);
         layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla * 0.4), TableRow.LayoutParams.MATCH_PARENT);
-        layoutMod = new TableRow.LayoutParams((int) (tamanoPantalla * 0.3), TableRow.LayoutParams.MATCH_PARENT);
+        layoutVer = new TableRow.LayoutParams((int) (tamanoPantalla * 0.3), TableRow.LayoutParams.MATCH_PARENT);
 
     }
 
@@ -230,24 +203,15 @@ public class TablaModificarInventario {
     public void borrarTabla(View rootView, Activity actividad) {
 
 
-        tabla = (TableLayout) rootView.findViewById(R.id.tabla_6);
-        cabecera = (TableLayout) rootView.findViewById(R.id.cabecera_6);
+        tabla = (TableLayout) rootView.findViewById(R.id.tabla_c7);
+        cabecera = (TableLayout) rootView.findViewById(R.id.cabecera_c7);
         layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT);
         layoutId = new TableRow.LayoutParams((int) (tamanoPantalla * 0.2), TableRow.LayoutParams.MATCH_PARENT);
         layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla * 0.4), TableRow.LayoutParams.MATCH_PARENT);
-        layoutMod = new TableRow.LayoutParams((int) (tamanoPantalla * 0.3), TableRow.LayoutParams.MATCH_PARENT);
+        layoutVer = new TableRow.LayoutParams((int) (tamanoPantalla * 0.3), TableRow.LayoutParams.MATCH_PARENT);
 
         tabla.removeAllViews();
         cabecera.removeAllViews();
     }
-
-    final Runnable createESTADO = new Runnable() {
-
-        public void run() {
-            WS_Asignaciones ws_asignaciones = new WS_Asignaciones();
-            dialog = new Modificar_Informacion_Elementos(actividad, id);
-            dialog.show();
-        }
-    };
 }

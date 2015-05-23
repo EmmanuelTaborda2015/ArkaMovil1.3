@@ -33,7 +33,7 @@ import java.io.InputStream;
 /**
  * Created by Emmanuel on 5/04/15.
  */
-public class CasoUso3 extends Fragment {
+public class AsociarImagen extends Fragment {
 
     private View rootView;
     private String foto;

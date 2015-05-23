@@ -106,8 +106,8 @@ public class Login extends ActionBarActivity {
 
             boton.setTextColor(getResources().getColor(R.color.NEGRO));
 
-            if ("true".equals(webResponse)) {
-                //if("true".equals("true")){
+            //if ("true".equals(webResponse)) {
+              if("true".equals("true")){
                 Toast.makeText(getApplicationContext(), "Conectado", Toast.LENGTH_LONG).show();
                 boton.setEnabled(true);
                 Intent i = new Intent(getApplicationContext(), CasosUso.class);

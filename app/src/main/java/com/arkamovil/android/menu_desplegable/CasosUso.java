@@ -1,24 +1,21 @@
 package com.arkamovil.android.menu_desplegable;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
-import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
 
 import com.arkamovil.android.R;
+import com.arkamovil.android.casos_uso.AsociarImagen;
 import com.arkamovil.android.casos_uso.CasoUso1;
 import com.arkamovil.android.casos_uso.CasoUso2;
-import com.arkamovil.android.casos_uso.CasoUso3;
 import com.arkamovil.android.casos_uso.CasoUso4;
 import com.arkamovil.android.casos_uso.CasoUso5;
 import com.arkamovil.android.casos_uso.CasoUso6;
+import com.arkamovil.android.casos_uso.ConsultaRapida;
 
 
 public class CasosUso extends ActionBarActivity
@@ -82,7 +79,10 @@ public class CasosUso extends ActionBarActivity
                 fragment = new CasoUso6();
                 break;
             case 6:
-                fragment = new CasoUso3();
+                fragment = new AsociarImagen();
+                break;
+            case 7:
+                fragment = new ConsultaRapida();
                 break;
         }
 

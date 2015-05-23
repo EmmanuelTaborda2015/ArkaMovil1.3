@@ -7,25 +7,18 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Bundle;
 import android.os.Environment;
 import android.text.format.Time;
 import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
 
 import com.arkamovil.android.R;
-import com.arkamovil.android.casos_uso.CasoUso4;
 import com.arkamovil.android.servicios_web.WS_Asignaciones;
-import com.arkamovil.android.servicios_web.WS_Elemento;
-import com.lowagie.text.Chunk;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Element;
@@ -35,15 +28,9 @@ import com.lowagie.text.HeaderFooter;
 import com.lowagie.text.Image;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.Phrase;
-import com.lowagie.text.Rectangle;
-import com.lowagie.text.pdf.ColumnText;
-import com.lowagie.text.pdf.MultiColumnText;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
-import com.lowagie.text.pdf.draw.LineSeparator;
-
-import org.w3c.dom.Text;
 
 public class GenerarPDF_Inventarios{
 
@@ -352,7 +339,7 @@ public class GenerarPDF_Inventarios{
 
             for(int i=0; i< id_elemento.size(); i++) {
 
-                ws_asignaciones.startWebAccess(this.actividad, id_elemento.get(i));
+                ws_asignaciones.startWebAccess(this.actividad, id_elemento.get(i), 0);
 
                 if (ws_asignaciones.getId_elemento().size() > 0) {
 

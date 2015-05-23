@@ -2,15 +2,14 @@ package com.arkamovil.android.servicios_web;
 
 import android.app.Activity;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
-import com.arkamovil.android.Informacion.Modificar_Informacion_Elementos;
-import com.arkamovil.android.Informacion.Modificar_Informacion_Elementos_Scanner;
 import com.arkamovil.android.R;
 import com.arkamovil.android.procesos.TablaConsultarInventario;
+import com.arkamovil.android.procesos.TablaConsultarInventariosAsignados;
+import com.arkamovil.android.procesos.TablaInventarioCedula;
 import com.arkamovil.android.procesos.TablaModificarInventario;
 
 import org.ksoap2.SoapEnvelope;
@@ -21,27 +20,26 @@ import org.ksoap2.transport.HttpTransportSE;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WS_Placa {
+public class WS_Elemento_dependencia {
 
     private final String NAMESPACE = "arkaurn:arka";
     //private final String URL = "http://10.0.2.2/ws/servicio.php?wsdl";
     private final String URL = "http://10.20.0.38/ws_arka_android/servicio.php?wsdl";
-    private final String SOAP_ACTION = "arkaurn:arka/consultar_placa";
-    private final String METHOD_NAME = "consultar_placa";
-
-    private static Modificar_Informacion_Elementos_Scanner dialog;
+    private final String SOAP_ACTION = "arkaurn:arka/consultar_elementos_dependencia";
+    private final String METHOD_NAME = "consultar_elementos_dependencia";
 
     public Thread getThread() {
         return thread;
     }
 
     private Thread thread;
-    private Thread thread_estado;
-
     private Handler handler = new Handler();
 
     private Activity act;
     private View rootView;
+    private int caso;
+
+    private int contador = 0;
 
     private static List<String> descripcion = new ArrayList<String>();
     private static List<String> id_elemento = new ArrayList<String>();
@@ -53,7 +51,11 @@ public class WS_Placa {
     private static List<String> subtotal = new ArrayList<String>();
     private static List<String> iva = new ArrayList<String>();
     private static List<String> total = new ArrayList<String>();
+    private static List<String> funcionario = new ArrayList<String>();
 
+    public static List<String> getFuncionario() {
+        return funcionario;
+    }
 
     public static List<String> getTotal() {
         return total;
@@ -95,10 +97,11 @@ public class WS_Placa {
         return id_elemento;
     }
 
-    public void startWebAccess(View rootView, Activity actividad, final String numplaca) {
+    public void startWebAccess(View rootView, Activity actividad, final String dep, int caso) {
 
         this.rootView = rootView;
         this.act = actividad;
+        this.caso = caso;
 
         descripcion = new ArrayList<String>();
         id_elemento = new ArrayList<String>();
@@ -115,7 +118,7 @@ public class WS_Placa {
             public void run() {
                 SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 
-                request.addProperty("placa", numplaca);
+                request.addProperty("nom_dep", dep);
 
                 SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
                 envelope.setOutputSoapObject(request);
@@ -140,6 +143,7 @@ public class WS_Placa {
                         subtotal.add(obj2.getProperty("subtotal_sin_iva").toString());
                         iva.add(obj2.getProperty("total_iva").toString());
                         total.add(obj2.getProperty("total_iva_con").toString());
+                        funcionario.add(obj2.getProperty("funcionario").toString());
                     }
 
                 } catch (Exception exception) {
@@ -154,36 +158,51 @@ public class WS_Placa {
     final Runnable createUI = new Runnable() {
 
         public void run() {
-            if (id_elemento.size() > 0) {
+            //Clase para crear Tablas, se envian como parametros la Vista, La Actividad y los valores para cada una de las columnas (ArrayList)
 
-                thread_estado = new Thread() {
-                    public void run() {
-                        WS_Asignaciones ws_asignaciones = new WS_Asignaciones();
-                        ws_asignaciones.startWebAccess(act, id_elemento.get(0), 0);
-
-                        handler.post(createESTADO);
-                    }
-
-                };
-
-                thread_estado.start();
-
-            } else {
-                Toast.makeText(act, "No se ha encontrado ningún registro con la placa escaneada", Toast.LENGTH_LONG).show();
+            if (caso == 1) {
+                TablaConsultarInventario crear = new TablaConsultarInventario();
+                crear.crear(rootView, act, id_elemento, descripcion);
+                if (id_elemento.size() > 0) {
+                    ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar);
+                    ImageView subir = (ImageView) rootView.findViewById(R.id.subir);
+                    bajar.setVisibility(View.VISIBLE);
+                    subir.setVisibility(View.VISIBLE);
+                }
+            } else if (caso == 2) {
+                TablaModificarInventario crear = new TablaModificarInventario();
+                crear.crear(rootView, act, id_elemento, descripcion);
+                if (id_elemento.size() > 0) {
+                    ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_6);
+                    ImageView subir = (ImageView) rootView.findViewById(R.id.subir_6);
+                    bajar.setVisibility(View.VISIBLE);
+                    subir.setVisibility(View.VISIBLE);
+                }
+            } else if (caso == 3) {
+                TablaConsultarInventariosAsignados crear = new TablaConsultarInventariosAsignados();
+                crear.crear(rootView, act, id_elemento, descripcion);
+                if (id_elemento.size() > 0) {
+                    ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_c4);
+                    ImageView subir = (ImageView) rootView.findViewById(R.id.subir_c4);
+                    Button pdf = (Button) rootView.findViewById(R.id.generarpdf_c4);
+                    bajar.setVisibility(View.VISIBLE);
+                    subir.setVisibility(View.VISIBLE);
+                    pdf.setVisibility(View.VISIBLE);
+                }
+            } else if (caso == 4) {
+                TablaInventarioCedula crear = new TablaInventarioCedula();
+                crear.crear(rootView, act, id_elemento, descripcion);
+                if (id_elemento.size() > 0) {
+                    ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_c7);
+                    ImageView subir = (ImageView) rootView.findViewById(R.id.subir_c7);
+                    bajar.setVisibility(View.VISIBLE);
+                    subir.setVisibility(View.VISIBLE);
+                }
             }
+
+
         }
     };
 
-    final Runnable createESTADO = new Runnable() {
 
-        public void run() {
-            WS_Asignaciones ws_asignaciones = new WS_Asignaciones();
-            dialog = new Modificar_Informacion_Elementos_Scanner(act);
-            dialog.show();
-        }
-    };
-
-    public void cerrarDialog() {
-        dialog.dismiss();
-    }
 }

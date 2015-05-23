@@ -19,11 +19,12 @@
 
             <TextView
                 android:id="@+id/label_funcionario"
-                android:text="@string/String_funcionario"
+                android:text="Documento de funcionario"
                 style="@style/labelArkaMovil"/>
 
             <AutoCompleteTextView
                 style="@style/buttonTextArkaMovil"
+                android:enabled="false"
                 android:id="@+id/funcionario_c4_dl" />
 
             <TextView
@@ -34,7 +35,7 @@
             <EditText
                 style="@style/buttonTextArkaMovil"
                 android:id="@+id/elemento_c4"
-                android:editable="false"/>
+                android:enabled="false"/>
 
             <TextView
                 android:id="@+id/label_placa"
@@ -43,7 +44,7 @@
 
             <EditText
                 style="@style/buttonTextArkaMovil"
-                android:editable="false"
+                android:enabled="false"
                 android:id="@+id/placa_c4" />
 
             <TextView
@@ -53,7 +54,7 @@
 
             <EditText
                 style="@style/buttonTextArkaMovil"
-                android:editable="false"
+                android:enabled="false"
                 android:id="@+id/estadoactualizacion_c4" />
 
             <TextView
@@ -63,7 +64,7 @@
 
             <EditText
                 style="@style/buttonTextArkaMovil"
-                android:editable="false"
+                android:enabled="false"
                 android:id="@+id/estado_c4" />
 
             <TextView
