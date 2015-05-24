@@ -12,10 +12,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arkamovil.android.R;
+import com.arkamovil.android.casos_uso.CasoUso6;
 import com.arkamovil.android.procesos.LlenarListas;
 import com.arkamovil.android.procesos.TablaModificarInventario;
 import com.arkamovil.android.servicios_web.WS_ActualizarInventario;
 import com.arkamovil.android.servicios_web.WS_Asignaciones;
+import com.arkamovil.android.servicios_web.WS_Elemento_dependencia;
 import com.arkamovil.android.servicios_web.WS_Elemento_funcionario;
 
 public class Modificar_Informacion_Elementos extends Dialog {
@@ -31,7 +33,6 @@ public class Modificar_Informacion_Elementos extends Dialog {
     private Spinner estadoSpin;
 
     private WS_Asignaciones datos;
-    private WS_Elemento_funcionario ws_elemento = new WS_Elemento_funcionario();
 
     private Thread thread_actualizarregistro;
 
@@ -57,13 +58,21 @@ public class Modificar_Informacion_Elementos extends Dialog {
 
         estadoSpin = (Spinner) findViewById(R.id.estado_61);
 
+        if (CasoUso6.getFuncion() == 1) {
+            WS_Elemento_dependencia ws_elemento = new WS_Elemento_dependencia();
+            elemento.setText(ws_elemento.getId_elemento().get(i));
+            placa.setText(ws_elemento.getPlaca().get(i));
+            serie.setText(ws_elemento.getSerie().get(i));
+        } else if (CasoUso6.getFuncion() == 2) {
+            WS_Elemento_funcionario ws_elemento = new WS_Elemento_funcionario();
+            elemento.setText(ws_elemento.getId_elemento().get(i));
+            placa.setText(ws_elemento.getPlaca().get(i));
+            serie.setText(ws_elemento.getSerie().get(i));
+        }
+
         datos = new WS_Asignaciones();
 
-        elemento.setText(ws_elemento.getId_elemento().get(i));
-        placa.setText(ws_elemento.getPlaca().get(i));
-        serie.setText(ws_elemento.getSerie().get(i));
-
-        if(datos.getEstado().size() > 0) {
+        if (datos.getEstado().size() > 0) {
             String est = datos.getEstado().get(0);
 
             if ("Existente y Activo".equalsIgnoreCase(est)) {
@@ -84,7 +93,7 @@ public class Modificar_Informacion_Elementos extends Dialog {
             estadoList.llenarSpinnerEstado1(c, estadoSpin);
 
             estadoSpin.setSelection(estado);
-        }else{
+        } else {
             LlenarListas estadoList = new LlenarListas();
             estadoList.llenarSpinnerEstado1(c, estadoSpin);
         }

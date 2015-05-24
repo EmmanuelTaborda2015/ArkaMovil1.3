@@ -175,8 +175,8 @@ public class WS_Elemento_funcionario {
                 TablaModificarInventario crear = new TablaModificarInventario();
                 crear.crear(rootView, act, id_elemento, descripcion);
                 if (id_elemento.size() > 0) {
-                    ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_6);
-                    ImageView subir = (ImageView) rootView.findViewById(R.id.subir_6);
+                    ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_c6);
+                    ImageView subir = (ImageView) rootView.findViewById(R.id.subir_c6);
                     bajar.setVisibility(View.VISIBLE);
                     subir.setVisibility(View.VISIBLE);
                 }

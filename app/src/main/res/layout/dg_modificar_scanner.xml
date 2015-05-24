@@ -19,13 +19,13 @@
             android:paddingBottom="20dp">
             <TextView
                 android:id="@+id/label_elemento"
-                android:text="Elemento"
+                android:text="Id Elemento"
                 style="@style/labelArkaMovil"/>
 
             <EditText
                 style="@style/buttonTextArkaMovil"
                 android:id="@+id/elemento_61s"
-                android:editable="false"/>
+                android:enabled="false"/>
 
             <TextView
                 android:id="@+id/label_serial"
@@ -35,7 +35,7 @@
             <EditText
                 style="@style/buttonTextArkaMovil"
                 android:id="@+id/serial_61s"
-                android:editable="false"/>
+                android:enabled="false"/>
 
             <TextView
                 android:id="@+id/label_placa"
@@ -44,7 +44,7 @@
 
             <EditText
                 style="@style/buttonTextArkaMovil"
-                android:editable="false"
+                android:enabled="false"
                 android:id="@+id/placa_61s" />
 
             <TextView
