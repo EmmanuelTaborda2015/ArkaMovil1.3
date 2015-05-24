@@ -9,6 +9,7 @@ import android.widget.CheckBox;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.arkamovil.android.R;
 
@@ -36,7 +37,7 @@ public class TablaAsignarInventarios {
 
     private static List<String> id_elemento;
     private static List<String> descripcion;
-    private static  boolean[] arr;
+    private static boolean[] arr;
 
 
     public static boolean[] getArr() {
@@ -62,9 +63,9 @@ public class TablaAsignarInventarios {
         this.id_elemento = id;
         this.descripcion = desc;
 
-        if(id_elemento.size() < this.factor){
+        if (id_elemento.size() < this.factor) {
             this.MAX_FILAS = id_elemento.size();
-        }else{
+        } else {
             this.MAX_FILAS = this.factor;
         }
 
@@ -72,15 +73,20 @@ public class TablaAsignarInventarios {
 
         arr = new boolean[id_elemento.size()];
 
-        for(int i = 0; i < id_elemento.size(); i++){
+        for (int i = 0; i < id_elemento.size(); i++) {
             arr[i] = false;
         }
 
         cargarElementos();
 
-        agregarCabecera();
+        if (id_elemento.size() > 0) {
+            agregarCabecera();
 
-        agregarFilasTabla();
+            agregarFilasTabla();
+        } else {
+            Toast.makeText(actividad, "No existen elementos disponibles en este momento para ser asignados.", Toast.LENGTH_LONG).show();
+        }
+
 
     }
 
@@ -158,20 +164,19 @@ public class TablaAsignarInventarios {
             txtMod.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    boolean isChecked = ((CheckBox)view).isChecked();
+                    boolean isChecked = ((CheckBox) view).isChecked();
 
                     if (isChecked) {
                         arr[view.getId()] = true;
-                    }
-                    else {
+                    } else {
                         arr[view.getId()] = false;
                     }
                 }
             });
 
-            if(arr[(inicio + i)] == true){
+            if (arr[(inicio + i)] == true) {
                 txtMod.setChecked(true);
-            }else{
+            } else {
                 txtMod.setChecked(false);
             }
 

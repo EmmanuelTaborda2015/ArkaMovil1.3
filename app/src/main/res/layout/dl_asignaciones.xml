@@ -25,6 +25,8 @@
             <AutoCompleteTextView
                 style="@style/buttonTextArkaMovil"
                 android:enabled="false"
+                android:inputType="number"
+                android:maxLength="17"
                 android:id="@+id/funcionario_c4_dl" />
 
             <TextView

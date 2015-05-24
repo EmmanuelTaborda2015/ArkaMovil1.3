@@ -80,4 +80,5 @@ public class WS_Sede {
     public List<String> getSede() {
         return sede;
     }
+
 }

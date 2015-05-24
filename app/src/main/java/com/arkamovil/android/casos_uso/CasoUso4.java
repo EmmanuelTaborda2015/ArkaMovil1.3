@@ -124,8 +124,6 @@ public class CasoUso4 extends Fragment {
         final LinearLayout l2 = (LinearLayout) rootView.findViewById(R.id.fun_c4);
         l2.setVisibility(View.GONE);
 
-        //
-
         Button des1 = (Button) rootView.findViewById(R.id.des_dep_c4);
         des1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -194,6 +192,22 @@ public class CasoUso4 extends Fragment {
             }
         });
 
+        dependencia.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+            }
+        });
+
+        funcionario.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+            }
+        });
+
         Button con_dep = (Button) rootView.findViewById(R.id.con_dep_c4);
         con_dep.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -202,6 +216,9 @@ public class CasoUso4 extends Fragment {
                 limpiarTabla();
 
                 int contador = 0;
+
+                seleccion = -1;
+                seleccion1 = -1;
 
                 for (int i = 0; i < lista_sede.size(); i++) {
                     if (String.valueOf(sede.getText()).equalsIgnoreCase(lista_sede.get(i))) {
@@ -216,13 +233,13 @@ public class CasoUso4 extends Fragment {
                             seleccion1 = i;
                         }
                     }
-                    if(seleccion1 > -1){
+                    if (seleccion1 > -1) {
                         elem_dep = new WS_Elemento_dependencia();
                         elem_dep.startWebAccess(rootView, getActivity(), lista_id_dependencia.get(seleccion1), 3);
                         id_elemento = elem_dep.getId_elemento();
                         lista_elemento_funcionario = elem_dep.getFuncionario();
                         string_dependencia = String.valueOf(dependencia.getText());
-                    }else{
+                    } else {
                         Toast.makeText(getActivity(), "La Dependencia ingresada no es valida, verifeque e intente de nuevo.", Toast.LENGTH_LONG).show();
                     }
                 } else {
@@ -241,6 +258,8 @@ public class CasoUso4 extends Fragment {
         con_fun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                seleccion2 = -1;
 
                 limpiarTabla();
 
@@ -322,7 +341,7 @@ public class CasoUso4 extends Fragment {
 
                 thread_actualizarregistro = new Thread() {
                     public void run() {
-
+                        pdf.setEnabled(false);
                         GenerarPDF_Inventarios generar = new GenerarPDF_Inventarios();
                         generar.generar(getResources(), getActivity(), id_elemento, String.valueOf(sede.getText()), String.valueOf(dependencia.getText()), String.valueOf(funcionario.getText()));
 
@@ -371,14 +390,23 @@ public class CasoUso4 extends Fragment {
     //se Actualiza la tabla en dado caso que se reasigne un elemento
     public void actualizarTabla() {
 
-        elem_fun.startWebAccess(rootView, getActivity(), lista_documentos.get(seleccion2), 3);
-        id_elemento = elem_fun.getId_elemento();
+        for (int i = 0; i < lista_funcionario.size(); i++) {
+            if (String.valueOf(funcionario.getText()).equalsIgnoreCase(lista_documentos.get(i))) {
+                seleccion2 = i;
+            }
+        }
+
+        if (seleccion2 > -1) {
+            elem_fun.startWebAccess(rootView, getActivity(), lista_documentos.get(seleccion2), 3);
+            id_elemento = elem_fun.getId_elemento();
+        }
     }
 
     final Runnable createUI = new Runnable() {
 
         public void run() {
             Toast.makeText(getActivity(), "Se ha generado el pdf en la carpeta -> Download -> Inventarios", Toast.LENGTH_LONG).show();
+            pdf.setEnabled(true);
         }
     };
 

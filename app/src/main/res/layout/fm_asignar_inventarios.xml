@@ -13,34 +13,111 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:padding="10dp">
 
-            <TextView
-                android:id="@+id/label_sede"
-                android:text="@string/string_sede"
-                style="@style/labelArkaMovil"/>
+            <ToggleButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/des_fun_c2"
+                android:background="@color/GRIS2"
+                android:textOff="DATOS DE FUNCIONARIO A ASIGNAR ELEMENTOS"
+                android:textOn="DATOS DE FUNCIONARIO A ASIGNAR ELEMENTOS" />
 
-            <AutoCompleteTextView
-                style="@style/buttonTextArkaMovil"
-                android:id="@+id/sede_c2" />
+            <LinearLayout
+                android:id="@+id/datos_funcionario"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical"
+                android:background="@drawable/borde_layout">
 
-            <TextView
-                android:id="@+id/label_dependencia"
-                android:text="@string/String_dependencia"
-                style="@style/labelArkaMovil"/>
+                <TextView
+                    android:id="@+id/label_sede"
+                    android:text="@string/string_sede"
+                    style="@style/labelArkaMovil" />
 
-            <AutoCompleteTextView
-                style="@style/buttonTextArkaMovil"
-                android:id="@+id/dependencia_c2" />
+                <AutoCompleteTextView
+                    style="@style/buttonTextArkaMovil"
+                    android:id="@+id/sede_c2" />
 
-            <TextView
-                android:id="@+id/label_funcionario"
-                android:text="@string/String_funcionario"
-                style="@style/labelArkaMovil"/>
+                <TextView
+                    android:id="@+id/label_dependencia"
+                    android:text="@string/String_dependencia"
+                    style="@style/labelArkaMovil" />
 
-            <AutoCompleteTextView
-                style="@style/buttonTextArkaMovil"
-                android:id="@+id/funcionario_c2" />
+                <AutoCompleteTextView
+                    style="@style/buttonTextArkaMovil"
+                    android:id="@+id/dependencia_c2" />
+
+                <TextView
+                    android:id="@+id/label_funcionario"
+                    android:text="@string/String_funcionario"
+                    style="@style/labelArkaMovil" />
+
+                <AutoCompleteTextView
+                    style="@style/buttonTextArkaMovil"
+                    android:inputType="number"
+                    android:maxLength="17"
+                    android:id="@+id/funcionario_c2" />
+
+                Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="VALIDAR"
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/con_fun" />
+
+            </LinearLayout>
+
+            <ToggleButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/fechas_c2"
+                android:layout_marginTop="10dp"
+                android:background="@color/GRIS2"
+                android:textOff="RANGO FECHA DE REGISTRO DE ELEMENTO"
+                android:textOn="RANGO FECHA DE REGISTRO DE ELEMENTO" />
+
+            <LinearLayout
+                android:id="@+id/filtro"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical"
+                android:background="@drawable/borde_layout">
+
+                <TextView
+                    android:id="@+id/label_fecha1"
+                    android:text="Fecha inicial"
+                    style="@style/labelArkaMovil" />
+
+                <TextView
+                    android:id="@+id/fecha1_c2"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    style="@style/buttonTextArkaMovil"
+                    android:text="@string/formatofecha"
+                    android:textColor="@color/GRIS" />
+
+                <TextView
+                    android:id="@+id/label_fecha2"
+                    android:text="Fecha final"
+                    style="@style/labelArkaMovil" />
+
+                <TextView
+                    android:id="@+id/fecha2_c2"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    style="@style/buttonTextArkaMovil"
+                    android:text="@string/formatofecha"
+                    android:textColor="@color/GRIS" />
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="consultar"
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/con_c2" />
+
+            </LinearLayout>
 
             <ImageView
                 android:layout_width="20dp"
@@ -50,17 +127,21 @@
                 android:src="@drawable/subir"
                 android:layout_gravity="center_horizontal" />
 
-            <TableLayout android:id="@+id/cabecera_c2"
+            <TableLayout
+                android:id="@+id/cabecera_c2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingTop="10dp">
-            </TableLayout>
+                android:paddingTop="10dp"></TableLayout>
 
-            <LinearLayout android:orientation="vertical"
-                android:layout_width="match_parent" android:layout_height="wrap_content">
-                <TableLayout android:id="@+id/tabla_c2"
-                    android:layout_width="wrap_content" android:layout_height="wrap_content">
-                </TableLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TableLayout
+                    android:id="@+id/tabla_c2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"></TableLayout>
             </LinearLayout>
 
             <ImageView
@@ -75,9 +156,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="ASIGNAR"
-                android:id="@+id/asignar_c2"/>
-
-
+                android:layout_marginTop="15dp"
+                android:id="@+id/asignar_c2" />
         </LinearLayout>
+
     </RelativeLayout>
 </ScrollView>

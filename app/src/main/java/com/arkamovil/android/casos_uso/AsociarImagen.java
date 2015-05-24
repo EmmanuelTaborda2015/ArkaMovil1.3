@@ -2,7 +2,11 @@ package com.arkamovil.android.casos_uso;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -113,37 +117,68 @@ public class AsociarImagen extends Fragment {
         return rootView;
     }
 
+    public static int calculateInSampleSize(BitmapFactory.Options options,
+                                            int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and
+            // keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) > reqHeight
+                    && (halfWidth / inSampleSize) > reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+        return inSampleSize;
+    }
+
+    public static Bitmap decodeSampledBitmapFromResource(String strPath, int reqWidth, int reqHeight) {
+
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(strPath, options);
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth,
+                reqHeight);
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeFile(strPath, options);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
 
         if (opcion == 1) {
             ImageView iv = (ImageView) rootView.findViewById(R.id.imageView1);
-            iv.setImageBitmap(BitmapFactory.decodeFile(foto));
+            iv.setImageBitmap(decodeSampledBitmapFromResource(foto, 100, 100));
 
             File file = new File(foto);
             if (file.exists()) {
                 InputStream inputStream = null;
-                try {
-                    inputStream = new FileInputStream(foto);
-                    //You can get an inputStream using any IO API
-                    byte[] bytes;
-                    byte[] buffer = new byte[8192];
-                    int bytesRead;
-                    ByteArrayOutputStream output = new ByteArrayOutputStream();
 
-                    while ((bytesRead = inputStream.read(buffer)) != -1) {
-                        output.write(buffer, 0, bytesRead);
-                    }
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                decodeSampledBitmapFromResource(foto, 100, 100).compress(Bitmap.CompressFormat.PNG, 100, baos); //bm is the bitmap object
+                byte[] b = baos.toByteArray();
 
-                    bytes = output.toByteArray();
-                    imagen = Base64.encodeToString(bytes, Base64.DEFAULT);
+                String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
 
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                imagen = encodedImage;
+
+                asignar.setEnabled(true);
+
+                file.delete();
+
+                foto = "";
+
 
                 asignar.setEnabled(true);
 

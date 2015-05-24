@@ -161,8 +161,7 @@ public class CasoUso6 extends Fragment {
         lista_funcionario = ws_funcionario.getFun_nombre();
         lista_documentos = ws_funcionario.getFun_identificacion();
 
-        //new Despliegue(funcionario);
-
+        new Despliegue(funcionario);
 
         sede.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -192,6 +191,22 @@ public class CasoUso6 extends Fragment {
             }
         });
 
+        dependencia.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+            }
+        });
+
+        funcionario.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+            }
+        });
+
         Button con_dep = (Button) rootView.findViewById(R.id.con_dep_c6);
         con_dep.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -199,7 +214,8 @@ public class CasoUso6 extends Fragment {
 
                 limpiarTabla();
 
-                int contador = 0;
+                seleccion = -1;
+                seleccion1 = -1;
 
                 for (int i = 0; i < lista_sede.size(); i++) {
                     if (String.valueOf(sede.getText()).equalsIgnoreCase(lista_sede.get(i))) {
@@ -242,6 +258,8 @@ public class CasoUso6 extends Fragment {
             public void onClick(View v) {
 
                 limpiarTabla();
+
+                seleccion2 = -1;
 
                 for (int i = 0; i < lista_funcionario.size(); i++) {
                     if (String.valueOf(funcionario.getText()).equalsIgnoreCase(lista_documentos.get(i))) {

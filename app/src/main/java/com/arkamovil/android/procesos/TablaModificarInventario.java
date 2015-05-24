@@ -83,7 +83,7 @@ public class TablaModificarInventario {
             agregarCabecera();
             agregarFilasTabla();
         } else {
-            Toast.makeText(actividad, "No registran elementos para el funcionario", Toast.LENGTH_LONG).show();
+            Toast.makeText(actividad, "No registran elementos para los criterios de busqueda.", Toast.LENGTH_LONG).show();
             ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_c6);
             ImageView subir = (ImageView) rootView.findViewById(R.id.subir_c6);
             bajar.setVisibility(View.GONE);

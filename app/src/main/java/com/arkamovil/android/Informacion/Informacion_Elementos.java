@@ -124,6 +124,7 @@ public class Informacion_Elementos extends Dialog {
         public void run() {
 
             ImageView imagen = (ImageView) findViewById(R.id.imagen_inf);
+            imagen.setPadding(5, 5, 5, 5);
 
             try {
                 byte[] byteData = Base64.decode(img, Base64.DEFAULT);

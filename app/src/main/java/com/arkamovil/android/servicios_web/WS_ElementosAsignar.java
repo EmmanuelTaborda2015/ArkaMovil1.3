@@ -66,7 +66,7 @@ public class WS_ElementosAsignar {
         return id_elemento;
     }
 
-    public void startWebAccess(View rootView, Activity actividad) {
+    public void startWebAccess(View rootView, Activity actividad, final String fecha_inicial, final String fecha_final) {
 
         this.rootView = rootView;
         this.act = actividad;
@@ -82,7 +82,8 @@ public class WS_ElementosAsignar {
             public void run() {
                 SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 
-                //request.addProperty("nom_fun", nombre_fun);
+                request.addProperty("fecha_inicio", fecha_inicial);
+                request.addProperty("fecha_final", fecha_final);
 
                 SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
                 envelope.setOutputSoapObject(request);
@@ -119,12 +120,19 @@ public class WS_ElementosAsignar {
         public void run() {
             TablaAsignarInventarios tablaAsignarInventarios = new TablaAsignarInventarios();
             tablaAsignarInventarios.crear(rootView, act, id_elemento, descripcion);
-            ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_c2);
-            ImageView subir = (ImageView) rootView.findViewById(R.id.subir_c2);
-            bajar.setVisibility(View.VISIBLE);
-            subir.setVisibility(View.VISIBLE);
-            Button asignar = (Button) rootView.findViewById(R.id.asignar_c2);
-            asignar.setVisibility(View.VISIBLE);
+
+            if (id_elemento.size() > 0) {
+                ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_c2);
+                ImageView subir = (ImageView) rootView.findViewById(R.id.subir_c2);
+                Button asignar = (Button) rootView.findViewById(R.id.asignar_c2);
+
+                bajar.setVisibility(View.VISIBLE);
+                subir.setVisibility(View.VISIBLE);
+                asignar.setVisibility(View.VISIBLE);
+            }
+
+            Button consultar = (Button) rootView.findViewById(R.id.con_c2);
+            consultar.setEnabled(true);
 
         }
     };

@@ -131,7 +131,7 @@ public class Asignaciones extends Dialog {
 
                     if (!"".equalsIgnoreCase(String.valueOf(funcionario.getText()))) {
                         for (int i = 0; i < casoUso4.getLista_funcionario().size(); i++) {
-                            if (casoUso4.getLista_funcionario().get(i).equals(String.valueOf(funcionario.getText()))) {
+                            if (casoUso4.getLista_documentos().get(i).equals(String.valueOf(funcionario.getText()))) {
                                 thread = new Thread() {
                                     public void run() {
                                         WS_EnviarElementosAsignar ws_enviarElementosAsignar = new WS_EnviarElementosAsignar();
