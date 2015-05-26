@@ -1,7 +1,5 @@
 package com.arkamovil.android.servicios_web;
 
-import android.util.Log;
-
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
@@ -25,8 +23,6 @@ public class WS_CargarImagen {
 
         request.addProperty("id_elemento", id_elemento);
         request.addProperty("imagen", imagen);
-
-        Log.v("imagen", imagen);
 
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         envelope.setOutputSoapObject(request);

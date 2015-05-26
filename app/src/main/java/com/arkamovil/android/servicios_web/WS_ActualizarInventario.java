@@ -1,6 +1,7 @@
 package com.arkamovil.android.servicios_web;
 
 import android.app.Activity;
+import android.text.format.Time;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
@@ -28,6 +29,10 @@ public class WS_ActualizarInventario {
         request.addProperty("placa", placa);
         request.addProperty("estado", estado);
         request.addProperty("observacion", observacion);
+
+        Time today = new Time(Time.getCurrentTimezone());
+        today.setToNow();
+        request.addProperty("fecha_registro", today.monthDay + "/" + (today.month + 1) + "/" + today.year);
 
 
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);

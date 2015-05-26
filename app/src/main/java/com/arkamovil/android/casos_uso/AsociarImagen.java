@@ -1,12 +1,8 @@
 package com.arkamovil.android.casos_uso;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -14,7 +10,6 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.util.Base64;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +18,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.arkamovil.android.R;
-import com.arkamovil.android.procesos.GenerarPDF_Inventarios;
 import com.arkamovil.android.servicios_web.WS_CargarImagen;
 import com.arkamovil.android.servicios_web.WS_ConsultarPlacaImagen;
 
@@ -177,13 +171,11 @@ public class AsociarImagen extends Fragment {
 
                 file.delete();
 
-                foto = "";
-
-
                 asignar.setEnabled(true);
 
             } else {
                 Toast.makeText(getActivity(), "No se ha realizado la foto", Toast.LENGTH_SHORT).show();
+                asignar.setEnabled(false);
             }
         }
         if (opcion == 2) {
@@ -248,7 +240,6 @@ public class AsociarImagen extends Fragment {
     final Runnable Elemento = new Runnable() {
 
         public void run() {
-            Log.v("id", id);
             if ("false".equals(id)) {
                 Toast.makeText(getActivity(), "No se encontro ningun elemento con la placa escaneada", Toast.LENGTH_LONG).show();
             } else {

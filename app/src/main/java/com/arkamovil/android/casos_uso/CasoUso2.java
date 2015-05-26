@@ -237,8 +237,6 @@ public class CasoUso2 extends Fragment {
                                 seleccion2 = i;
                             }
                         }
-
-                        Log.v("seleccion2", seleccion2 + "");
                         if (seleccion2 > -1) {
                             //AQui va el codigo de asignar :)
                             thread = new Thread() {
@@ -246,10 +244,6 @@ public class CasoUso2 extends Fragment {
 
                                     TablaAsignarInventarios selec = new TablaAsignarInventarios();
                                     for (int i = 0; i < elem.getId_elemento().size(); i++) {
-                                        Log.v("seleccion", seleccion + "");
-                                        Log.v("seleccion1", seleccion1 + "");
-                                        Log.v("seleccion2", seleccion2 + "");
-
                                         if (selec.getArr()[i] == true) {
                                             WS_EnviarElementosAsignar ws_enviarElementosAsignar = new WS_EnviarElementosAsignar();
                                             String a = ws_enviarElementosAsignar.startWebAccess(String.valueOf(lista_id_sede.get(seleccion)), String.valueOf(lista_id_dependencia.get(seleccion1)), String.valueOf(lista_documento.get(seleccion2)), String.valueOf(elem.getId_elemento().get(i)));

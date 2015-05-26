@@ -21,6 +21,10 @@ import java.util.ListIterator;
 
 public class TablaAsignarInventarios {
 
+    private double f1 = 0.25;
+    private double f2 = 0.4;
+    private double f3 = 0.25;
+
     private static TableLayout tabla;
     private static TableLayout cabecera;
 
@@ -37,6 +41,7 @@ public class TablaAsignarInventarios {
 
     private static List<String> id_elemento;
     private static List<String> descripcion;
+    private static List<String> placa;
     private static boolean[] arr;
 
 
@@ -52,10 +57,11 @@ public class TablaAsignarInventarios {
     private static int MAX_FILAS = 0;
 
 
-    public void crear(View rootView, Activity actividad, List<String> id, List<String> desc) {
+    public void crear(View rootView, Activity actividad, List<String> id, List<String> desc, List<String> placa) {
 
         this.actividad = actividad;
         this.rootView = rootView;
+        this.placa = placa;
 
         this.tamanoPantalla = rootView.getWidth();
 
@@ -105,7 +111,7 @@ public class TablaAsignarInventarios {
         txtDescripcion = new TextView(actividad);
         txtInfo = new TextView(actividad);
 
-        txtId.setText("Id");
+        txtId.setText("Placa");
         txtId.setGravity(Gravity.CENTER_HORIZONTAL);
         txtId.setTextAppearance(actividad, R.style.etiqueta);
         txtId.setBackgroundResource(R.drawable.tabla_celda_cabecera);
@@ -144,7 +150,7 @@ public class TablaAsignarInventarios {
             txtDescripcion = new TextView(actividad);
             txtMod = new CheckBox(actividad);
 
-            txtId.setText(id_elemento.get(inicio + i));
+            txtId.setText(placa.get(inicio + i));
             txtId.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
             txtId.setTextAppearance(actividad, R.style.etiqueta);
             txtId.setBackgroundResource(R.drawable.tabla_celda);
@@ -197,9 +203,9 @@ public class TablaAsignarInventarios {
         cabecera = (TableLayout) rootView.findViewById(R.id.cabecera_c2);
         layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT);
-        layoutId = new TableRow.LayoutParams((int) (tamanoPantalla * 0.2), TableRow.LayoutParams.MATCH_PARENT);
-        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla * 0.4), TableRow.LayoutParams.MATCH_PARENT);
-        layoutMod = new TableRow.LayoutParams((int) (tamanoPantalla * 0.3), TableRow.LayoutParams.MATCH_PARENT);
+        layoutId = new TableRow.LayoutParams((int) (tamanoPantalla * f1), TableRow.LayoutParams.MATCH_PARENT);
+        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla * f2), TableRow.LayoutParams.MATCH_PARENT);
+        layoutMod = new TableRow.LayoutParams((int) (tamanoPantalla * f3), TableRow.LayoutParams.MATCH_PARENT);
 
     }
 
@@ -228,9 +234,9 @@ public class TablaAsignarInventarios {
         cabecera = (TableLayout) rootView.findViewById(R.id.cabecera_c2);
         layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT);
-        layoutId = new TableRow.LayoutParams((int) (tamanoPantalla * 0.2), TableRow.LayoutParams.MATCH_PARENT);
-        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla * 0.4), TableRow.LayoutParams.MATCH_PARENT);
-        layoutMod = new TableRow.LayoutParams((int) (tamanoPantalla * 0.3), TableRow.LayoutParams.MATCH_PARENT);
+        layoutId = new TableRow.LayoutParams((int) (tamanoPantalla * f1), TableRow.LayoutParams.MATCH_PARENT);
+        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla * f2), TableRow.LayoutParams.MATCH_PARENT);
+        layoutMod = new TableRow.LayoutParams((int) (tamanoPantalla * f3), TableRow.LayoutParams.MATCH_PARENT);
 
         tabla.removeAllViews();
         cabecera.removeAllViews();

@@ -113,6 +113,7 @@ public class WS_Elemento_dependencia {
         subtotal = new ArrayList<String>();
         iva = new ArrayList<String>();
         total = new ArrayList<String>();
+        funcionario = new ArrayList<String>();
 
         thread = new Thread() {
             public void run() {
@@ -162,7 +163,7 @@ public class WS_Elemento_dependencia {
 
             if (caso == 1) {
                 TablaConsultarInventario crear = new TablaConsultarInventario();
-                crear.crear(rootView, act, id_elemento, descripcion);
+                crear.crear(rootView, act, id_elemento, descripcion, placa);
                 if (id_elemento.size() > 0) {
                     ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_c5);
                     ImageView subir = (ImageView) rootView.findViewById(R.id.subir_c5);
@@ -171,7 +172,7 @@ public class WS_Elemento_dependencia {
                 }
             } else if (caso == 2) {
                 TablaModificarInventario crear = new TablaModificarInventario();
-                crear.crear(rootView, act, id_elemento, descripcion);
+                crear.crear(rootView, act, id_elemento, descripcion, placa);
                 if (id_elemento.size() > 0) {
                     ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_c6);
                     ImageView subir = (ImageView) rootView.findViewById(R.id.subir_c6);
@@ -180,18 +181,18 @@ public class WS_Elemento_dependencia {
                 }
             } else if (caso == 3) {
                 TablaConsultarInventariosAsignados crear = new TablaConsultarInventariosAsignados();
-                crear.crear(rootView, act, id_elemento, descripcion);
+                crear.crear(rootView, act, id_elemento, descripcion, placa);
                 if (id_elemento.size() > 0) {
                     ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_c4);
                     ImageView subir = (ImageView) rootView.findViewById(R.id.subir_c4);
-                    Button pdf = (Button) rootView.findViewById(R.id.generarpdf_c4);
+                    //Button pdf = (Button) rootView.findViewById(R.id.generarpdf_c4);
                     bajar.setVisibility(View.VISIBLE);
                     subir.setVisibility(View.VISIBLE);
-                    pdf.setVisibility(View.VISIBLE);
+                    //pdf.setVisibility(View.VISIBLE);
                 }
             } else if (caso == 4) {
                 TablaInventarioCedula crear = new TablaInventarioCedula();
-                crear.crear(rootView, act, id_elemento, descripcion);
+                crear.crear(rootView, act, id_elemento, descripcion, placa);
                 if (id_elemento.size() > 0) {
                     ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_c7);
                     ImageView subir = (ImageView) rootView.findViewById(R.id.subir_c7);

@@ -67,7 +67,7 @@ public class GenerarPDF_ActaVisita{
             int contador = 0;
 
             for(int i=0; i<cFecha.length; i++){
-                if('-' == cFecha[i]){
+                if('/' == cFecha[i]){
                     contador++;
                 }else{
                     if(contador == 0){
@@ -84,7 +84,7 @@ public class GenerarPDF_ActaVisita{
             contador = 0;
 
             for(int i=0; i<cProximaVisita.length; i++){
-                if('-' == cProximaVisita[i]){
+                if('/' == cProximaVisita[i]){
                     contador++;
                 }else{
                     if(contador == 0){

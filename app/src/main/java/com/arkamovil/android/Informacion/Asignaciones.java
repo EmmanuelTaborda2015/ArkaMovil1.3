@@ -142,6 +142,7 @@ public class Asignaciones extends Dialog {
 
                                         ws_enviarElementosAsignar.startWebAccess(String.valueOf(casoUso4.getString_sede()), casoUso4.getString_dependencia(), documento, String.valueOf(elemento.getText()));
 
+
                                         casoUso4.setActualizacion(1);
 
                                         handler.post(createUI);
@@ -173,6 +174,8 @@ public class Asignaciones extends Dialog {
             Toast.makeText(c, "Ha sido Reasignado el elemento", Toast.LENGTH_LONG).show();
             TablaConsultarInventariosAsignados tablaConsultarInventariosAsignados = new TablaConsultarInventariosAsignados();
             tablaConsultarInventariosAsignados.cerrarDialog();
+            Button actualizar = (Button) roorView.findViewById(R.id.actualizar_c4);
+            actualizar.setText("Listo");
         }
     };
 

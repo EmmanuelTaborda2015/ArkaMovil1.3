@@ -16,13 +16,14 @@
 
     <!--Etiquetas casos de uso en menu desplegable-->
 
-    <string name="title_section1">Acta de Visita</string>
-    <string name="title_section2">Asignar Inventarios</string>
-    <string name="title_section3">Asociar Imagen a Elemento</string>
-    <string name="title_section4">Consultar Inventarios Asignados</string>
-    <string name="title_section5">Consultar Asignación de  Inventarios</string>
-    <string name="title_section6">Actualizar Inventario</string>
-    <string name="title_section7">Consulta Rapida</string>
+    <string name="title_section1">1 - Acta de Visita</string>
+    <string name="title_section2">2 - Asignar Inventarios</string>
+    <string name="title_section3">6 - Asociar Imagen a Elemento</string>
+    <string name="title_section4">5 - Consultar Inventarios Asignados</string>
+    <string name="title_section5">3 - Consultar Asignación de  Inventarios</string>
+    <string name="title_section6">4 - Actualizar Inventario</string>
+    <string name="title_section7">7 - Consulta Rapida</string>
+    <string name="title_section8">8 - Leer Placa</string>
 
     <!--///////////////////////////// -->
 

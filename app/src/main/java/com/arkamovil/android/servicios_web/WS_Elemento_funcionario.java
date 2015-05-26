@@ -164,7 +164,7 @@ public class WS_Elemento_funcionario {
 
             if (caso == 1) {
                 TablaConsultarInventario crear = new TablaConsultarInventario();
-                crear.crear(rootView, act, id_elemento, descripcion);
+                crear.crear(rootView, act, id_elemento, descripcion, placa);
                 if (id_elemento.size() > 0) {
                     ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_c5);
                     ImageView subir = (ImageView) rootView.findViewById(R.id.subir_c5);
@@ -173,7 +173,7 @@ public class WS_Elemento_funcionario {
                 }
             } else if (caso == 2) {
                 TablaModificarInventario crear = new TablaModificarInventario();
-                crear.crear(rootView, act, id_elemento, descripcion);
+                crear.crear(rootView, act, id_elemento, descripcion, placa);
                 if (id_elemento.size() > 0) {
                     ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_c6);
                     ImageView subir = (ImageView) rootView.findViewById(R.id.subir_c6);
@@ -182,7 +182,7 @@ public class WS_Elemento_funcionario {
                 }
             } else if (caso == 3) {
                 TablaConsultarInventariosAsignados crear = new TablaConsultarInventariosAsignados();
-                crear.crear(rootView, act, id_elemento, descripcion);
+                crear.crear(rootView, act, id_elemento, descripcion, placa);
                 if (id_elemento.size() > 0) {
                     ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_c4);
                     ImageView subir = (ImageView) rootView.findViewById(R.id.subir_c4);
@@ -193,13 +193,15 @@ public class WS_Elemento_funcionario {
                 }
             } else if (caso == 4) {
                 TablaInventarioCedula crear = new TablaInventarioCedula();
-                crear.crear(rootView, act, id_elemento, descripcion);
+                crear.crear(rootView, act, id_elemento, descripcion, placa);
                 if (id_elemento.size() > 0) {
                     ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_c7);
                     ImageView subir = (ImageView) rootView.findViewById(R.id.subir_c7);
                     bajar.setVisibility(View.VISIBLE);
                     subir.setVisibility(View.VISIBLE);
                 }
+                Button consultar = (Button) rootView.findViewById(R.id.consultar_c7);
+                consultar.setEnabled(true);
             }
 
 

@@ -32,7 +32,6 @@ public class ConsultaRapida extends Fragment {
         rootView = inflater.inflate(R.layout.fm_consulta_cedula, container, false);
 
 
-
         doc_funcionario = (AutoCompleteTextView) rootView.findViewById(R.id.documento_c7);
         consultar = (Button) rootView.findViewById(R.id.consultar_c7);
         bajar = (ImageView) rootView.findViewById(R.id.bajar_c7);
@@ -44,7 +43,8 @@ public class ConsultaRapida extends Fragment {
         consultar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!"".equals(String.valueOf(doc_funcionario.getText()))){
+                consultar.setEnabled(false);
+                if (!"".equals(String.valueOf(doc_funcionario.getText()))) {
 
                     limpiarTabla();
 
@@ -53,10 +53,10 @@ public class ConsultaRapida extends Fragment {
 
                     final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-                }else{
+                } else {
                     Toast.makeText(getActivity(), "Por favor ingrese el documento del funcionario a consultar", Toast.LENGTH_LONG).show();
+                    consultar.setEnabled(true);
                 }
-
             }
         });
         //boton para bajar los elementos

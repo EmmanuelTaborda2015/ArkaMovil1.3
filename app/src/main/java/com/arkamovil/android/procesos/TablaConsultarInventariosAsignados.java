@@ -26,6 +26,10 @@ public class TablaConsultarInventariosAsignados {
     private static TableLayout tabla;
     private static TableLayout cabecera;
 
+    private double f1 = 0.3;
+    private double f2 = 0.4;
+    private double f3 = 0.2;
+
     private static TableRow.LayoutParams layoutFila;
     private static TableRow.LayoutParams layoutId;
     private static TableRow.LayoutParams layoutTexto;
@@ -48,6 +52,7 @@ public class TablaConsultarInventariosAsignados {
 
     private static List<String> id_elemento;
     private static List<String> descripcion;
+    private static List<String> placa;
     private static boolean[] arr;
 
     private static int inicio;
@@ -57,10 +62,11 @@ public class TablaConsultarInventariosAsignados {
 
     private static int MAX_FILAS = 0;
 
-    public void crear(View rootView, Activity actividad, List<String> id, List<String> desc) {
+    public void crear(View rootView, Activity actividad, List<String> id, List<String> desc, List<String> placa) {
 
         this.actividad = actividad;
         this.rootView = rootView;
+        this.placa = placa;
 
         this.tamanoPantalla = rootView.getWidth();
 
@@ -82,7 +88,7 @@ public class TablaConsultarInventariosAsignados {
             agregarCabecera();
             agregarFilasTabla();
         } else {
-            Toast.makeText(actividad, "No registran elementos para el funcionario", Toast.LENGTH_LONG).show();
+            Toast.makeText(actividad, "No registran elementos para el criterio de busqueda.", Toast.LENGTH_LONG).show();
             ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_c4);
             ImageView subir = (ImageView) rootView.findViewById(R.id.subir_c4);
             Button pdf = (Button) rootView.findViewById(R.id.generarpdf_c4);
@@ -106,7 +112,7 @@ public class TablaConsultarInventariosAsignados {
         txtDescripcion = new TextView(actividad);
         txtInfo = new TextView(actividad);
 
-        txtId.setText("Id");
+        txtId.setText("Placa");
         txtId.setGravity(Gravity.CENTER_HORIZONTAL);
         txtId.setTextAppearance(actividad, R.style.etiqueta);
         txtId.setBackgroundResource(R.drawable.tabla_celda_cabecera);
@@ -145,7 +151,7 @@ public class TablaConsultarInventariosAsignados {
             txtDescripcion = new TextView(actividad);
             txtVer = new ImageView(actividad);
 
-            txtId.setText(id_elemento.get(this.inicio + i));
+            txtId.setText(placa.get(this.inicio + i));
             txtId.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
             txtId.setTextAppearance(actividad, R.style.etiqueta);
             txtId.setBackgroundResource(R.drawable.tabla_celda);
@@ -168,7 +174,6 @@ public class TablaConsultarInventariosAsignados {
                         public void run() {
                             WS_Asignaciones ws_asignaciones = new WS_Asignaciones();
                             ws_asignaciones.startWebAccess(actividad, id_elemento.get(v.getId()), v.getId());
-
 
                             handler.post(createUI);
                         }
@@ -196,9 +201,9 @@ public class TablaConsultarInventariosAsignados {
         cabecera = (TableLayout) rootView.findViewById(R.id.cabecera_c4);
         layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT);
-        layoutId = new TableRow.LayoutParams((int) (tamanoPantalla * 0.2), TableRow.LayoutParams.MATCH_PARENT);
-        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla * 0.4), TableRow.LayoutParams.MATCH_PARENT);
-        layoutVer = new TableRow.LayoutParams((int) (tamanoPantalla * 0.30), TableRow.LayoutParams.MATCH_PARENT);
+        layoutId = new TableRow.LayoutParams((int) (tamanoPantalla * f1), TableRow.LayoutParams.MATCH_PARENT);
+        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla * f2), TableRow.LayoutParams.MATCH_PARENT);
+        layoutVer = new TableRow.LayoutParams((int) (tamanoPantalla * f3), TableRow.LayoutParams.MATCH_PARENT);
     }
 
     public void bajar(View rootView, Activity actividad) {
@@ -226,9 +231,9 @@ public class TablaConsultarInventariosAsignados {
         cabecera = (TableLayout) rootView.findViewById(R.id.cabecera_c4);
         layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT);
-        layoutId = new TableRow.LayoutParams((int) (tamanoPantalla * 0.2), TableRow.LayoutParams.MATCH_PARENT);
-        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla * 0.4), TableRow.LayoutParams.MATCH_PARENT);
-        layoutVer = new TableRow.LayoutParams((int) (tamanoPantalla * 0.30), TableRow.LayoutParams.MATCH_PARENT);
+        layoutId = new TableRow.LayoutParams((int) (tamanoPantalla * f1), TableRow.LayoutParams.MATCH_PARENT);
+        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla * f2), TableRow.LayoutParams.MATCH_PARENT);
+        layoutVer = new TableRow.LayoutParams((int) (tamanoPantalla * f3), TableRow.LayoutParams.MATCH_PARENT);
 
         tabla.removeAllViews();
         cabecera.removeAllViews();

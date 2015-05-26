@@ -57,25 +57,26 @@
                     android:id="@+id/dependencia_c1" />
 
                 <TextView
+                    android:id="@+id/label_ceularesponsable"
+                    android:text="Documento del responsable"
+                    style="@style/labelArkaMovil"/>
+
+                <AutoCompleteTextView
+                    style="@style/buttonTextArkaMovil"
+                    android:inputType="number"
+
+                    android:maxLength="15"
+                    android:id="@+id/cedularesponsable_c1" />
+
+                <TextView
                     android:id="@+id/label_nombreresponsable"
                     android:text="@string/String_nombreresponsable"
                     style="@style/labelArkaMovil"/>
 
                 <AutoCompleteTextView
                     style="@style/buttonTextArkaMovil"
-                    android:id="@+id/nombreresponsable_c1" />
-
-                <TextView
-                    android:id="@+id/label_ceularesponsable"
-                    android:text="@string/String_cedularesponsable"
-                    style="@style/labelArkaMovil"/>
-
-                <AutoCompleteTextView
-                    style="@style/buttonTextArkaMovil"
-                    android:inputType="number"
                     android:enabled="false"
-                    android:maxLength="15"
-                    android:id="@+id/cedularesponsable_c1" />
+                    android:id="@+id/nombreresponsable_c1" />
 
                 <TextView
                     android:id="@+id/label_observacion"

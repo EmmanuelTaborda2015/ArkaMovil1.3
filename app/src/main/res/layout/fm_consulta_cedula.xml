@@ -13,25 +13,33 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:padding="10dp">
 
-            <TextView
-                android:id="@+id/label_cedula"
-                android:text="@string/string_documento"
-                style="@style/labelArkaMovil" />
+            <LinearLayout
+                android:id="@+id/con_c7"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:orientation="vertical"
+                android:background="@drawable/borde_layout">
 
-            <AutoCompleteTextView
-                style="@style/buttonTextArkaMovil"
-                android:inputType="number"
-                android:maxLength="17"
-                android:id="@+id/documento_c7" />
+                <TextView
+                    android:id="@+id/label_cedula"
+                    android:text="@string/string_documento"
+                    style="@style/labelArkaMovil" />
 
+                <AutoCompleteTextView
+                    style="@style/buttonTextArkaMovil"
+                    android:inputType="number"
+                    android:maxLength="17"
+                    android:id="@+id/documento_c7" />
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Consultar"
-                android:id="@+id/consultar_c7" />
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Consultar"
+                    android:id="@+id/consultar_c7" />
+
+            </LinearLayout>
 
             <ImageView
                 android:layout_width="20dp"

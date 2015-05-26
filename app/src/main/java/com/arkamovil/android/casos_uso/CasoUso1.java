@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.text.format.Time;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,7 +72,9 @@ public class CasoUso1 extends Fragment {
 
 
     private List<String> lista_sede = new ArrayList<String>();
+    private List<String> lista_id_sede = new ArrayList<String>();
     private List<String> lista_dependencia = new ArrayList<String>();
+    private List<String> lista_id_dependencia = new ArrayList<String>();
     private List<String> lista_funcionario = new ArrayList<String>();
     private List<String> lista_documento = new ArrayList<String>();
 
@@ -89,15 +92,24 @@ public class CasoUso1 extends Fragment {
         establecerCampos();
 
         dependencia.setEnabled(false);
-        funcionario.setEnabled(false);
 
         //Se cargar los datos del web service sede.
         WS_Sede ws_sede = new WS_Sede();
         ws_sede.startWebAccess(getActivity(), sede);
         lista_sede = ws_sede.getSede();
+        lista_id_sede = ws_sede.getId_sede();
+
+
+        WS_Funcionario_Oracle ws_funcionario = new WS_Funcionario_Oracle();
+        ws_funcionario.startWebAccess(getActivity(), docRes, "null");
+
+        lista_funcionario = ws_funcionario.getFun_nombre();
+        lista_documento = ws_funcionario.getFun_identificacion();
 
         //Se despliegan los datos obtenidos por del web service en el campo Atocomplete sede.
         new Despliegue(sede);
+
+        new Despliegue(docRes);
 
         //se genera la funció que permite generar un evento al seleccionar un item de las sedes.
         sede.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -111,6 +123,7 @@ public class CasoUso1 extends Fragment {
                 WS_Dependencia ws_dependencia = new WS_Dependencia();
                 ws_dependencia.startWebAccess(getActivity(), dependencia, lista_sede.get(seleccion1));
                 lista_dependencia = ws_dependencia.getDependencia();
+                lista_id_dependencia = ws_dependencia.getId_dependencia();
 
                 //Se eliminan los items seleccionados anteriormente.
 
@@ -143,31 +156,27 @@ public class CasoUso1 extends Fragment {
                         seleccion2 = i;
                     }
                 }
-                WS_Funcionario_Oracle ws_funcionario = new WS_Funcionario_Oracle();
-                ws_funcionario.startWebAccess(getActivity(), funcionario, lista_dependencia.get(seleccion2));
 
-                lista_funcionario = ws_funcionario.getFun_nombre();
-                lista_documento = ws_funcionario.getFun_identificacion();
 
                 funcionario.setText("");
                 docRes.setText("");
-                funcionario.requestFocus();
+                docRes.requestFocus();
 
-                new Despliegue(funcionario);
+
             }
         });
 
-        funcionario.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        docRes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                for (int i = 0; i < lista_funcionario.size(); i++) {
-                    if (String.valueOf(funcionario.getText()).equals(lista_funcionario.get(i))) {
+                for (int i = 0; i < lista_documento.size(); i++) {
+                    if (String.valueOf(docRes.getText()).equals(lista_documento.get(i))) {
                         seleccion3 = i;
                     }
                 }
 
-                docRes.setText(lista_documento.get(seleccion3));
+                funcionario.setText(lista_funcionario.get(seleccion3));
 
                 observacion.requestFocus();
 
@@ -245,7 +254,7 @@ public class CasoUso1 extends Fragment {
                     thread_registrarActa = new Thread() {
                         public void run() {
                             WS_RegistroActaVisita enviar = new WS_RegistroActaVisita();
-                            enviar.startWebAccess(dependencia_s, nombRes_s, docRes_s, observacion_s, fecha, proxVisita);
+                            enviar.startWebAccess(lista_id_sede.get(seleccion1), lista_id_dependencia.get(seleccion2), docRes_s, observacion_s, fecha, proxVisita);
                         }
                     };
 
@@ -326,7 +335,8 @@ public class CasoUso1 extends Fragment {
 
         public void run() {
             AutoCompleteTextView numVisita = (AutoCompleteTextView) rootView.findViewById(R.id.numerovisita);
-            if ("".equals(String.valueOf(webResponse))) {
+            Log.v("num-vis",webResponse);
+            if ("anyType{}".equalsIgnoreCase(String.valueOf(webResponse))) {
                 numVisita.setText("1");
             } else {
                 numVisita.setText(String.valueOf(Integer.parseInt(webResponse) + 1));

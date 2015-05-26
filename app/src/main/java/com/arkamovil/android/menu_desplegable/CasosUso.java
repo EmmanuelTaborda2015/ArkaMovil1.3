@@ -16,6 +16,7 @@ import com.arkamovil.android.casos_uso.CasoUso4;
 import com.arkamovil.android.casos_uso.CasoUso5;
 import com.arkamovil.android.casos_uso.CasoUso6;
 import com.arkamovil.android.casos_uso.ConsultaRapida;
+import com.arkamovil.android.casos_uso.LeerPlaca;
 
 
 public class CasosUso extends ActionBarActivity
@@ -70,19 +71,22 @@ public class CasosUso extends ActionBarActivity
                 fragment = new CasoUso2();
                 break;
             case 3:
-                fragment = new CasoUso4();
-                break;
-            case 4:
                 fragment = new CasoUso5();
                 break;
-            case 5:
+            case 4:
                 fragment = new CasoUso6();
+                break;
+            case 5:
+                fragment = new CasoUso4();
                 break;
             case 6:
                 fragment = new AsociarImagen();
                 break;
             case 7:
                 fragment = new ConsultaRapida();
+                break;
+            case 8:
+                fragment = new LeerPlaca();
                 break;
         }
 

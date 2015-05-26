@@ -16,14 +16,14 @@ public class WS_RegistroActaVisita {
     private String webResponse = "";
 
 
-    public String startWebAccess(String dependencia, String nomres, String cedres, String obser, String fecha, String proxVisita) {
+    public String startWebAccess(String sede, String dependencia, String responsable, String obser, String fecha, String proxVisita) {
 
 
         SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 
+        request.addProperty("sede", sede);
         request.addProperty("dependencia", dependencia);
-        request.addProperty("nombre_res", nomres);
-        request.addProperty("documento_res", cedres);
+        request.addProperty("responsable", responsable);
         request.addProperty("observacion", obser);
         request.addProperty("fecha", fecha);
         request.addProperty("proxima_vis", proxVisita);

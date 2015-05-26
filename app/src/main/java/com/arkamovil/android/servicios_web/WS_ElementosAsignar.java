@@ -119,7 +119,7 @@ public class WS_ElementosAsignar {
 
         public void run() {
             TablaAsignarInventarios tablaAsignarInventarios = new TablaAsignarInventarios();
-            tablaAsignarInventarios.crear(rootView, act, id_elemento, descripcion);
+            tablaAsignarInventarios.crear(rootView, act, id_elemento, descripcion, placa);
 
             if (id_elemento.size() > 0) {
                 ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_c2);
