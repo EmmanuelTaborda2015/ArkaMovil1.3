@@ -18,7 +18,7 @@ public class WS_EnviarElementosAsignar {
     private String webResponse = "";
 
 
-    public String startWebAccess(String sede, String dependencia, String funcionario, String id_elemento) {
+    public String startWebAccess(String sede, String dependencia, String funcionario, String observacion, String id_elemento) {
 
 
         SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
@@ -26,6 +26,7 @@ public class WS_EnviarElementosAsignar {
         request.addProperty("dependencia", dependencia);
         request.addProperty("funcionario", funcionario);
         request.addProperty("id_elemento", id_elemento);
+        request.addProperty("observaciones", observacion);
 
         Time today = new Time(Time.getCurrentTimezone());
         today.setToNow();

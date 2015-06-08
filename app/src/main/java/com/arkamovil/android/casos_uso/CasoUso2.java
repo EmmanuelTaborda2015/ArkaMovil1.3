@@ -246,7 +246,7 @@ public class CasoUso2 extends Fragment {
                                     for (int i = 0; i < elem.getId_elemento().size(); i++) {
                                         if (selec.getArr()[i] == true) {
                                             WS_EnviarElementosAsignar ws_enviarElementosAsignar = new WS_EnviarElementosAsignar();
-                                            String a = ws_enviarElementosAsignar.startWebAccess(String.valueOf(lista_id_sede.get(seleccion)), String.valueOf(lista_id_dependencia.get(seleccion1)), String.valueOf(lista_documento.get(seleccion2)), String.valueOf(elem.getId_elemento().get(i)));
+                                            String a = ws_enviarElementosAsignar.startWebAccess(String.valueOf(lista_id_sede.get(seleccion)), String.valueOf(lista_id_dependencia.get(seleccion1)), String.valueOf(lista_documento.get(seleccion2)),"", String.valueOf(elem.getId_elemento().get(i)));
                                         }
                                     }
 

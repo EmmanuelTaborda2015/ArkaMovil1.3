@@ -386,12 +386,11 @@ public class CasoUso4 extends Fragment {
         pdf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                pdf.setEnabled(false);
                 thread_actualizarregistro = new Thread() {
                     public void run() {
-                        pdf.setEnabled(false);
                         GenerarPDF_Inventarios generar = new GenerarPDF_Inventarios();
-                        generar.generar(getResources(), getActivity(), id_elemento, String.valueOf(sede.getText()), String.valueOf(dependencia.getText()), String.valueOf(funcionario.getText()));
+                        generar.generar(getResources(), getActivity(), id_elemento, String.valueOf(elem_fun.getSede().get(0)), String.valueOf(elem_fun.getDependencia().get(0)), String.valueOf(funcionario.getText()));
 
                         handler.post(createUI);
                     }

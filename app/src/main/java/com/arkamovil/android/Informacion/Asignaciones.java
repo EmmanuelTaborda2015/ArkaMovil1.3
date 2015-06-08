@@ -19,6 +19,7 @@ import com.arkamovil.android.casos_uso.CasoUso4;
 import com.arkamovil.android.herramientas.Despliegue;
 import com.arkamovil.android.procesos.TablaConsultarInventariosAsignados;
 import com.arkamovil.android.servicios_web.WS_Asignaciones;
+import com.arkamovil.android.servicios_web.WS_Elemento_funcionario;
 import com.arkamovil.android.servicios_web.WS_EnviarElementosAsignar;
 
 public class Asignaciones extends Dialog {
@@ -45,6 +46,7 @@ public class Asignaciones extends Dialog {
     private Handler handler = new Handler();
 
     private WS_Asignaciones datos;
+    private WS_Elemento_funcionario elementos;
 
     private int i;
 
@@ -140,7 +142,7 @@ public class Asignaciones extends Dialog {
 
                                         documento = String.valueOf(funcionario.getText());
 
-                                        ws_enviarElementosAsignar.startWebAccess(String.valueOf(casoUso4.getString_sede()), casoUso4.getString_dependencia(), documento, String.valueOf(elemento.getText()));
+                                        ws_enviarElementosAsignar.startWebAccess(String.valueOf(elementos.getSede().get(datos.getSeleccion())), String.valueOf(elementos.getDependencia().get(datos.getSeleccion())), documento, datos.getObservaciones().get(0),  String.valueOf(elemento.getText()));
 
 
                                         casoUso4.setActualizacion(1);

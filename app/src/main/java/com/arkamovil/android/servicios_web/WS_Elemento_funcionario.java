@@ -54,6 +54,9 @@ public class WS_Elemento_funcionario {
     private static List<String> iva = new ArrayList<String>();
     private static List<String> total = new ArrayList<String>();
     private static List<String> funcionario = new ArrayList<String>();
+    private static List<String> sede = new ArrayList<String>();
+    private static List<String> dependencia = new ArrayList<String>();
+
 
     public static List<String> getFuncionario() {
         return funcionario;
@@ -91,6 +94,14 @@ public class WS_Elemento_funcionario {
         return iva;
     }
 
+    public static List<String> getSede() {
+        return sede;
+    }
+
+    public static List<String> getDependencia() {
+        return dependencia;
+    }
+
     public static List<String> getDescripcion() {
         return descripcion;
     }
@@ -115,6 +126,9 @@ public class WS_Elemento_funcionario {
         subtotal = new ArrayList<String>();
         iva = new ArrayList<String>();
         total = new ArrayList<String>();
+        funcionario = new ArrayList<String>();
+        sede = new ArrayList<String>();
+        dependencia = new ArrayList<String>();
 
         thread = new Thread() {
             public void run() {
@@ -146,6 +160,8 @@ public class WS_Elemento_funcionario {
                         iva.add(obj2.getProperty("total_iva").toString());
                         total.add(obj2.getProperty("total_iva_con").toString());
                         funcionario.add(obj2.getProperty("funcionario").toString());
+                        sede.add(obj2.getProperty("sede").toString());
+                        dependencia.add(obj2.getProperty("dependencia").toString());
                     }
 
                 } catch (Exception exception) {
