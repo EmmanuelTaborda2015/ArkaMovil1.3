@@ -57,6 +57,15 @@
                     android:id="@+id/dependencia_c1" />
 
                 <TextView
+                    android:id="@+id/label_ubicacion"
+                    android:text="@string/String_ubicacion"
+                    style="@style/labelArkaMovil"/>
+
+                <AutoCompleteTextView
+                    style="@style/buttonTextArkaMovil"
+                    android:id="@+id/ubicacion_c1" />
+
+                <TextView
                     android:id="@+id/label_ceularesponsable"
                     android:text="Documento del responsable"
                     style="@style/labelArkaMovil"/>

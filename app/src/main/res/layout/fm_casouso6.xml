@@ -72,6 +72,15 @@
                     style="@style/buttonTextArkaMovil"
                     android:id="@+id/dependencia_c6" />
 
+                <TextView
+                    android:id="@+id/label_ubicacion"
+                    android:text="@string/String_ubicacion"
+                    style="@style/labelArkaMovil" />
+
+                <AutoCompleteTextView
+                    style="@style/buttonTextArkaMovil"
+                    android:id="@+id/ubicacion_c6" />
+
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

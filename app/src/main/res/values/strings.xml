@@ -59,6 +59,7 @@
     <string name="String_cedularesponsable">Cédula del responsable</string>
     <string name="String_numerovisita">Visita #</string>
     <string name="String_dependencia">Dependencia</string>
+    <string name="String_ubicacion">Ubicación</string>
     <string name="String_estado">Estado</string>
     <string name="String_estadoActualizacion">Estado de Actualización</string>
     <string name="id">Id</string>
