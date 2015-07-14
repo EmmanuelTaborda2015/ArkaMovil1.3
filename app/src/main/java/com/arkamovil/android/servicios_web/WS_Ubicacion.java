@@ -18,13 +18,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-public class WS_Dependencia {
+public class WS_Ubicacion {
 
     private final String NAMESPACE = "urn:arka";
     //private final String URL = "http://10.0.2.2/ws/servicio.php?wsdl";
     private final String URL = "http://10.20.0.38/WS_ARKA/servicio/servicio.php";
-    private final String SOAP_ACTION = "urn:arka/dependencia";
-    private final String METHOD_NAME = "dependencia";
+    private final String SOAP_ACTION = "urn:arka/ubicacion";
+    private final String METHOD_NAME = "ubicacion";
 
     private Thread thread;
     private Handler handler = new Handler();
@@ -32,11 +32,11 @@ public class WS_Dependencia {
     private Activity act;
     private AutoCompleteTextView spin;
 
-    private List<String> dependencia = new ArrayList<String>();
-    private List<String> id_dependencia = new ArrayList<String>();
+    private List<String> ubicacion = new ArrayList<String>();
+    private List<String> id_ubicacion = new ArrayList<String>();
 
 
-    public void startWebAccess(final Activity act, final AutoCompleteTextView spin, final String sede) {
+    public void startWebAccess(final Activity act, final AutoCompleteTextView spin, final String dependencia) {
 
         this.act = act;
         this.spin = spin;
@@ -45,7 +45,7 @@ public class WS_Dependencia {
             public void run() {
                 SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 
-                request.addProperty("sede", sede);
+                request.addProperty("dependencia", dependencia);
 
                 SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
                 envelope.setOutputSoapObject(request);
@@ -56,14 +56,17 @@ public class WS_Dependencia {
 
                     httpTransport.call(SOAP_ACTION, envelope);
                     SoapObject obj1 = (SoapObject)envelope.bodyIn;
+
                     Vector<?> responseVector = (Vector<?>) obj1.getProperty(0);
 
                     for (int i = 0; i < responseVector.size(); i++) {
                         SoapObject obj2 = (SoapObject) responseVector.get(i);
                         SoapObject obj3 = (SoapObject) obj2.getProperty(1);
-                        id_dependencia.add(obj3.getProperty("value").toString());
+                        id_ubicacion.add(obj3.getProperty("value").toString());
                         obj3 = (SoapObject) obj2.getProperty(3);
-                        dependencia.add(obj3.getProperty("value").toString());
+                        ubicacion.add(obj3.getProperty("value").toString());
+                        Log.v("mensaje", "id :" + id_ubicacion.get(i));
+                        Log.v("mensaje", "nombre :" + ubicacion.get(i));
                     }
 
                 } catch (Exception exception) {
@@ -78,12 +81,12 @@ public class WS_Dependencia {
     final Runnable createUI = new Runnable() {
 
         public void run() {
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(act, android.R.layout.simple_spinner_item, dependencia);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(act, android.R.layout.simple_spinner_item, ubicacion);
             spin.setAdapter(adapter);
 
-            if (dependencia.size() == 0) {
-                Toast.makeText(act, "La sede seleccionada no tiene dependencias relacionadas", Toast.LENGTH_LONG).show();
-                spin.setText("No existen dependencias relacionadas");
+            if (ubicacion.size() == 0) {
+                Toast.makeText(act, "La dependencia seleccionada no tiene ubicaciones relacionadas", Toast.LENGTH_LONG).show();
+                spin.setText("No existen ubicaciones relacionadas");
                 spin.setEnabled(false);
                 spin.setTextColor(act.getResources().getColor(R.color.GRIS));
             } else {
@@ -93,10 +96,10 @@ public class WS_Dependencia {
         }
     };
 
-    public List<String> getDependencia() {
-        return dependencia;
+    public List<String> getUbicacion() {
+        return ubicacion;
     }
-    public List<String> getId_dependencia() {
-        return id_dependencia;
+    public List<String> getId_ubicacion() {
+        return id_ubicacion;
     }
 }
