@@ -25,6 +25,7 @@ import com.arkamovil.android.servicios_web.WS_Funcionario_Oracle;
 import com.arkamovil.android.servicios_web.WS_NumeroVisitas;
 import com.arkamovil.android.servicios_web.WS_RegistroActaVisita;
 import com.arkamovil.android.servicios_web.WS_Sede;
+import com.arkamovil.android.servicios_web.WS_Ubicacion;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -44,6 +45,7 @@ public class CasoUso1 extends Fragment {
 
     private AutoCompleteTextView sede;
     private AutoCompleteTextView dependencia;
+    private AutoCompleteTextView ubicacion;
     private AutoCompleteTextView funcionario;
     private AutoCompleteTextView docRes;
     private EditText observacion;
@@ -54,6 +56,7 @@ public class CasoUso1 extends Fragment {
     private String fecha;
     private String sede_s;
     private String dependencia_s;
+    private String ubicacion_s;
     private String nombRes_s;
     private String docRes_s;
     private String observacion_s;
@@ -73,11 +76,14 @@ public class CasoUso1 extends Fragment {
 
     private List<String> lista_sede = new ArrayList<String>();
     private List<String> lista_id_sede = new ArrayList<String>();
+    private List<String> lista_ubicacion = new ArrayList<String>();
+    private List<String> lista_id_ubicacion = new ArrayList<String>();
     private List<String> lista_dependencia = new ArrayList<String>();
     private List<String> lista_id_dependencia = new ArrayList<String>();
     private List<String> lista_funcionario = new ArrayList<String>();
     private List<String> lista_documento = new ArrayList<String>();
 
+    private int seleccion = 0;
     private int seleccion1 = 0;
     private int seleccion2 = 0;
     private int seleccion3 = 0;
@@ -92,6 +98,7 @@ public class CasoUso1 extends Fragment {
         establecerCampos();
 
         dependencia.setEnabled(false);
+        ubicacion.setEnabled(false);
 
         //Se cargar los datos del web service sede.
         WS_Sede ws_sede = new WS_Sede();
@@ -117,11 +124,11 @@ public class CasoUso1 extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 for (int i = 0; i < lista_sede.size(); i++) {
                     if (String.valueOf(sede.getText()).equals(lista_sede.get(i))) {
-                        seleccion1 = i;
+                        seleccion = i;
                     }
                 }
                 WS_Dependencia ws_dependencia = new WS_Dependencia();
-                ws_dependencia.startWebAccess(getActivity(), dependencia, lista_sede.get(seleccion1));
+                ws_dependencia.startWebAccess(getActivity(), dependencia, lista_id_sede.get(seleccion));
                 lista_dependencia = ws_dependencia.getDependencia();
                 lista_id_dependencia = ws_dependencia.getId_dependencia();
 
@@ -153,16 +160,51 @@ public class CasoUso1 extends Fragment {
 
                 for (int i = 0; i < lista_dependencia.size(); i++) {
                     if (String.valueOf(dependencia.getText()).equals(lista_dependencia.get(i))) {
+                        seleccion1 = i;
+                    }
+                }
+
+                WS_Ubicacion ws_ubicacion = new WS_Ubicacion();
+                ws_ubicacion.startWebAccess(getActivity(), ubicacion, lista_id_dependencia.get(seleccion1));
+
+                lista_ubicacion = ws_ubicacion.getUbicacion();
+                lista_id_ubicacion = ws_ubicacion.getId_ubicacion();
+
+                //Se eliminan los items seleccionados anteriormente.
+
+                ubicacion.setText("");
+                funcionario.setText("");
+                docRes.setText("");
+                ubicacion.requestFocus();
+
+                //Se despliegan los datos obtenidos de la dependencia.
+                new Despliegue(ubicacion);
+
+                thread_numvisitas = new Thread() {
+                    public void run() {
+                        WS_NumeroVisitas visitas = new WS_NumeroVisitas();
+                        webResponse = visitas.startWebAccess();
+                        handler.post(createUI);
+                    }
+                };
+
+                thread_numvisitas.start();
+
+            }
+        });
+
+        ubicacion.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                for (int i = 0; i < lista_ubicacion.size(); i++) {
+                    if (String.valueOf(ubicacion.getText()).equals(lista_ubicacion.get(i))) {
                         seleccion2 = i;
                     }
                 }
 
-
                 funcionario.setText("");
                 docRes.setText("");
                 docRes.requestFocus();
-
-
             }
         });
 
@@ -254,7 +296,7 @@ public class CasoUso1 extends Fragment {
                     thread_registrarActa = new Thread() {
                         public void run() {
                             WS_RegistroActaVisita enviar = new WS_RegistroActaVisita();
-                            enviar.startWebAccess(lista_id_sede.get(seleccion1), lista_id_dependencia.get(seleccion2), docRes_s, observacion_s, fecha, proxVisita);
+                            enviar.startWebAccess(lista_id_sede.get(seleccion), lista_id_dependencia.get(seleccion1), docRes_s, observacion_s, fecha, proxVisita);
                         }
                     };
 
@@ -348,6 +390,7 @@ public class CasoUso1 extends Fragment {
 
         sede = (AutoCompleteTextView) rootView.findViewById(R.id.sede_c1);
         dependencia = (AutoCompleteTextView) rootView.findViewById(R.id.dependencia_c1);
+        ubicacion = (AutoCompleteTextView) rootView.findViewById(R.id.ubicacion_c1);
         funcionario = (AutoCompleteTextView) rootView.findViewById(R.id.nombreresponsable_c1);
         docRes = (AutoCompleteTextView) rootView.findViewById(R.id.cedularesponsable_c1);
         observacion = (EditText) rootView.findViewById(R.id.observacion_c1);

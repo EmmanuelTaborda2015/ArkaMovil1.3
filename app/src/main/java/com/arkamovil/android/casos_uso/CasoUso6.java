@@ -24,6 +24,7 @@ import com.arkamovil.android.servicios_web.WS_Elemento_funcionario;
 import com.arkamovil.android.servicios_web.WS_Funcionario_Oracle;
 import com.arkamovil.android.servicios_web.WS_Placa;
 import com.arkamovil.android.servicios_web.WS_Sede;
+import com.arkamovil.android.servicios_web.WS_Ubicacion;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,15 +33,19 @@ public class CasoUso6 extends Fragment {
 
     private AutoCompleteTextView sede;
     private AutoCompleteTextView dependencia;
+    private AutoCompleteTextView ubicacion;
     private AutoCompleteTextView funcionario;
     private Button scanear;
 
-    private List<String> lista_sede = new ArrayList<String>();
-    private List<String> lista_dependencia = new ArrayList<String>();
+    private static List<String> lista_sede;
+    private static List<String> lista_id_sede;
+    private static List<String> lista_dependencia;
+    private static List<String> lista_id_dependencia;
+    private static List<String> lista_ubicacion;
+    private static List<String> lista_id_ubicacion;
     private List<String> lista_funcionario = new ArrayList<String>();
     private List<String> lista_documento = new ArrayList<String>();
     private static List<String> lista_documentos = new ArrayList<String>();
-    private static List<String> lista_id_dependencia = new ArrayList<String>();
     private static List<String> id_elemento = new ArrayList<String>();
     private static List<String> lista_elemento_funcionario = new ArrayList<String>();
 
@@ -64,6 +69,7 @@ public class CasoUso6 extends Fragment {
     private int seleccion = -1;
     private int seleccion1 = -1;
     private int seleccion2 = -1;
+    private int seleccion3 = -1;
 
     private static WS_Elemento_funcionario elem_fun;
 
@@ -80,11 +86,13 @@ public class CasoUso6 extends Fragment {
 
         sede = (AutoCompleteTextView) rootView.findViewById(R.id.sede_c6);
         dependencia = (AutoCompleteTextView) rootView.findViewById(R.id.dependencia_c6);
+        ubicacion = (AutoCompleteTextView) rootView.findViewById(R.id.ubicacion_c6);
         funcionario = (AutoCompleteTextView) rootView.findViewById(R.id.funcionario_c6);
         bajar = (ImageView) rootView.findViewById(R.id.bajar_c6);
         subir = (ImageView) rootView.findViewById(R.id.subir_c6);
 
         dependencia.setEnabled(false);
+        ubicacion.setEnabled(false);
 
         bajar.setVisibility(View.GONE);
         subir.setVisibility(View.GONE);
@@ -94,6 +102,7 @@ public class CasoUso6 extends Fragment {
         WS_Sede ws_sede = new WS_Sede();
         ws_sede.startWebAccess(getActivity(), sede);
         lista_sede = ws_sede.getSede();
+        lista_id_sede = ws_sede.getId_sede();
 
         final LinearLayout l1 = (LinearLayout) rootView.findViewById(R.id.pla_c6);
         l1.setVisibility(View.GONE);
@@ -173,15 +182,13 @@ public class CasoUso6 extends Fragment {
                 }
                 //Se envia parametros de vista y de campo AutoComplete al web service de facultad.
                 WS_Dependencia ws_dependencia = new WS_Dependencia();
-                ws_dependencia.startWebAccess(getActivity(), dependencia, lista_sede.get(seleccion));
-
-//                WS_Dependencia_Postgres ws_dependencia = new WS_Dependencia_Postgres();
-//                ws_dependencia.startWebAccess(getActivity(), dependencia);
+                ws_dependencia.startWebAccess(getActivity(), dependencia, lista_id_sede.get(seleccion));
 
                 lista_dependencia = ws_dependencia.getDependencia();
                 lista_id_dependencia = ws_dependencia.getId_dependencia();
 
                 dependencia.setText("");
+                ubicacion.setText("");
                 dependencia.requestFocus();
 
                 limpiarTabla();
@@ -192,6 +199,31 @@ public class CasoUso6 extends Fragment {
         });
 
         dependencia.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                for (int i = 0; i < lista_dependencia.size(); i++) {
+                    if (String.valueOf(dependencia.getText()).equals(lista_dependencia.get(i))) {
+                        seleccion1 = i;
+                    }
+                }
+                //Se envia parametros de vista y de campo AutoComplete al web service de facultad.
+                WS_Ubicacion ws_ubicacion = new WS_Ubicacion();
+                ws_ubicacion.startWebAccess(getActivity(), ubicacion, lista_id_dependencia.get(seleccion1));
+
+                lista_ubicacion = ws_ubicacion.getUbicacion();
+                lista_id_ubicacion = ws_ubicacion.getId_ubicacion();
+
+                ubicacion.setText("");
+                ubicacion.requestFocus();
+
+                limpiarTabla();
+
+                //Se despliegan los datos obtenidos de la dependencia.
+                new Despliegue(ubicacion);
+            }
+        });
+
+        ubicacion.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
@@ -216,6 +248,7 @@ public class CasoUso6 extends Fragment {
 
                 seleccion = -1;
                 seleccion1 = -1;
+                seleccion2 = -1;
 
                 for (int i = 0; i < lista_sede.size(); i++) {
                     if (String.valueOf(sede.getText()).equalsIgnoreCase(lista_sede.get(i))) {
@@ -230,14 +263,23 @@ public class CasoUso6 extends Fragment {
                             seleccion1 = i;
                         }
                     }
-                    if(seleccion1 > -1){
-                        elem_dep = new WS_Elemento_dependencia();
-                        elem_dep.startWebAccess(rootView, getActivity(), lista_id_dependencia.get(seleccion1), 2);
-                        id_elemento = elem_dep.getId_elemento();
-                        lista_elemento_funcionario = elem_dep.getFuncionario();
-                        string_dependencia = String.valueOf(dependencia.getText());
-                        funcion = 1;
-                    }else{
+                    if (seleccion1 > -1) {
+                        for (int i = 0; i < lista_ubicacion.size(); i++) {
+                            if (String.valueOf(ubicacion.getText()).equalsIgnoreCase(lista_ubicacion.get(i))) {
+                                seleccion2 = i;
+                            }
+                        }
+                        if (seleccion2 > -1) {
+                            elem_dep = new WS_Elemento_dependencia();
+                            elem_dep.startWebAccess(rootView, getActivity(), lista_id_dependencia.get(seleccion1), 2);
+                            id_elemento = elem_dep.getId_elemento();
+                            lista_elemento_funcionario = elem_dep.getFuncionario();
+                            string_dependencia = String.valueOf(dependencia.getText());
+                            funcion = 1;
+                        } else {
+                            Toast.makeText(getActivity(), "La Ubicación ingresada no es valida, verifeque e intente de nuevo.", Toast.LENGTH_LONG).show();
+                        }
+                    } else {
                         Toast.makeText(getActivity(), "La Dependencia ingresada no es valida, verifeque e intente de nuevo.", Toast.LENGTH_LONG).show();
                     }
                 } else {
@@ -246,6 +288,7 @@ public class CasoUso6 extends Fragment {
 
                 seleccion = -1;
                 seleccion1 = -1;
+                seleccion2 = -1;
 
                 final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
@@ -259,17 +302,17 @@ public class CasoUso6 extends Fragment {
 
                 limpiarTabla();
 
-                seleccion2 = -1;
+                seleccion3 = -1;
 
                 for (int i = 0; i < lista_funcionario.size(); i++) {
                     if (String.valueOf(funcionario.getText()).equalsIgnoreCase(lista_documentos.get(i))) {
-                        seleccion2 = i;
+                        seleccion3 = i;
                     }
                 }
 
-                if (seleccion2 > -1) {
+                if (seleccion3 > -1) {
                     elem_fun = new WS_Elemento_funcionario();
-                    elem_fun.startWebAccess(rootView, getActivity(), lista_documentos.get(seleccion2), 2);
+                    elem_fun.startWebAccess(rootView, getActivity(), lista_documentos.get(seleccion3), 2);
                     id_elemento = elem_fun.getId_elemento();
                     lista_elemento_funcionario = elem_fun.getFuncionario();
                     string_funcionario = String.valueOf(funcionario.getText());
@@ -281,7 +324,7 @@ public class CasoUso6 extends Fragment {
                     Toast.makeText(getActivity(), "El documento ingresado no es valido, por favor verifiquelo e intente de nuevo.", Toast.LENGTH_LONG).show();
                 }
 
-                seleccion2 = -1;
+                seleccion3 = -1;
 
                 final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);

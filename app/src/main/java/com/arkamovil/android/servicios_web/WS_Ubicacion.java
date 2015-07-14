@@ -65,8 +65,6 @@ public class WS_Ubicacion {
                         id_ubicacion.add(obj3.getProperty("value").toString());
                         obj3 = (SoapObject) obj2.getProperty(3);
                         ubicacion.add(obj3.getProperty("value").toString());
-                        Log.v("mensaje", "id :" + id_ubicacion.get(i));
-                        Log.v("mensaje", "nombre :" + ubicacion.get(i));
                     }
 
                 } catch (Exception exception) {

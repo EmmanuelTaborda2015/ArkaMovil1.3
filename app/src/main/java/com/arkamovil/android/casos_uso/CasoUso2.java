@@ -33,6 +33,7 @@ import com.arkamovil.android.servicios_web.WS_ElementosAsignar;
 import com.arkamovil.android.servicios_web.WS_EnviarElementosAsignar;
 import com.arkamovil.android.servicios_web.WS_Funcionario_Oracle;
 import com.arkamovil.android.servicios_web.WS_Sede;
+import com.arkamovil.android.servicios_web.WS_Ubicacion;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -42,6 +43,7 @@ public class CasoUso2 extends Fragment {
 
     private AutoCompleteTextView sede;
     private AutoCompleteTextView dependencia;
+    private AutoCompleteTextView ubicacion;
     private AutoCompleteTextView funcionario;
 
     private TextView fecha1;
@@ -60,6 +62,8 @@ public class CasoUso2 extends Fragment {
     private List<String> lista_id_sede = new ArrayList<String>();
     private List<String> lista_dependencia = new ArrayList<String>();
     private List<String> lista_id_dependencia = new ArrayList<String>();
+    private List<String> lista_ubicacion = new ArrayList<String>();
+    private List<String> lista_id_ubicacion = new ArrayList<String>();
     private static List<String> lista_funcionario = new ArrayList<String>();
     private List<String> lista_documento = new ArrayList<String>();
 
@@ -75,6 +79,7 @@ public class CasoUso2 extends Fragment {
     private int seleccion = -1;
     private int seleccion1 = -1;
     private int seleccion2 = -1;
+    private int seleccion3 = -1;
 
     private static int year1;
     private static int month1;
@@ -93,11 +98,13 @@ public class CasoUso2 extends Fragment {
 
         sede = (AutoCompleteTextView) rootView.findViewById(R.id.sede_c2);
         dependencia = (AutoCompleteTextView) rootView.findViewById(R.id.dependencia_c2);
+        ubicacion = (AutoCompleteTextView) rootView.findViewById(R.id.ubicacion_c2);
         funcionario = (AutoCompleteTextView) rootView.findViewById(R.id.funcionario_c2);
         bajar = (ImageView) rootView.findViewById(R.id.bajar_c2);
         subir = (ImageView) rootView.findViewById(R.id.subir_c2);
 
         dependencia.setEnabled(false);
+        ubicacion.setEnabled(false);
 
         asignar = (Button) rootView.findViewById(R.id.asignar_c2);
         asignar.setVisibility(View.GONE);
@@ -167,10 +174,7 @@ public class CasoUso2 extends Fragment {
                 }
                 //Se envia parametros de vista y de campo AutoComplete al web service de facultad.
                 WS_Dependencia ws_dependencia = new WS_Dependencia();
-                ws_dependencia.startWebAccess(getActivity(), dependencia, lista_sede.get(seleccion));
-
-//                WS_Dependencia_Postgres ws_dependencia = new WS_Dependencia_Postgres();
-//                ws_dependencia.startWebAccess(getActivity(), dependencia);
+                ws_dependencia.startWebAccess(getActivity(), dependencia, lista_id_sede.get(seleccion));
 
                 lista_dependencia = ws_dependencia.getDependencia();
                 lista_id_dependencia = ws_dependencia.getId_dependencia();
@@ -178,6 +182,7 @@ public class CasoUso2 extends Fragment {
                 string_sede = String.valueOf(sede.getText());
 
                 dependencia.setText("");
+                ubicacion.setText("");
                 dependencia.requestFocus();
 
                 //Se despliegan los datos obtenidos de la dependencia.
@@ -185,21 +190,34 @@ public class CasoUso2 extends Fragment {
             }
         });
 
-        //Se genera esta función cuando se selecciona un item de la lista
         dependencia.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 for (int i = 0; i < lista_dependencia.size(); i++) {
                     if (String.valueOf(dependencia.getText()).equals(lista_dependencia.get(i))) {
-                        seleccion = i;
+                        seleccion1 = i;
                     }
                 }
-                //Se envia parametros de vista y de campo AutoComplete al web service de funcionarios.
+                //Se envia parametros de vista y de campo AutoComplete al web service de facultad.
+                WS_Ubicacion ws_ubicacion = new WS_Ubicacion();
+                ws_ubicacion.startWebAccess(getActivity(), ubicacion, lista_id_dependencia.get(seleccion1));
 
-//                WS_Funcionario ws_funcionario = new WS_Funcionario();
-//                ws_funcionario.startWebAccess(getActivity(), funcionario, lista_dependencia.get(seleccion));
+                lista_ubicacion = ws_ubicacion.getUbicacion();
+                lista_id_ubicacion = ws_ubicacion.getId_ubicacion();
 
+                ubicacion.setText("");
+                ubicacion.requestFocus();
 
+                limpiarTabla();
+
+                //Se despliegan los datos obtenidos de la dependencia.
+                new Despliegue(ubicacion);
+            }
+        });
+
+        ubicacion.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 funcionario.setText("");
                 funcionario.requestFocus();
 
@@ -216,6 +234,7 @@ public class CasoUso2 extends Fragment {
                 seleccion = -1;
                 seleccion1 = -1;
                 seleccion2 = -1;
+                seleccion3 = -1;
 
                 for (int i = 0; i < lista_sede.size(); i++) {
                     if (String.valueOf(sede.getText()).equalsIgnoreCase(lista_sede.get(i))) {
@@ -232,32 +251,43 @@ public class CasoUso2 extends Fragment {
                     }
                     if (seleccion1 > -1) {
 
-                        for (int i = 0; i < lista_funcionario.size(); i++) {
-                            if (String.valueOf(funcionario.getText()).equalsIgnoreCase(lista_documento.get(i))) {
+                        for (int i = 0; i < lista_ubicacion.size(); i++) {
+                            if (String.valueOf(ubicacion.getText()).equalsIgnoreCase(lista_ubicacion.get(i))) {
                                 seleccion2 = i;
                             }
                         }
                         if (seleccion2 > -1) {
-                            //AQui va el codigo de asignar :)
-                            thread = new Thread() {
-                                public void run() {
 
-                                    TablaAsignarInventarios selec = new TablaAsignarInventarios();
-                                    for (int i = 0; i < elem.getId_elemento().size(); i++) {
-                                        if (selec.getArr()[i] == true) {
-                                            WS_EnviarElementosAsignar ws_enviarElementosAsignar = new WS_EnviarElementosAsignar();
-                                            String a = ws_enviarElementosAsignar.startWebAccess(String.valueOf(lista_id_sede.get(seleccion)), String.valueOf(lista_id_dependencia.get(seleccion1)), String.valueOf(lista_documento.get(seleccion2)),"", String.valueOf(elem.getId_elemento().get(i)));
-                                        }
-                                    }
-
-                                    handler.post(createUI);
+                            for (int i = 0; i < lista_funcionario.size(); i++) {
+                                if (String.valueOf(funcionario.getText()).equalsIgnoreCase(lista_documento.get(i))) {
+                                    seleccion3 = i;
                                 }
-                            };
+                            }
+                            if (seleccion3 > -1) {
+                                //AQui va el codigo de asignar :)
+                                thread = new Thread() {
+                                    public void run() {
 
-                            thread.start();
+                                        TablaAsignarInventarios selec = new TablaAsignarInventarios();
+                                        for (int i = 0; i < elem.getId_elemento().size(); i++) {
+                                            if (selec.getArr()[i] == true) {
+                                                WS_EnviarElementosAsignar ws_enviarElementosAsignar = new WS_EnviarElementosAsignar();
+                                                String a = ws_enviarElementosAsignar.startWebAccess(String.valueOf(lista_id_sede.get(seleccion)), String.valueOf(lista_id_dependencia.get(seleccion1)), String.valueOf(lista_documento.get(seleccion2)), "", String.valueOf(elem.getId_elemento().get(i)));
+                                            }
+                                        }
 
+                                        handler.post(createUI);
+                                    }
+                                };
+
+                                thread.start();
+
+                            } else {
+                                Toast.makeText(getActivity(), "El funcionario ingresado no es valido, por favor verifiquelo e intente de nuevo.", Toast.LENGTH_LONG).show();
+                                asignar.setEnabled(true);
+                            }
                         } else {
-                            Toast.makeText(getActivity(), "El funcionario ingresado no es valido, por favor verifiquelo e intente de nuevo.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), "La ubicación ingresada no es valido, por favor verifiquela e intente de nuevo.", Toast.LENGTH_LONG).show();
                             asignar.setEnabled(true);
                         }
                     } else {
