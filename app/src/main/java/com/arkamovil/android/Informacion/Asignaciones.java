@@ -142,7 +142,7 @@ public class Asignaciones extends Dialog {
 
                                         documento = String.valueOf(funcionario.getText());
 
-                                        ws_enviarElementosAsignar.startWebAccess(String.valueOf(elementos.getSede().get(datos.getSeleccion())), String.valueOf(elementos.getDependencia().get(datos.getSeleccion())), documento, datos.getObservaciones().get(0),  String.valueOf(elemento.getText()));
+                                        ws_enviarElementosAsignar.startWebAccess(String.valueOf(elementos.getSede().get(datos.getSeleccion())), String.valueOf(elementos.getDependencia().get(datos.getSeleccion())), documento, datos.getObservaciones().get(0),  String.valueOf(elemento.getText()), "Ubicacion");
 
 
                                         casoUso4.setActualizacion(1);

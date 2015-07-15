@@ -7,16 +7,15 @@ import org.ksoap2.transport.HttpTransportSE;
 
 public class WS_RegistroActaVisita {
 
-    private final String NAMESPACE = "arkaurn:arka";
-    //private final String URL = "http://10.0.2.2/ws/servicio.php?wsdl";
-    private final String URL = "http://10.20.0.38/ws_arka_android/servicio.php?wsdl";
-    private final String SOAP_ACTION = "arkaurn:arka/registrarActaVisita";
+    private final String NAMESPACE = "urn:arka";
+    private final String URL = "http://10.20.0.38/WS_ARKA/servicio/servicio.php";
+    private final String SOAP_ACTION = "urn:arka/registrarActaVisita";
     private final String METHOD_NAME = "registrarActaVisita";
 
     private String webResponse = "";
 
 
-    public String startWebAccess(String sede, String dependencia, String responsable, String obser, String fecha, String proxVisita) {
+    public String startWebAccess(String sede, String dependencia, String responsable, String obser, String fecha, String proxVisita, String ubicacion) {
 
 
         SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
@@ -27,6 +26,7 @@ public class WS_RegistroActaVisita {
         request.addProperty("observacion", obser);
         request.addProperty("fecha", fecha);
         request.addProperty("proxima_vis", proxVisita);
+        request.addProperty("ubicacion", ubicacion);
 
 
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);

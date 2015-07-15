@@ -21,7 +21,6 @@ import java.util.Vector;
 public class WS_Ubicacion {
 
     private final String NAMESPACE = "urn:arka";
-    //private final String URL = "http://10.0.2.2/ws/servicio.php?wsdl";
     private final String URL = "http://10.20.0.38/WS_ARKA/servicio/servicio.php";
     private final String SOAP_ACTION = "urn:arka/ubicacion";
     private final String METHOD_NAME = "ubicacion";

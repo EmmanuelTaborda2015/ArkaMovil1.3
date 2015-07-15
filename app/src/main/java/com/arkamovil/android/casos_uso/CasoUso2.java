@@ -31,6 +31,7 @@ import com.arkamovil.android.servicios_web.WS_Elemento_dependencia;
 import com.arkamovil.android.servicios_web.WS_Elemento_funcionario;
 import com.arkamovil.android.servicios_web.WS_ElementosAsignar;
 import com.arkamovil.android.servicios_web.WS_EnviarElementosAsignar;
+import com.arkamovil.android.servicios_web.WS_Funcionario;
 import com.arkamovil.android.servicios_web.WS_Funcionario_Oracle;
 import com.arkamovil.android.servicios_web.WS_Sede;
 import com.arkamovil.android.servicios_web.WS_Ubicacion;
@@ -120,7 +121,7 @@ public class CasoUso2 extends Fragment {
         lista_id_sede = ws_sede.getId_sede();
 
 
-        WS_Funcionario_Oracle ws_funcionario = new WS_Funcionario_Oracle();
+        WS_Funcionario ws_funcionario = new WS_Funcionario();
         ws_funcionario.startWebAccess(getActivity(), funcionario, "null");
 
         lista_funcionario = ws_funcionario.getFun_nombre();
@@ -221,6 +222,8 @@ public class CasoUso2 extends Fragment {
                 funcionario.setText("");
                 funcionario.requestFocus();
 
+                limpiarTabla();
+
                 new Despliegue(funcionario);
             }
         });
@@ -272,7 +275,7 @@ public class CasoUso2 extends Fragment {
                                         for (int i = 0; i < elem.getId_elemento().size(); i++) {
                                             if (selec.getArr()[i] == true) {
                                                 WS_EnviarElementosAsignar ws_enviarElementosAsignar = new WS_EnviarElementosAsignar();
-                                                String a = ws_enviarElementosAsignar.startWebAccess(String.valueOf(lista_id_sede.get(seleccion)), String.valueOf(lista_id_dependencia.get(seleccion1)), String.valueOf(lista_documento.get(seleccion2)), "", String.valueOf(elem.getId_elemento().get(i)));
+                                                String a = ws_enviarElementosAsignar.startWebAccess(String.valueOf(lista_id_sede.get(seleccion)), String.valueOf(lista_id_dependencia.get(seleccion1)), String.valueOf(lista_documento.get(seleccion3)), "", String.valueOf(elem.getId_elemento().get(i)), String.valueOf(lista_id_ubicacion.get(seleccion2)));
                                             }
                                         }
 

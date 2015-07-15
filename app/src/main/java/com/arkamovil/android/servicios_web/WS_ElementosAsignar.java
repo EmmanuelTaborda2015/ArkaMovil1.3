@@ -2,6 +2,7 @@ package com.arkamovil.android.servicios_web;
 
 import android.app.Activity;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -16,13 +17,13 @@ import org.ksoap2.transport.HttpTransportSE;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 public class WS_ElementosAsignar {
 
-    private final String NAMESPACE = "arkaurn:arka";
-    //private final String URL = "http://10.0.2.2/ws/servicio.php?wsdl";
-    private final String URL = "http://10.20.0.38/ws_arka_android/servicio.php?wsdl";
-    private final String SOAP_ACTION = "arkaurn:arka/asignar_elementos";
+    private final String NAMESPACE = "urn:arka";
+    private final String URL = "http://10.20.0.38/WS_ARKA/servicio/servicio.php";
+    private final String SOAP_ACTION = "urn:arka/asignar_elementos";
     private final String METHOD_NAME = "asignar_elementos";
 
     public Thread getThread() {
@@ -41,6 +42,9 @@ public class WS_ElementosAsignar {
     private static List<String> marca = new ArrayList<String>();
     private static List<String> placa = new ArrayList<String>();
     private static List<String> serie = new ArrayList<String>();
+    private static List<String> sede = new ArrayList<String>();
+    private static List<String> dependencia = new ArrayList<String>();
+    private static List<String> funcionario = new ArrayList<String>();
 
     public static List<String> getNivel() {
         return nivel;
@@ -77,6 +81,9 @@ public class WS_ElementosAsignar {
         marca = new ArrayList<String>();
         placa = new ArrayList<String>();
         serie = new ArrayList<String>();
+        sede = new ArrayList<String>();
+        dependencia = new ArrayList<String>();
+        funcionario = new ArrayList<String>();
 
         thread = new Thread() {
             public void run() {
@@ -94,19 +101,53 @@ public class WS_ElementosAsignar {
 
                     httpTransport.call(SOAP_ACTION, envelope);
 
-                    SoapObject obj1 = (SoapObject) envelope.getResponse();
+                    SoapObject obj1 = (SoapObject)envelope.bodyIn;
 
-                    for (int i = 0; i < obj1.getPropertyCount(); i++) {
-                        SoapObject obj2 = (SoapObject) obj1.getProperty(i);
-                        id_elemento.add(obj2.getProperty("id_elemento").toString());
-                        descripcion.add(obj2.getProperty("descripcion").toString());
-                        nivel.add(obj2.getProperty("nivel").toString());
-                        marca.add(obj2.getProperty("marca").toString());
-                        placa.add(obj2.getProperty("placa").toString());
-                        serie.add(obj2.getProperty("serie").toString());
+                    Vector<?> responseVector = (Vector<?>) obj1.getProperty(0);
+
+                    for (int i = 0; i < responseVector.size(); i++) {
+                        SoapObject obj2 = (SoapObject) responseVector.get(i);
+                        SoapObject obj3;
+
+                        try{
+                            obj3 = (SoapObject) obj2.getProperty(1);
+                            id_elemento.add(obj3.getProperty("value").toString());
+                        }catch (NullPointerException ex){
+                            id_elemento.add("");
+                        }
+                        try{
+                            obj3 = (SoapObject) obj2.getProperty(3);
+                            descripcion.add(obj3.getProperty("value").toString());
+                        }catch (NullPointerException ex){
+                            descripcion.add("");
+                        }
+                        try{
+                            obj3 = (SoapObject) obj2.getProperty(5);
+                            nivel.add(obj3.getProperty("value").toString());
+                        }catch (NullPointerException ex){
+                            nivel.add("");
+                        }
+                        try{
+                            obj3 = (SoapObject) obj2.getProperty(7);
+                            marca.add(obj3.getProperty("value").toString());
+                        }catch (NullPointerException ex){
+                            marca.add("");
+                        }
+                        try{
+                            obj3 = (SoapObject) obj2.getProperty(9);
+                            placa.add(obj3.getProperty("value").toString());
+                        }catch (NullPointerException ex){
+                            placa.add("");
+                        }
+                        try{
+                            obj3 = (SoapObject) obj2.getProperty(11);
+                            serie.add(obj3.getProperty("value").toString());
+                        }catch (NullPointerException ex){
+                            serie.add("");
+                        }
                     }
 
-                } catch (Exception exception) {
+                } catch (Exception exception) {Log.v("mensaje", exception.toString());
                 }
                 handler.post(createUI);
             }

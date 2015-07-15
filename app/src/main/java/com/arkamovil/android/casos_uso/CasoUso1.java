@@ -21,6 +21,7 @@ import com.arkamovil.android.R;
 import com.arkamovil.android.herramientas.Despliegue;
 import com.arkamovil.android.procesos.GenerarPDF_ActaVisita;
 import com.arkamovil.android.servicios_web.WS_Dependencia;
+import com.arkamovil.android.servicios_web.WS_Funcionario;
 import com.arkamovil.android.servicios_web.WS_Funcionario_Oracle;
 import com.arkamovil.android.servicios_web.WS_NumeroVisitas;
 import com.arkamovil.android.servicios_web.WS_RegistroActaVisita;
@@ -107,7 +108,7 @@ public class CasoUso1 extends Fragment {
         lista_id_sede = ws_sede.getId_sede();
 
 
-        WS_Funcionario_Oracle ws_funcionario = new WS_Funcionario_Oracle();
+        WS_Funcionario ws_funcionario = new WS_Funcionario();
         ws_funcionario.startWebAccess(getActivity(), docRes, "null");
 
         lista_funcionario = ws_funcionario.getFun_nombre();
@@ -296,7 +297,7 @@ public class CasoUso1 extends Fragment {
                     thread_registrarActa = new Thread() {
                         public void run() {
                             WS_RegistroActaVisita enviar = new WS_RegistroActaVisita();
-                            enviar.startWebAccess(lista_id_sede.get(seleccion), lista_id_dependencia.get(seleccion1), docRes_s, observacion_s, fecha, proxVisita);
+                            enviar.startWebAccess(lista_id_sede.get(seleccion), lista_id_dependencia.get(seleccion1), docRes_s, observacion_s, fecha, proxVisita, lista_id_ubicacion.get(seleccion2));
                         }
                     };
 
@@ -431,6 +432,7 @@ public class CasoUso1 extends Fragment {
     public void limpiar() {
         sede.setText("");
         dependencia.setText("");
+        ubicacion.setText("");
         funcionario.setText("");
         docRes.setText("");
         observacion.setText("");

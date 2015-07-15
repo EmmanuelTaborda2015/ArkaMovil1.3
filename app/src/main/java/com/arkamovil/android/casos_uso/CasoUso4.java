@@ -25,6 +25,7 @@ import com.arkamovil.android.procesos.TablaConsultarInventariosAsignados;
 import com.arkamovil.android.servicios_web.WS_Dependencia;
 import com.arkamovil.android.servicios_web.WS_Elemento_dependencia;
 import com.arkamovil.android.servicios_web.WS_Elemento_funcionario;
+import com.arkamovil.android.servicios_web.WS_Funcionario;
 import com.arkamovil.android.servicios_web.WS_Funcionario_Oracle;
 import com.arkamovil.android.servicios_web.WS_Sede;
 import com.arkamovil.android.servicios_web.WS_Ubicacion;
@@ -181,7 +182,7 @@ public class CasoUso4 extends Fragment {
 
         new Despliegue(sede);
 
-        WS_Funcionario_Oracle ws_funcionario = new WS_Funcionario_Oracle();
+        WS_Funcionario ws_funcionario = new WS_Funcionario();
         ws_funcionario.startWebAccess(getActivity(), funcionario, "null");
 
         lista_funcionario = ws_funcionario.getFun_nombre();
@@ -343,7 +344,7 @@ public class CasoUso4 extends Fragment {
                         seleccion3 = i;
                     }
                 }
-
+                Log.v("mensaje", funcionario.getText().toString());
                 if (seleccion3 > -1) {
                     elem_fun = new WS_Elemento_funcionario();
                     elem_fun.startWebAccess(rootView, getActivity(), lista_documentos.get(seleccion3), 3);

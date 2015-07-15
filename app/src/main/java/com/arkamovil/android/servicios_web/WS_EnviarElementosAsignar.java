@@ -1,6 +1,7 @@
 package com.arkamovil.android.servicios_web;
 
 import android.text.format.Time;
+import android.util.Log;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
@@ -9,16 +10,15 @@ import org.ksoap2.transport.HttpTransportSE;
 
 public class WS_EnviarElementosAsignar {
 
-    private final String NAMESPACE = "arkaurn:arka";
-    //private final String URL = "http://10.0.2.2/ws/servicio.php?wsdl";
-    private final String URL = "http://10.20.0.38/ws_arka_android/servicio.php?wsdl";
-    private final String SOAP_ACTION = "arkaurn:arka/asignar_elementos_funcionario";
+    private final String NAMESPACE = "urn:arka";
+    private final String URL = "http://10.20.0.38/WS_ARKA/servicio/servicio.php";
+    private final String SOAP_ACTION = "urn:arka/asignar_elementos_funcionario";
     private final String METHOD_NAME = "asignar_elementos_funcionario";
 
     private String webResponse = "";
 
 
-    public String startWebAccess(String sede, String dependencia, String funcionario, String observacion, String id_elemento) {
+    public String startWebAccess(String sede, String dependencia, String funcionario, String observacion, String id_elemento, String ubicacion) {
 
 
         SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
@@ -30,7 +30,9 @@ public class WS_EnviarElementosAsignar {
 
         Time today = new Time(Time.getCurrentTimezone());
         today.setToNow();
-        request.addProperty("fecha_registro",today.monthDay + "/" + (today.month + 1) + "/" + today.year);
+        request.addProperty("fecha_registro", today.monthDay + "/" + (today.month + 1) + "/" + today.year);
+        request.addProperty("ubicacion", ubicacion);
+
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         envelope.setOutputSoapObject(request);
 

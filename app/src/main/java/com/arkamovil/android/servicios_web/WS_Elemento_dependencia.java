@@ -2,6 +2,7 @@ package com.arkamovil.android.servicios_web;
 
 import android.app.Activity;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,13 +20,13 @@ import org.ksoap2.transport.HttpTransportSE;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 public class WS_Elemento_dependencia {
 
-    private final String NAMESPACE = "arkaurn:arka";
-    //private final String URL = "http://10.0.2.2/ws/servicio.php?wsdl";
-    private final String URL = "http://10.20.0.38/ws_arka_android/servicio.php?wsdl";
-    private final String SOAP_ACTION = "arkaurn:arka/consultar_elementos_dependencia";
+    private final String NAMESPACE = "urn:arka";
+    private final String URL = "http://10.20.0.38/WS_ARKA/servicio/servicio.php";
+    private final String SOAP_ACTION = "urn:arka/consultar_elementos_dependencia";
     private final String METHOD_NAME = "consultar_elementos_dependencia";
 
     public Thread getThread() {
@@ -119,7 +120,7 @@ public class WS_Elemento_dependencia {
             public void run() {
                 SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 
-                request.addProperty("nom_dep", dep);
+                request.addProperty("dependencia", dep);
 
                 SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
                 envelope.setOutputSoapObject(request);
@@ -130,21 +131,80 @@ public class WS_Elemento_dependencia {
 
                     httpTransport.call(SOAP_ACTION, envelope);
 
-                    SoapObject obj1 = (SoapObject) envelope.getResponse();
+                    SoapObject obj1 = (SoapObject)envelope.bodyIn;
 
-                    for (int i = 0; i < obj1.getPropertyCount(); i++) {
-                        SoapObject obj2 = (SoapObject) obj1.getProperty(i);
-                        id_elemento.add(obj2.getProperty("id_elemento").toString());
-                        descripcion.add(obj2.getProperty("descripcion").toString());
-                        nivel.add(obj2.getProperty("nivel").toString());
-                        marca.add(obj2.getProperty("marca").toString());
-                        placa.add(obj2.getProperty("placa").toString());
-                        serie.add(obj2.getProperty("serie").toString());
-                        valor.add(obj2.getProperty("valor").toString());
-                        subtotal.add(obj2.getProperty("subtotal_sin_iva").toString());
-                        iva.add(obj2.getProperty("total_iva").toString());
-                        total.add(obj2.getProperty("total_iva_con").toString());
-                        funcionario.add(obj2.getProperty("funcionario").toString());
+                    Vector<?> responseVector = (Vector<?>) obj1.getProperty(0);
+
+                    for (int i = 0; i < responseVector.size(); i++) {
+                        SoapObject obj2 = (SoapObject) responseVector.get(i);
+                        SoapObject obj3;
+
+                        try{
+                            obj3 = (SoapObject) obj2.getProperty(1);
+                            id_elemento.add(obj3.getProperty("value").toString());
+                        }catch (NullPointerException ex){
+                            id_elemento.add("");
+                        }
+                        try{
+                            obj3 = (SoapObject) obj2.getProperty(3);
+                            descripcion.add(obj3.getProperty("value").toString());
+                        }catch (NullPointerException ex){
+                            descripcion.add("");
+                        }
+                        try{
+                            obj3 = (SoapObject) obj2.getProperty(5);
+                            nivel.add(obj3.getProperty("value").toString());
+                        }catch (NullPointerException ex){
+                            nivel.add("");
+                        }
+                        try{
+                            obj3 = (SoapObject) obj2.getProperty(7);
+                            marca.add(obj3.getProperty("value").toString());
+                        }catch (NullPointerException ex){
+                            marca.add("");
+                        }
+                        try{
+                            obj3 = (SoapObject) obj2.getProperty(9);
+                            placa.add(obj3.getProperty("value").toString());
+                        }catch (NullPointerException ex){
+                            placa.add("");
+                        }
+                        try{
+                            obj3 = (SoapObject) obj2.getProperty(11);
+                            serie.add(obj3.getProperty("value").toString());
+                        }catch (NullPointerException ex){
+                            serie.add("");
+                        }
+                        try{
+                            obj3 = (SoapObject) obj2.getProperty(13);
+                            valor.add(obj3.getProperty("value").toString());
+                        }catch (NullPointerException ex){
+                            valor.add("");
+                        }
+                        try{
+                            obj3 = (SoapObject) obj2.getProperty(15);
+                            subtotal.add(obj3.getProperty("value").toString());
+                        }catch (NullPointerException ex){
+                            subtotal.add("");
+                        }
+                        try{
+                            obj3 = (SoapObject) obj2.getProperty(17);
+                            iva.add(obj3.getProperty("value").toString());
+                        }catch (NullPointerException ex){
+                            iva.add("");
+                        }
+                        try{
+                            obj3 = (SoapObject) obj2.getProperty(19);
+                            total.add(obj3.getProperty("value").toString());
+                        }catch (NullPointerException ex){
+                            total.add("");
+                        }
+                        try{
+                            obj3 = (SoapObject) obj2.getProperty(21);
+                            funcionario.add(obj3.getProperty("value").toString());
+                        }catch (NullPointerException ex){
+                            funcionario.add("");
+                        }
                     }
 
                 } catch (Exception exception) {
