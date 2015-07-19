@@ -18,7 +18,6 @@ import java.util.Vector;
 public class WS_Sede {
 
     private final String NAMESPACE = "urn:arka";
-    //private final String URL = "http://10.0.2.2/ws/servicio.php?wsdl";
     private final String URL = "http://10.20.0.38/WS_ARKA/servicio/servicio.php";
     private final String SOAP_ACTION = "urn:arka/sede";
     private final String METHOD_NAME = "sede";
@@ -61,10 +60,20 @@ public class WS_Sede {
 
                     for (int i = 0; i < responseVector.size(); i++) {
                         SoapObject obj2 = (SoapObject) responseVector.get(i);
-                        SoapObject obj3 = (SoapObject) obj2.getProperty(1);
-                        id_sede.add(obj3.getProperty("value").toString());
-                        obj3 = (SoapObject) obj2.getProperty(3);
-                        sede.add(obj3.getProperty("value").toString());
+                        SoapObject obj3;
+
+                        try{
+                            obj3 = (SoapObject) obj2.getProperty(1);
+                            id_sede.add(obj3.getProperty("value").toString());
+                        }catch (NullPointerException ex){
+                            id_sede.add("");
+                        }
+                        try{
+                            obj3 = (SoapObject) obj2.getProperty(3);
+                            sede.add(obj3.getProperty("value").toString());
+                        }catch (NullPointerException ex){
+                            sede.add("");
+                        }
                     }
 
                 } catch (Exception exception) {

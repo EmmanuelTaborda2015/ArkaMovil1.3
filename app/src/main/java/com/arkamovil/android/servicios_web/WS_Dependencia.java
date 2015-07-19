@@ -60,10 +60,20 @@ public class WS_Dependencia {
 
                     for (int i = 0; i < responseVector.size(); i++) {
                         SoapObject obj2 = (SoapObject) responseVector.get(i);
-                        SoapObject obj3 = (SoapObject) obj2.getProperty(1);
-                        id_dependencia.add(obj3.getProperty("value").toString());
-                        obj3 = (SoapObject) obj2.getProperty(3);
-                        dependencia.add(obj3.getProperty("value").toString());
+                        SoapObject obj3;
+
+                        try{
+                            obj3 = (SoapObject) obj2.getProperty(1);
+                            id_dependencia.add(obj3.getProperty("value").toString());
+                        }catch (NullPointerException ex){
+                            id_dependencia.add("");
+                        }
+                        try{
+                            obj3 = (SoapObject) obj2.getProperty(3);
+                            dependencia.add(obj3.getProperty("value").toString());
+                        }catch (NullPointerException ex){
+                            dependencia.add("");
+                        }
                     }
 
                 } catch (Exception exception) {

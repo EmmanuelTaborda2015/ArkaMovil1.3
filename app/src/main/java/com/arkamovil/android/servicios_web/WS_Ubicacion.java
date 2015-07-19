@@ -60,10 +60,20 @@ public class WS_Ubicacion {
 
                     for (int i = 0; i < responseVector.size(); i++) {
                         SoapObject obj2 = (SoapObject) responseVector.get(i);
-                        SoapObject obj3 = (SoapObject) obj2.getProperty(1);
-                        id_ubicacion.add(obj3.getProperty("value").toString());
-                        obj3 = (SoapObject) obj2.getProperty(3);
-                        ubicacion.add(obj3.getProperty("value").toString());
+                        SoapObject obj3;
+
+                        try{
+                            obj3 = (SoapObject) obj2.getProperty(1);
+                            id_ubicacion.add(obj3.getProperty("value").toString());
+                        }catch (NullPointerException ex){
+                            id_ubicacion.add("");
+                        }
+                        try{
+                            obj3 = (SoapObject) obj2.getProperty(3);
+                            ubicacion.add(obj3.getProperty("value").toString());
+                        }catch (NullPointerException ex){
+                            ubicacion.add("");
+                        }
                     }
 
                 } catch (Exception exception) {

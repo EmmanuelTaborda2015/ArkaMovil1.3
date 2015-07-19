@@ -147,7 +147,8 @@ public class WS_ElementosAsignar {
                         }
                     }
 
-                } catch (Exception exception) {Log.v("mensaje", exception.toString());
+                } catch (Exception exception) {
+                    Log.v("mensaje", exception.toString());
                 }
                 handler.post(createUI);
             }
@@ -160,7 +161,7 @@ public class WS_ElementosAsignar {
 
         public void run() {
             TablaAsignarInventarios tablaAsignarInventarios = new TablaAsignarInventarios();
-            tablaAsignarInventarios.crear(rootView, act, id_elemento, descripcion, placa);
+            tablaAsignarInventarios.crear(rootView, act, id_elemento, descripcion, placa);//funcionario y confirmacion
 
             if (id_elemento.size() > 0) {
                 ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_c2);
@@ -172,7 +173,7 @@ public class WS_ElementosAsignar {
                 asignar.setVisibility(View.VISIBLE);
             }
 
-            Button consultar = (Button) rootView.findViewById(R.id.con_c2);
+            Button consultar = (Button) rootView.findViewById(R.id.con_fun_c2);
             consultar.setEnabled(true);
 
         }

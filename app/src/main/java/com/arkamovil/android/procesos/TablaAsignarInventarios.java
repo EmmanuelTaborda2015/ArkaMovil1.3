@@ -1,6 +1,8 @@
 package com.arkamovil.android.procesos;
 
 import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.Gravity;
@@ -24,6 +26,7 @@ public class TablaAsignarInventarios {
     private double f1 = 0.25;
     private double f2 = 0.4;
     private double f3 = 0.25;
+    private double f4 = 0.05;
 
     private static TableLayout tabla;
     private static TableLayout cabecera;
@@ -31,17 +34,22 @@ public class TablaAsignarInventarios {
     private static TableRow.LayoutParams layoutFila;
     private static TableRow.LayoutParams layoutId;
     private static TableRow.LayoutParams layoutTexto;
+    private static TableRow.LayoutParams layoutFuncionario;
     private static TableRow.LayoutParams layoutMod;
 
     private static Activity actividad;
     private static View rootView;
+
+    private boolean selectAll;
 
     private static final int factor = 5;
 
 
     private static List<String> id_elemento;
     private static List<String> descripcion;
+    private static List<String> funcionario;
     private static List<String> placa;
+    private static List<Boolean> confirmados;
     private static boolean[] arr;
 
 
@@ -69,6 +77,8 @@ public class TablaAsignarInventarios {
         this.id_elemento = id;
         this.descripcion = desc;
 
+        this.funcionario = desc;
+
         if (id_elemento.size() < this.factor) {
             this.MAX_FILAS = id_elemento.size();
         } else {
@@ -76,6 +86,18 @@ public class TablaAsignarInventarios {
         }
 
         this.inicio = 0;
+
+        //****************************
+        confirmados = new ArrayList<Boolean>();
+
+        for (int i = 0; i < id_elemento.size(); i++) {
+            if(i==1){
+                confirmados.add( true );
+            }else{
+                confirmados.add( false );
+            }
+        }
+        //****************************
 
         arr = new boolean[id_elemento.size()];
 
@@ -101,6 +123,7 @@ public class TablaAsignarInventarios {
         TableRow fila;
         TextView txtId;
         TextView txtDescripcion;
+        TextView txtFuncionario;
         TextView txtInfo;
 
 
@@ -109,6 +132,7 @@ public class TablaAsignarInventarios {
 
         txtId = new TextView(actividad);
         txtDescripcion = new TextView(actividad);
+        txtFuncionario = new TextView(actividad);
         txtInfo = new TextView(actividad);
 
         txtId.setText("Placa");
@@ -123,14 +147,41 @@ public class TablaAsignarInventarios {
         txtDescripcion.setBackgroundResource(R.drawable.tabla_celda_cabecera);
         txtDescripcion.setLayoutParams(layoutTexto);
 
-        txtInfo.setText("Asignar");
+        txtFuncionario.setText("Funcionario");
+        txtFuncionario.setGravity(Gravity.CENTER_HORIZONTAL);
+        txtFuncionario.setTextAppearance(actividad, R.style.etiqueta);
+        txtFuncionario.setBackgroundResource(R.drawable.tabla_celda_cabecera);
+        txtFuncionario.setLayoutParams(layoutFuncionario);
+
+        txtInfo.setText("A");
         txtInfo.setGravity(Gravity.CENTER_HORIZONTAL);
         txtInfo.setTextAppearance(actividad, R.style.etiqueta);
         txtInfo.setBackgroundResource(R.drawable.tabla_celda_cabecera);
         txtInfo.setLayoutParams(layoutMod);
+        txtInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(selectAll == false){
+                    for (int i = 0; i<arr.length; i++){
+                        arr[i] = true;
+                    }
+                    cargarElementos();
+                    agregarFilasTabla();
+                    selectAll = true;
+                }else if(selectAll == true){
+                    for (int i = 0; i<arr.length; i++){
+                        arr[i] = false;
+                    }
+                    cargarElementos();
+                    agregarFilasTabla();
+                    selectAll = false;
+                }
+            }
+        });
 
         fila.addView(txtId);
         fila.addView(txtDescripcion);
+        fila.addView(txtFuncionario);
         fila.addView(txtInfo);
         cabecera.addView(fila);
     }
@@ -140,6 +191,7 @@ public class TablaAsignarInventarios {
         TableRow fila;
         TextView txtId;
         TextView txtDescripcion;
+        TextView txtFuncionario;
         CheckBox txtMod;
 
         for (int i = 0; i < MAX_FILAS; i++) {
@@ -148,6 +200,7 @@ public class TablaAsignarInventarios {
 
             txtId = new TextView(actividad);
             txtDescripcion = new TextView(actividad);
+            txtFuncionario = new TextView(actividad);
             txtMod = new CheckBox(actividad);
 
             txtId.setText(placa.get(inicio + i));
@@ -162,11 +215,18 @@ public class TablaAsignarInventarios {
             txtDescripcion.setBackgroundResource(R.drawable.tabla_celda);
             txtDescripcion.setLayoutParams(layoutTexto);
 
+            txtFuncionario.setText(funcionario.get(inicio + i));
+            txtFuncionario.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
+            txtFuncionario.setTextAppearance(actividad, R.style.etiqueta);
+            txtFuncionario.setBackgroundResource(R.drawable.tabla_celda);
+            txtFuncionario.setLayoutParams(layoutFuncionario);
+
             txtMod.setId(inicio + i);
-            txtMod.setPadding(30, 30, 30, 30);
+            //txtMod.setPadding(30, 30, 30, 30);
             txtMod.setBackgroundResource(R.drawable.tabla_celda);
             txtMod.setLayoutParams(layoutMod);
             txtMod.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
+
             txtMod.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -180,14 +240,23 @@ public class TablaAsignarInventarios {
                 }
             });
 
-            if (arr[(inicio + i)] == true) {
+            if ( arr[ ( inicio + i ) ] == true ) {
                 txtMod.setChecked(true);
             } else {
                 txtMod.setChecked(false);
             }
 
+            if(confirmados.get( inicio + i ) == true){
+                txtMod.setChecked(true);
+                txtMod.setEnabled(false);
+                GradientDrawable d=new GradientDrawable();
+                d.setColor(Color.RED);
+                txtMod.setBackgroundColor(Color.CYAN);
+            }
+
             fila.addView(txtId);
             fila.addView(txtDescripcion);
+            fila.addView(txtFuncionario);
             fila.addView(txtMod);
 
             tabla.addView(fila);
@@ -205,7 +274,8 @@ public class TablaAsignarInventarios {
                 TableRow.LayoutParams.WRAP_CONTENT);
         layoutId = new TableRow.LayoutParams((int) (tamanoPantalla * f1), TableRow.LayoutParams.MATCH_PARENT);
         layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla * f2), TableRow.LayoutParams.MATCH_PARENT);
-        layoutMod = new TableRow.LayoutParams((int) (tamanoPantalla * f3), TableRow.LayoutParams.MATCH_PARENT);
+        layoutFuncionario = new TableRow.LayoutParams((int) (tamanoPantalla * f3), TableRow.LayoutParams.MATCH_PARENT);
+        layoutMod = new TableRow.LayoutParams((int) (tamanoPantalla * f4), TableRow.LayoutParams.MATCH_PARENT);
 
     }
 
@@ -236,7 +306,9 @@ public class TablaAsignarInventarios {
                 TableRow.LayoutParams.WRAP_CONTENT);
         layoutId = new TableRow.LayoutParams((int) (tamanoPantalla * f1), TableRow.LayoutParams.MATCH_PARENT);
         layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla * f2), TableRow.LayoutParams.MATCH_PARENT);
-        layoutMod = new TableRow.LayoutParams((int) (tamanoPantalla * f3), TableRow.LayoutParams.MATCH_PARENT);
+        layoutFuncionario = new TableRow.LayoutParams((int) (tamanoPantalla * f3), TableRow.LayoutParams.MATCH_PARENT);
+        layoutMod = new TableRow.LayoutParams((int) (tamanoPantalla * f4), TableRow.LayoutParams.MATCH_PARENT);
+
 
         tabla.removeAllViews();
         cabecera.removeAllViews();

@@ -7,10 +7,9 @@ import org.ksoap2.transport.HttpTransportSE;
 
 public class WS_ConsultarPlacaImagen {
 
-    private final String NAMESPACE = "arkaurn:arka";
-    //private final String URL = "http://10.0.2.2/ws/servicio.php?wsdl";
-    private final String URL = "http://10.20.0.38/ws_arka_android/servicio.php?wsdl";
-    private final String SOAP_ACTION = "arkaurn:arka/consultar_placa_imagen";
+    private final String NAMESPACE = "urn:arka";
+    private final String URL = "http://10.20.0.38/WS_ARKA/servicio/servicio.php";
+    private final String SOAP_ACTION = "urn:arka/consultar_placa_imagen";
     private final String METHOD_NAME = "consultar_placa_imagen";
 
     private String webResponse = "";
@@ -29,8 +28,12 @@ public class WS_ConsultarPlacaImagen {
 
         try {
             httpTransport.call(SOAP_ACTION, envelope);
-            Object response = envelope.getResponse();
-            webResponse = response.toString();
+            try{
+                Object response = envelope.getResponse();
+                webResponse = response.toString();
+            }catch (NullPointerException ex){
+                webResponse = "";
+            }
         } catch (Exception exception) {
         }
         return webResponse;

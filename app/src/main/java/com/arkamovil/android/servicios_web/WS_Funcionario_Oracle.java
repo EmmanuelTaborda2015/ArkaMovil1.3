@@ -65,6 +65,7 @@ public class WS_Funcionario_Oracle {
 
                     for (int i = 0; i < obj1.getPropertyCount(); i++) {
                         SoapObject obj2 = (SoapObject) obj1.getProperty(i);
+
                         fun_identificacion.add(obj2.getProperty("id").toString());
                         fun_nombre.add(obj2.getProperty("nombre").toString());
                     }

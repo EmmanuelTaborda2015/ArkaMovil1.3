@@ -219,18 +219,6 @@ public class WS_Elemento_funcionario {
                         } catch (NullPointerException ex) {
                             funcionario.add("");
                         }
-                        try {
-                            obj3 = (SoapObject) obj2.getProperty(23);
-                            sede.add(obj3.getProperty("value").toString());
-                        } catch (NullPointerException ex) {
-                            sede.add("");
-                        }
-                        try {
-                            obj3 = (SoapObject) obj2.getProperty(25);
-                            dependencia.add(obj3.getProperty("value").toString());
-                        } catch (NullPointerException ex) {
-                            dependencia.add("");
-                        }
                     }
                 } catch (Exception exception) {
                 }

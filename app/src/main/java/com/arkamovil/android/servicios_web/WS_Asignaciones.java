@@ -19,6 +19,7 @@ import org.ksoap2.transport.HttpTransportSE;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 public class WS_Asignaciones {
 
@@ -89,6 +90,7 @@ public class WS_Asignaciones {
 
             httpTransport.call(SOAP_ACTION, envelope);
 
+
             SoapObject obj1 = (SoapObject) envelope.getResponse();
 
             for (int i = 0; i < obj1.getPropertyCount(); i++) {
@@ -99,6 +101,45 @@ public class WS_Asignaciones {
                 estado_actualizacion.add(obj2.getProperty("estado_actualizacion").toString());
                 observaciones.add(obj2.getProperty("observacion").toString());
             }
+
+//            SoapObject obj1 = (SoapObject)envelope.bodyIn;
+//
+//            Vector<?> responseVector = (Vector<?>) obj1.getProperty(0);
+//
+//            for (int i = 0; i < responseVector.size(); i++) {
+//                SoapObject obj2 = (SoapObject) responseVector.get(i);
+//                SoapObject obj3;
+//
+//                try {
+//                    obj3 = (SoapObject) obj2.getProperty(1);
+//                    id_elemento.add(obj3.getProperty("value").toString());
+//                } catch (NullPointerException ex) {
+//                    id_elemento.add("");
+//                }
+//                try {
+//                    obj3 = (SoapObject) obj2.getProperty(3);
+//                    placa.add(obj3.getProperty("value").toString());
+//                } catch (NullPointerException ex) {
+//                    placa.add("");
+//                }
+//                try {
+//                    obj3 = (SoapObject) obj2.getProperty(5);
+//                    estado.add(obj3.getProperty("value").toString());
+//                } catch (NullPointerException ex) {
+//                    estado.add("");
+//                }
+//                try {
+//                    obj3 = (SoapObject) obj2.getProperty(7);
+//                    estado_actualizacion.add(obj3.getProperty("value").toString());
+//                } catch (NullPointerException ex) {
+//                    estado_actualizacion.add("");
+//                }
+//                try {
+//                    obj3 = (SoapObject) obj2.getProperty(9);
+//                    observaciones.add(obj3.getProperty("value").toString());
+//                } catch (NullPointerException ex) {
+//                    observaciones.add("");
+//                }
         } catch (Exception exception) {
         }
 

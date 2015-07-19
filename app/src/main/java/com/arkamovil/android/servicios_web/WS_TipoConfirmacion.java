@@ -5,9 +5,6 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Toast;
-
-import com.arkamovil.android.R;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
@@ -18,12 +15,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-public class WS_Funcionario {
+public class WS_TipoConfirmacion {
 
     private final String NAMESPACE = "urn:arka";
     private final String URL = "http://10.20.0.38/WS_ARKA/servicio/servicio.php";
-    private final String SOAP_ACTION = "urn:arka/funcionario";
-    private final String METHOD_NAME = "funcionario";
+    private final String SOAP_ACTION = "urn:arka/sede";
+    private final String METHOD_NAME = "sede";
 
     private Thread thread;
     private Handler handler = new Handler();
@@ -31,19 +28,14 @@ public class WS_Funcionario {
     private Activity act;
     private AutoCompleteTextView spin;
 
-    private List<String> fun_identificacion = new ArrayList<String>();
-    private List<String> fun_nombre = new ArrayList<String>();
-    private List<String> fun_identif_nomb = new ArrayList<String>();
+    private List<String> sede = new ArrayList<String>();
+    private List<String> id_sede = new ArrayList<String>();
 
-    public List<String> getFun_nombre() {
-        return fun_nombre;
+    public List<String> getId_sede() {
+        return id_sede;
     }
 
-    public List<String> getFun_identificacion() {
-        return fun_identificacion;
-    }
-
-    public void startWebAccess(final Activity act, final AutoCompleteTextView spin, final String dependencia) {
+    public void startWebAccess(final Activity act, final AutoCompleteTextView spin) {
 
         this.act = act;
         this.spin = spin;
@@ -51,8 +43,7 @@ public class WS_Funcionario {
         thread = new Thread() {
             public void run() {
                 SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
-
-                //request.addProperty("id_objeto", dependencia);
+                //request.addProperty("","");
 
                 SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
                 envelope.setOutputSoapObject(request);
@@ -62,6 +53,7 @@ public class WS_Funcionario {
                 try {
 
                     httpTransport.call(SOAP_ACTION, envelope);
+
                     SoapObject obj1 = (SoapObject)envelope.bodyIn;
 
                     Vector<?> responseVector = (Vector<?>) obj1.getProperty(0);
@@ -72,43 +64,38 @@ public class WS_Funcionario {
 
                         try{
                             obj3 = (SoapObject) obj2.getProperty(1);
-                            fun_nombre.add(obj3.getProperty("value").toString());
+                            id_sede.add(obj3.getProperty("value").toString());
                         }catch (NullPointerException ex){
-                            fun_nombre.add("");
+                            id_sede.add("");
                         }
                         try{
                             obj3 = (SoapObject) obj2.getProperty(3);
-                            fun_identificacion.add(obj3.getProperty("value").toString());
+                            sede.add(obj3.getProperty("value").toString());
                         }catch (NullPointerException ex){
-                            fun_identificacion.add("");
-                        }
-                        try{
-                            fun_identif_nomb.add(fun_identificacion.get(i) + " - " + fun_nombre.get(i));
-                        }catch (NullPointerException ex){
-                            fun_identif_nomb.add("");
+                            sede.add("");
                         }
                     }
 
                 } catch (Exception exception) {
+                    Log.v("mensaje", exception.toString());
                 }
                 handler.post(createUI);
             }
         };
 
         thread.start();
-
     }
 
     final Runnable createUI = new Runnable() {
 
         public void run() {
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(act, android.R.layout.simple_spinner_item, fun_identif_nomb);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(act, android.R.layout.simple_spinner_item, sede);
             spin.setAdapter(adapter);
-
-            if(fun_identificacion.size() == 0){
-                Toast.makeText(act, "VERIFIQUE SU CONEXIÓN A INTERNET", Toast.LENGTH_LONG).show();
-            }
         }
     };
+
+    public List<String> getSede() {
+        return sede;
+    }
 
 }

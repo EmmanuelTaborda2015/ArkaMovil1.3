@@ -31,8 +31,12 @@ public class WS_CargarImagen {
 
         try {
             httpTransport.call(SOAP_ACTION, envelope);
-            Object response = envelope.getResponse();
-            webResponse = response.toString();
+            try{
+                Object response = envelope.getResponse();
+                webResponse = response.toString();
+            }catch (NullPointerException ex){
+                webResponse = "";
+            }
         } catch (Exception exception) {
         }
         return webResponse;
