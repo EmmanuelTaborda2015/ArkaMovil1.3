@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,6 +35,7 @@ import com.arkamovil.android.servicios_web.WS_ElementosAsignar;
 import com.arkamovil.android.servicios_web.WS_EnviarElementosAsignar;
 import com.arkamovil.android.servicios_web.WS_Funcionario;
 import com.arkamovil.android.servicios_web.WS_Funcionario_Oracle;
+import com.arkamovil.android.servicios_web.WS_InventarioTipoConfirmacion;
 import com.arkamovil.android.servicios_web.WS_Sede;
 import com.arkamovil.android.servicios_web.WS_Ubicacion;
 
@@ -273,10 +275,16 @@ public class CasoUso2 extends Fragment {
             @Override
             public void onClick(View v) {
                 if( estado_aprob > 0 ){
-                    limpiarTabla();
+//                    limpiarTabla();
+//
+                    WS_InventarioTipoConfirmacion elem2 = new WS_InventarioTipoConfirmacion();
+                    elem2.startWebAccess(rootView, getActivity());
 
-                    elem = new WS_ElementosAsignar();
-                    elem.startWebAccess(rootView, getActivity(), "12/06/2015", "17/08/2015");
+                    Fragment fragment = new LeerPlaca();
+                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                    transaction.replace(R.id.container, fragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
                 }else{
                 Toast.makeText(getActivity(), "Por favor seleccione el estado de aprobación a consultar.", Toast.LENGTH_LONG).show();
             }
