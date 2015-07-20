@@ -122,15 +122,15 @@ public class WS_InventarioTipoConfirmacion {
 
         public void run() {
             TablaInventarios tablaInventarios = new TablaInventarios();
-            tablaInventarios.crear(vista, actividad, doc_fun, sede, dependencia, ubicacion);//funcionario y confirmacion
+            tablaInventarios.crear(vista, actividad, doc_fun, sede, dependencia, ubicacion);
 
-            if (doc_fun.size() > 0) {
-                ImageView bajar = (ImageView) vista.findViewById(R.id.bajar_c2);
-                ImageView subir = (ImageView) vista.findViewById(R.id.subir_c2);
-
-                bajar.setVisibility(View.VISIBLE);
-                subir.setVisibility(View.VISIBLE);
-            }
+//            if (doc_fun.size() > 0) {
+//                ImageView bajar = (ImageView) vista.findViewById(R.id.bajar_c2);
+//                ImageView subir = (ImageView) vista.findViewById(R.id.subir_c2);
+//
+//                bajar.setVisibility(View.VISIBLE);
+//                subir.setVisibility(View.VISIBLE);
+//            }
         }
     };
 }

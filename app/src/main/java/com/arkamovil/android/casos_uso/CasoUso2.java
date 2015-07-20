@@ -277,10 +277,10 @@ public class CasoUso2 extends Fragment {
                 if( estado_aprob > 0 ){
 //                    limpiarTabla();
 //
-                    WS_InventarioTipoConfirmacion elem2 = new WS_InventarioTipoConfirmacion();
-                    elem2.startWebAccess(rootView, getActivity());
+                    //WS_InventarioTipoConfirmacion elem2 = new WS_InventarioTipoConfirmacion();
+                    //elem2.startWebAccess(rootView, getActivity());
 
-                    Fragment fragment = new LeerPlaca();
+                    Fragment fragment = new LevantamientoFisico();
                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
                     transaction.replace(R.id.container, fragment);
                     transaction.addToBackStack(null);

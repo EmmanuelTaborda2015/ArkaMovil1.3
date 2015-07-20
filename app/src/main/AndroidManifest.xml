@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:screenOrientation="portrait"
+            android:screenOrientation="landscape"
             android:name=".menu_desplegable.CasosUso"
             android:configChanges="orientation|screenSize"
             android:label="@string/title_activity_casos_uso" >
