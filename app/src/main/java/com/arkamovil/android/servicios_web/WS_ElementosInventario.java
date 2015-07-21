@@ -15,58 +15,21 @@ public class WS_ElementosInventario {
 
     private final String NAMESPACE = "urn:arka";
     private final String URL = "http://10.20.0.38/WS_ARKA/servicio/servicio.php";
-    private final String SOAP_ACTION = "urn:arka/elementosInventario";
-    private final String METHOD_NAME = "elementosInventario";
-
-    private List<String> doc_fun = new ArrayList<String>();
-    private List<String> nomb_fun = new ArrayList<String>();
-
-    private List<String> id_sede = new ArrayList<String>();
-    private List<String> sede = new ArrayList<String>();
-
-    private List<String> id_dependencia = new ArrayList<String>();
-    private List<String> dependencia = new ArrayList<String>();
-
-    private List<String> id_espacio = new ArrayList<String>();
-    private List<String> espacio = new ArrayList<String>();
+    private final String SOAP_ACTION = "urn:arka/elementosFuncionario";
+    private final String METHOD_NAME = "elementosFuncionario";
 
     private List<String> id_elemento = new ArrayList<String>();
-
-    public List<String> getId_elemento() {
-        return espacio;
-    }
-
-    public List<String> getEspacio() {
-        return espacio;
-    }
-
-    public List<String> getId_espacio() {
-        return id_espacio;
-    }
-
-    public List<String> getDependencia() {
-        return dependencia;
-    }
-
-    public List<String> getId_dependencia() {
-        return id_dependencia;
-    }
-
-    public List<String> getSede() {
-        return sede;
-    }
-
-    public List<String> getId_sede() {
-        return id_sede;
-    }
-
-    public List<String> getNomb_fun() {
-        return nomb_fun;
-    }
-
-    public List<String> getDoc_fun() {
-        return doc_fun;
-    }
+    private List<String> placa = new ArrayList<String>();
+    private List<String> descripcion = new ArrayList<String>();
+    private List<String> estado = new ArrayList<String>();
+    private List<String> marca = new ArrayList<String>();
+    private List<String> serie = new ArrayList<String>();
+    private List<String> nivel = new ArrayList<String>();
+    private List<String> total = new ArrayList<String>();
+    private List<String> tipo_bien = new ArrayList<String>();
+    private List<String> fecha_asig = new ArrayList<String>();
+    private List<String> ubicacion_esp = new ArrayList<String>();
+    private List<String> id_levantamiento = new ArrayList<String>();
 
     public void startWebAccess(final String doc_funcioanario, final String id_dep) {
 
@@ -98,45 +61,69 @@ public class WS_ElementosInventario {
                 }
                 try {
                     obj3 = (SoapObject) obj2.getProperty(3);
-                    doc_fun.add(obj3.getProperty("value").toString());
+                    placa.add(obj3.getProperty("value").toString());
                 } catch (NullPointerException ex) {
-                    doc_fun.add("");
+                    placa.add("");
                 }
                 try {
                     obj3 = (SoapObject) obj2.getProperty(5);
-                    nomb_fun.add(obj3.getProperty("value").toString());
+                    descripcion.add(obj3.getProperty("value").toString());
                 } catch (NullPointerException ex) {
-                    nomb_fun.add("");
+                    descripcion.add("");
                 }
                 try {
                     obj3 = (SoapObject) obj2.getProperty(7);
-                    id_sede.add(obj3.getProperty("value").toString());
+                    estado.add(obj3.getProperty("value").toString());
                 } catch (NullPointerException ex) {
-                    id_sede.add("");
+                    estado.add("");
                 }
                 try {
                     obj3 = (SoapObject) obj2.getProperty(9);
-                    sede.add(obj3.getProperty("value").toString());
+                    marca.add(obj3.getProperty("value").toString());
                 } catch (NullPointerException ex) {
-                    sede.add("");
+                    marca.add("");
                 }
                 try {
                     obj3 = (SoapObject) obj2.getProperty(11);
-                    id_dependencia.add(obj3.getProperty("value").toString());
+                    serie.add(obj3.getProperty("value").toString());
                 } catch (NullPointerException ex) {
-                    id_dependencia.add("");
+                    serie.add("");
                 }
                 try {
                     obj3 = (SoapObject) obj2.getProperty(13);
-                    dependencia.add(obj3.getProperty("value").toString());
+                    nivel.add(obj3.getProperty("value").toString());
                 } catch (NullPointerException ex) {
-                    dependencia.add("");
+                    nivel.add("");
                 }
                 try {
                     obj3 = (SoapObject) obj2.getProperty(15);
-                    id_espacio.add(obj3.getProperty("value").toString());
+                    total.add(obj3.getProperty("value").toString());
                 } catch (NullPointerException ex) {
-                    espacio.add("");
+                    total.add("");
+                }
+                try {
+                    obj3 = (SoapObject) obj2.getProperty(17);
+                    tipo_bien.add(obj3.getProperty("value").toString());
+                } catch (NullPointerException ex) {
+                    tipo_bien.add("");
+                }
+                try {
+                    obj3 = (SoapObject) obj2.getProperty(19);
+                    fecha_asig.add(obj3.getProperty("value").toString());
+                } catch (NullPointerException ex) {
+                    fecha_asig.add("");
+                }
+                try {
+                    obj3 = (SoapObject) obj2.getProperty(21);
+                    ubicacion_esp.add(obj3.getProperty("value").toString());
+                } catch (NullPointerException ex) {
+                    ubicacion_esp.add("");
+                }
+                try {
+                    obj3 = (SoapObject) obj2.getProperty(23);
+                    id_levantamiento.add(obj3.getProperty("value").toString());
+                } catch (NullPointerException ex) {
+                    id_levantamiento.add("");
                 }
             }
         } catch (Exception exception) {

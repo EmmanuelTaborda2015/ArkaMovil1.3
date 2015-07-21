@@ -61,7 +61,7 @@
     <string name="String_dependencia">Dependencia</string>
     <string name="String_ubicacion">Ubicación</string>
     <string name="String_tipo_confirmacion">Estado de Aprobación</string>
-    <string name="String_criterio_busqueda">Estado de Aprobación</string>
+    <string name="String_criterio_busqueda">Criterios de búsqueda</string>
     <string name="String_estado">Estado</string>
     <string name="String_estadoActualizacion">Estado de Actualización</string>
     <string name="id">Id</string>

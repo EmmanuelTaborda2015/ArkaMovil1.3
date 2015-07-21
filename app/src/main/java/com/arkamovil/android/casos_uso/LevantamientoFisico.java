@@ -40,8 +40,6 @@ public class LevantamientoFisico extends Fragment {
         final String criterio  = getArguments().getString("criterio");
         final String dato  = getArguments().getString("dato");
 
-        Toast.makeText(getActivity(), estado + " " + criterio + " " + dato , Toast.LENGTH_LONG).show();
-
         thread = new Thread() {
             public void run() {
                 inventario = new WS_InventarioTipoConfirmacion();
@@ -76,7 +74,7 @@ public class LevantamientoFisico extends Fragment {
     final Runnable createUI = new Runnable() {
 
         public void run() {
-            crear(rootView, getActivity(), inventario.getId_elemento(), inventario.getNomb_fun(), inventario.getDoc_fun(), inventario.getId_sede(), inventario.getSede(), inventario.getId_dependencia(), inventario.getDependencia(), inventario.getId_espacio(), inventario.getEspacio());
+            crear(rootView, getActivity(), inventario.getNomb_fun(), inventario.getDoc_fun(), inventario.getId_sede(), inventario.getSede(), inventario.getId_dependencia(), inventario.getDependencia(), inventario.getId_espacio(), inventario.getEspacio());
         }
     };
 
@@ -125,12 +123,11 @@ public class LevantamientoFisico extends Fragment {
     private static int MAX_FILAS = 0;
 
 
-    public void crear(View rootView, Activity actividad, List<String> id_elemento, List<String> nom_fun, List<String> doc_fun, List<String> id_sede, List<String> sede, List<String> id_dependencia, List<String> dependencia, List<String> id_espacio, List<String> espacio) {
+    public void crear(View rootView, Activity actividad, List<String> nom_fun, List<String> doc_fun, List<String> id_sede, List<String> sede, List<String> id_dependencia, List<String> dependencia, List<String> id_espacio, List<String> espacio) {
 
         this.actividad = actividad;
         this.vista = rootView;
 
-        this.id_elemento=id_elemento;
         this.nom_fun=nom_fun;
         this.doc_fun=doc_fun;
         this.id_sede=id_sede;
@@ -251,9 +248,12 @@ public class LevantamientoFisico extends Fragment {
             txtverInventario.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //dialog = new Informacion_Elementos_Cedula(actividad, v.getId());
-                    //dialog.show();
+
                     Fragment fragment = new ElementosInventario();
+                    Bundle parametro = new Bundle();
+                    parametro.putString("doc_fun", doc_fun.get(v.getId()));
+                    parametro.putString("id_dep", id_dependencia.get(v.getId()));
+                    fragment.setArguments(parametro);
                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
                     transaction.replace(R.id.container, fragment);
                     transaction.addToBackStack(null);

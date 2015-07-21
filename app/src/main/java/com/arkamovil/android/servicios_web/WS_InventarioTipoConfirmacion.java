@@ -38,12 +38,6 @@ public class WS_InventarioTipoConfirmacion {
     private List<String> id_espacio = new ArrayList<String>();
     private List<String> espacio = new ArrayList<String>();
 
-    private List<String> id_elemento = new ArrayList<String>();
-
-    public List<String> getId_elemento() {
-        return espacio;
-    }
-
     public List<String> getEspacio() {
         return espacio;
     }
@@ -101,56 +95,51 @@ public class WS_InventarioTipoConfirmacion {
             for (int i = 0; i < responseVector.size(); i++) {
                 SoapObject obj2 = (SoapObject) responseVector.get(i);
                 SoapObject obj3;
+
                 try {
                     obj3 = (SoapObject) obj2.getProperty(1);
-                    id_elemento.add(obj3.getProperty("value").toString());
-                } catch (NullPointerException ex) {
-                    id_elemento.add("");
-                }
-                try {
-                    obj3 = (SoapObject) obj2.getProperty(3);
                     doc_fun.add(obj3.getProperty("value").toString());
                 } catch (NullPointerException ex) {
                     doc_fun.add("");
                 }
                 try {
-                    obj3 = (SoapObject) obj2.getProperty(5);
+                    obj3 = (SoapObject) obj2.getProperty(3);
                     nomb_fun.add(obj3.getProperty("value").toString());
                 } catch (NullPointerException ex) {
                     nomb_fun.add("");
                 }
                 try {
-                    obj3 = (SoapObject) obj2.getProperty(7);
+                    obj3 = (SoapObject) obj2.getProperty(5);
                     id_sede.add(obj3.getProperty("value").toString());
                 } catch (NullPointerException ex) {
                     id_sede.add("");
                 }
                 try {
-                    obj3 = (SoapObject) obj2.getProperty(9);
+                    obj3 = (SoapObject) obj2.getProperty(7);
                     sede.add(obj3.getProperty("value").toString());
                 } catch (NullPointerException ex) {
                     sede.add("");
                 }
                 try {
-                    obj3 = (SoapObject) obj2.getProperty(11);
+                    obj3 = (SoapObject) obj2.getProperty(9);
                     id_dependencia.add(obj3.getProperty("value").toString());
                 } catch (NullPointerException ex) {
                     id_dependencia.add("");
                 }
                 try {
-                    obj3 = (SoapObject) obj2.getProperty(13);
+                    obj3 = (SoapObject) obj2.getProperty(11);
                     dependencia.add(obj3.getProperty("value").toString());
                 } catch (NullPointerException ex) {
                     dependencia.add("");
                 }
                 try {
-                    obj3 = (SoapObject) obj2.getProperty(15);
+                    obj3 = (SoapObject) obj2.getProperty(13);
                     id_espacio.add(obj3.getProperty("value").toString());
                 } catch (NullPointerException ex) {
                     id_espacio.add("");
                 }
                 try {
-                    obj3 = (SoapObject) obj2.getProperty(17);
+                    obj3 = (SoapObject) obj2.getProperty(15);
                     espacio.add(obj3.getProperty("value").toString());
                 } catch (NullPointerException ex) {
                     espacio.add("");

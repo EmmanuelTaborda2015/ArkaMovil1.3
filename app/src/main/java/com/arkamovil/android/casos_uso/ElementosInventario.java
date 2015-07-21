@@ -36,11 +36,11 @@ public class ElementosInventario extends Fragment {
 
         rootView = inflater.inflate(R.layout.fm_inventario, container, false);
 
-//        final String estado  = getArguments().getString("estado");
-//        final String criterio  = getArguments().getString("criterio");
+        final String estado  = getArguments().getString("doc_fun");
+        final String criterio  = getArguments().getString("id_dep");
 //        final String dato  = getArguments().getString("dato");
 //
-//        Toast.makeText(getActivity(), estado + " " + criterio + " " + dato , Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), estado + " " + criterio + " "  , Toast.LENGTH_LONG).show();
 
         thread = new Thread() {
             public void run() {
