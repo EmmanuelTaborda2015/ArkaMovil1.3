@@ -1,14 +1,6 @@
 package com.arkamovil.android.servicios_web;
 
-import android.app.Activity;
-import android.os.Handler;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-
-import com.arkamovil.android.R;
-import com.arkamovil.android.procesos.TablaInventarios;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
@@ -19,12 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-public class WS_InventarioTipoConfirmacion {
+public class WS_ElementosInventario {
 
     private final String NAMESPACE = "urn:arka";
     private final String URL = "http://10.20.0.38/WS_ARKA/servicio/servicio.php";
-    private final String SOAP_ACTION = "urn:arka/tipoConfirmacionInventario";
-    private final String METHOD_NAME = "tipoConfirmacionInventario";
+    private final String SOAP_ACTION = "urn:arka/elementosInventario";
+    private final String METHOD_NAME = "elementosInventario";
 
     private List<String> doc_fun = new ArrayList<String>();
     private List<String> nomb_fun = new ArrayList<String>();
@@ -76,15 +68,12 @@ public class WS_InventarioTipoConfirmacion {
         return doc_fun;
     }
 
-    public void startWebAccess(final String estado, final String criterio, final String dato, final int offset, final int limit) {
+    public void startWebAccess(final String doc_funcioanario, final String id_dep) {
 
         SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 
-        request.addProperty("estado", estado);
-        request.addProperty("criterio", criterio);
-        request.addProperty("dato", dato);
-        request.addProperty("offset", offset);
-        request.addProperty("limit", limit);
+        request.addProperty("funcionario", doc_funcioanario);
+        request.addProperty("dependencia", id_dep);
 
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         envelope.setOutputSoapObject(request);
@@ -146,12 +135,6 @@ public class WS_InventarioTipoConfirmacion {
                 try {
                     obj3 = (SoapObject) obj2.getProperty(15);
                     id_espacio.add(obj3.getProperty("value").toString());
-                } catch (NullPointerException ex) {
-                    id_espacio.add("");
-                }
-                try {
-                    obj3 = (SoapObject) obj2.getProperty(17);
-                    espacio.add(obj3.getProperty("value").toString());
                 } catch (NullPointerException ex) {
                     espacio.add("");
                 }

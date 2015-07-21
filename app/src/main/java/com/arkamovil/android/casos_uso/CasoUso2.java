@@ -28,6 +28,7 @@ import com.arkamovil.android.R;
 import com.arkamovil.android.herramientas.Despliegue;
 import com.arkamovil.android.procesos.TablaAsignarInventarios;
 import com.arkamovil.android.procesos.TablaConsultarInventario;
+import com.arkamovil.android.procesos.TablaInventarios;
 import com.arkamovil.android.servicios_web.WS_Dependencia;
 import com.arkamovil.android.servicios_web.WS_Elemento_dependencia;
 import com.arkamovil.android.servicios_web.WS_Elemento_funcionario;
@@ -49,6 +50,9 @@ public class CasoUso2 extends Fragment {
     private AutoCompleteTextView dependencia;
     private AutoCompleteTextView funcionario;
 
+    WS_InventarioTipoConfirmacion inventario;
+
+
     private static String string_sede;
     private static String string_funcionario;
 
@@ -64,11 +68,6 @@ public class CasoUso2 extends Fragment {
     private static List<String> lista_funcionario = new ArrayList<String>();
     private List<String> lista_documento = new ArrayList<String>();
 
-    private ImageView bajar;
-    private ImageView subir;
-    private Button asignar;
-
-    private WS_ElementosAsignar elem;
 
     private static View rootView;
 
@@ -79,6 +78,7 @@ public class CasoUso2 extends Fragment {
     private int seleccion3 = -1;
 
     private  int estado_aprob = -1;
+    private  int criterio = -1;
 
 
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
@@ -90,16 +90,7 @@ public class CasoUso2 extends Fragment {
         dependencia = (AutoCompleteTextView) rootView.findViewById(R.id.dependencia_c2);
         funcionario = (AutoCompleteTextView) rootView.findViewById(R.id.funcionario_c2);
 
-        bajar = (ImageView) rootView.findViewById(R.id.bajar_c2);
-        subir = (ImageView) rootView.findViewById(R.id.subir_c2);
-
         dependencia.setEnabled(false);
-
-        asignar = (Button) rootView.findViewById(R.id.asignar_c2);
-        asignar.setVisibility(View.GONE);
-
-        bajar.setVisibility(View.GONE);
-        subir.setVisibility(View.GONE);
 
         final Button des1 = (Button) rootView.findViewById(R.id.filtro_tod_c2);
         final Button des2 = (Button) rootView.findViewById(R.id.filtro_dep_c2);
@@ -145,6 +136,7 @@ public class CasoUso2 extends Fragment {
 
         criterio_busqueda.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                criterio = i;
                 if( i == 1 ){
                     des1.setVisibility(View.VISIBLE);
                     l1.setVisibility(View.VISIBLE);
@@ -274,23 +266,25 @@ public class CasoUso2 extends Fragment {
         consultar_tod.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if( estado_aprob > 0 ){
-//                    limpiarTabla();
-//
-                    //WS_InventarioTipoConfirmacion elem2 = new WS_InventarioTipoConfirmacion();
-                    //elem2.startWebAccess(rootView, getActivity());
+                if (estado_aprob > 0) {
 
                     Fragment fragment = new LevantamientoFisico();
+                    Bundle parametro = new Bundle();
+                    parametro.putString("estado", (estado_aprob - 1) + "");
+                    parametro.putString("criterio", "todos");
+                    parametro.putString("dato", "");
+                    fragment.setArguments(parametro);
                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
                     transaction.replace(R.id.container, fragment);
                     transaction.addToBackStack(null);
                     transaction.commit();
-                }else{
-                Toast.makeText(getActivity(), "Por favor seleccione el estado de aprobación a consultar.", Toast.LENGTH_LONG).show();
-            }
 
-        }
-    });
+                } else {
+                    Toast.makeText(getActivity(), "Por favor seleccione el estado de aprobación a consultar.", Toast.LENGTH_LONG).show();
+                }
+
+            }
+        });
         final Button consultar_dep = (Button) rootView.findViewById(R.id.con_dep_c2);
         consultar_dep.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -309,30 +303,43 @@ public class CasoUso2 extends Fragment {
 
                     if (seleccion > -1) {
                         if(!String.valueOf(dependencia.getText()).equalsIgnoreCase("")){
-                            string_sede = String.valueOf(sede.getText());
                             for (int i = 0; i < lista_dependencia.size(); i++) {
                                 if (String.valueOf(dependencia.getText()).equalsIgnoreCase(lista_dependencia.get(i))) {
                                     seleccion1 = i;
                                 }
                             }
                             if (seleccion1 > -1) {
-                                limpiarTabla();
 
-                                elem = new WS_ElementosAsignar();
-                                elem.startWebAccess(rootView, getActivity(), "12/06/2015", "17/08/2015");
+                                Fragment fragment = new LevantamientoFisico();
+                                Bundle parametro = new Bundle();
+                                parametro.putString("estado", (estado_aprob-1)+"");
+                                parametro.putString("criterio", "dependencia");
+                                parametro.putString("dato", lista_id_sede.get(seleccion)+ "," + lista_id_dependencia.get(seleccion1) );
+                                fragment.setArguments(parametro);
+                                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                                transaction.replace(R.id.container, fragment);
+                                transaction.addToBackStack(null);
+                                transaction.commit();
+
                             } else {
                                 Toast.makeText(getActivity(), "La Dependencia ingresada no es valida, verifeque e intente de nuevo.", Toast.LENGTH_LONG).show();
-                                asignar.setEnabled(true);
                             }
                         }else{
-                            limpiarTabla();
 
-                            elem = new WS_ElementosAsignar();
-                            elem.startWebAccess(rootView, getActivity(), "12/06/2015", "17/08/2015");
+                            Fragment fragment = new LevantamientoFisico();
+                            Bundle parametro = new Bundle();
+                            parametro.putString("estado", (estado_aprob-1)+"");
+                            parametro.putString("criterio", "sede");
+                            parametro.putString("dato", lista_id_sede.get(seleccion) );
+                            fragment.setArguments(parametro);
+                            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                            transaction.replace(R.id.container, fragment);
+                            transaction.addToBackStack(null);
+                            transaction.commit();
+
                         }
                     } else {
                         Toast.makeText(getActivity(), "La Sede ingresada no es valida, verifeque e intente de nuevo.", Toast.LENGTH_LONG).show();
-                        asignar.setEnabled(true);
                     }
 
                     final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
@@ -358,13 +365,20 @@ public class CasoUso2 extends Fragment {
                     }
                 }
                 if (seleccion3 > -1) {
-                    limpiarTabla();
 
-                    elem = new WS_ElementosAsignar();
-                    elem.startWebAccess(rootView, getActivity(), "12/06/2015", "17/08/2015");
+                    Fragment fragment = new LevantamientoFisico();
+                    Bundle parametro = new Bundle();
+                    parametro.putString("estado", (estado_aprob-1)+"");
+                    parametro.putString("criterio", "funcionario");
+                    parametro.putString("dato", lista_documento.get(seleccion3) );
+                    fragment.setArguments(parametro);
+                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                    transaction.replace(R.id.container, fragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+
                 } else {
                     Toast.makeText(getActivity(), "El funcionario ingresado no es valido, por favor verifiquelo e intente de nuevo.", Toast.LENGTH_LONG).show();
-                    asignar.setEnabled(true);
                 }
                 }else{
                     Toast.makeText(getActivity(), "Por favor seleccione el estado de aprobación a consultar.", Toast.LENGTH_LONG).show();
@@ -383,143 +397,13 @@ public class CasoUso2 extends Fragment {
             }
         });
 
-        //boton para bajar los elementos
-        bajar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TablaAsignarInventarios baj = new TablaAsignarInventarios();
-                baj.bajar(rootView, getActivity());
-            }
-        });
-        //llamar metodo en clase CrearTablas para ir hacia los primeros registros mostrados en la tabla
-        subir.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TablaAsignarInventarios sub = new TablaAsignarInventarios();
-                sub.subir(rootView, getActivity());
-            }
-        });
-
-//        final Button consultar = (Button) rootView.findViewById(R.id.con_dep_c2);
-//        consultar.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                limpiarTabla();
-//
-//                elem = new WS_ElementosAsignar();
-//                elem.startWebAccess(rootView, getActivity(), "12/06/2015", "17/08/2015");
-
-//                consultar.setEnabled(false);
-//                if ("DD/MM/AAAA".equalsIgnoreCase(String.valueOf(fecha1.getText())) || "DD/MM/AAAA".equalsIgnoreCase(String.valueOf(fecha2.getText()))) {
-//                    Toast.makeText(getActivity(), "Ingrese la fecha inicial y/o la fecha final", Toast.LENGTH_LONG).show();
-//                    consultar.setEnabled(true);
-//                } else {
-//                    limpiarTabla();
-//
-//                    elem = new WS_ElementosAsignar();
-//                    elem.startWebAccess(rootView, getActivity(), "12/06/2015", "17/08/2015");
-////                }
-//            }
-//        });
-
-        //fecha1 = (TextView) rootView.findViewById(R.id.fecha1_c2);
-        //fecha1.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                contador = 0;
-//
-//                Time today = new Time(Time.getCurrentTimezone());
-//                today.setToNow();
-//
-//                String val1 = "";
-//                String val2 = "";
-//
-//                if (today.monthDay < 10) {
-//                    val1 = "0";
-//                }
-//
-//                if ((today.month + 1) < 10) {
-//                    val2 = "0";
-//                }
-//
-//                year1 = today.year;
-//                month1 = today.month;
-//                day1 = today.monthDay;
-//
-//                DatePickerDialog dialog = new DatePickerDialog(getActivity(), datePickerListener,
-//                        year1, month1, day1);
-//                dialog.show();
-//
-//            }
-//        });
-//
-//        fecha2 = (TextView) rootView.findViewById(R.id.fecha2_c2);
-//        fecha2.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//
-//                contador = 1;
-//
-//                final Calendar c = Calendar.getInstance();
-//                year2 = c.get(Calendar.YEAR);
-//                month2 = c.get(Calendar.MONTH);
-//                day2 = c.get(Calendar.DAY_OF_MONTH);
-//
-//
-//                if (!"DD/MM/AAAA".equalsIgnoreCase(String.valueOf(fecha1.getText()))) {
-//                    DatePickerDialog dialog = new DatePickerDialog(getActivity(), datePickerListener,
-//                            year1, month1, day1);
-//                    dialog.show();
-//                } else {
-//                    Toast.makeText(getActivity(), "Por favor ingrese primero la fecha inicial.", Toast.LENGTH_LONG).show();
-//                }
-//            }
-//        });
-
         return rootView;
     }
 
-    public void limpiarTabla() {
 
-        TablaAsignarInventarios borrar = new TablaAsignarInventarios();
-        borrar.borrarTabla(rootView, getActivity());
-        asignar.setVisibility(View.GONE);
-        bajar.setVisibility(View.GONE);
-        subir.setVisibility(View.GONE);
-    }
 
-    final Runnable createUI = new Runnable() {
 
-        public void run() {
-            asignar.setVisibility(View.GONE);
-            limpiarTabla();
-            elem = new WS_ElementosAsignar();
-            elem.startWebAccess(rootView, getActivity(), "15/04/1988", "15/04/2016");
-            string_funcionario = String.valueOf(funcionario.getText());
-            Toast.makeText(getActivity(), "Han sido asignados los elementos.", Toast.LENGTH_LONG).show();
 
-            seleccion = -1;
-            seleccion1 = -1;
-            seleccion2 = -1;
 
-            asignar.setEnabled(true);
-
-        }
-    };
-
-    public static String getString_sede() {
-        return string_sede;
-    }
-
-    public static String getString_funcionario() {
-        return string_funcionario;
-    }
-
-    public static List<String> getLista_funcionario() {
-        return lista_funcionario;
-    }
 }
 

@@ -13,10 +13,12 @@ import com.arkamovil.android.R;
 
 import java.util.List;
 
-public class TablaInventarios {
+public class TablaInventarios{
 
-    private double f1 = 0.35;
-    private double f2 = 0.18;
+    ImageView txtverInventario;
+
+    private double f1 = 0.18;
+    private double f2 = 0.35;
     private double f3 = 0.35;
     private double f4 = 0.12;
 
@@ -75,7 +77,7 @@ public class TablaInventarios {
             agregarCabecera();
             agregarFilasTabla();
         } else {
-            Toast.makeText(actividad, "No existen elementos disponibles en este momento para ser asignados.", Toast.LENGTH_LONG).show();
+            Toast.makeText(actividad, "No existen inventarios para los criterios seleccionados.", Toast.LENGTH_LONG).show();
         }
 
 
@@ -98,13 +100,13 @@ public class TablaInventarios {
         txtDependencia = new TextView(actividad);
         txtInformacion = new TextView(actividad);
 
-        txtNombreFuncionario.setText("Nombre");
+        txtNombreFuncionario.setText("Documento");
         txtNombreFuncionario.setGravity(Gravity.CENTER_HORIZONTAL);
         txtNombreFuncionario.setTextAppearance(actividad, R.style.etiqueta);
         txtNombreFuncionario.setBackgroundResource(R.drawable.tabla_celda_cabecera);
         txtNombreFuncionario.setLayoutParams(layoutId);
 
-        txtDocumentoFuncionario.setText("Documento");
+        txtDocumentoFuncionario.setText("Nombre");
         txtDocumentoFuncionario.setGravity(Gravity.CENTER_HORIZONTAL);
         txtDocumentoFuncionario.setTextAppearance(actividad, R.style.etiqueta);
         txtDocumentoFuncionario.setBackgroundResource(R.drawable.tabla_celda_cabecera);
@@ -116,7 +118,7 @@ public class TablaInventarios {
         txtDependencia.setBackgroundResource(R.drawable.tabla_celda_cabecera);
         txtDependencia.setLayoutParams(layoutFuncionario);
 
-        txtInformacion.setText("V");
+        txtInformacion.setText("Detalles");
         txtInformacion.setGravity(Gravity.CENTER_HORIZONTAL);
         txtInformacion.setTextAppearance(actividad, R.style.etiqueta);
         txtInformacion.setBackgroundResource(R.drawable.tabla_celda_cabecera);
@@ -135,7 +137,6 @@ public class TablaInventarios {
         TextView txtnombre;
         TextView txtdocumento;
         TextView txtdependencia;
-        ImageView txtverInventario;
 
         for (int i = 0; i < MAX_FILAS; i++) {
             fila = new TableRow(actividad);
@@ -168,6 +169,15 @@ public class TablaInventarios {
             txtverInventario.setId(this.inicio + i);
             txtverInventario.setBackgroundResource(R.drawable.tabla_celda);
             txtverInventario.setLayoutParams(layoutMod);
+            txtverInventario.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //dialog = new Informacion_Elementos_Cedula(actividad, v.getId());
+                    //dialog.show();
+
+                }
+            });
+
 
             fila.addView(txtnombre);
             fila.addView(txtdocumento);
@@ -193,7 +203,7 @@ public class TablaInventarios {
 
     }
 
-    public void bajar(View rootView, Activity actividad) {
+    public void bajar() {
 
         if (this.inicio <= (doc_fun.size() - (factor + 1))) {
             cargarElementos();
@@ -202,7 +212,7 @@ public class TablaInventarios {
         }
     }
 
-    public void subir(View rootView, Activity actividad) {
+    public void subir() {
 
         if (this.inicio > 0) {
             cargarElementos();
@@ -211,18 +221,16 @@ public class TablaInventarios {
         }
     }
 
-    public void borrarTabla(View rootView, Activity actividad) {
+    public void borrarTabla() {
 
-
-        tabla = (TableLayout) rootView.findViewById(R.id.tabla_levantamiento_fisico);
-        cabecera = (TableLayout) rootView.findViewById(R.id.cabecera_levantamiento_fisico);
+        tabla = (TableLayout) vista.findViewById(R.id.tabla_levantamiento_fisico);
+        cabecera = (TableLayout) vista.findViewById(R.id.cabecera_levantamiento_fisico);
         layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT);
         layoutId = new TableRow.LayoutParams((int) (tamanoPantalla * f1), TableRow.LayoutParams.MATCH_PARENT);
         layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla * f2), TableRow.LayoutParams.MATCH_PARENT);
         layoutFuncionario = new TableRow.LayoutParams((int) (tamanoPantalla * f3), TableRow.LayoutParams.MATCH_PARENT);
         layoutMod = new TableRow.LayoutParams((int) (tamanoPantalla * f4), TableRow.LayoutParams.MATCH_PARENT);
-
 
         tabla.removeAllViews();
         cabecera.removeAllViews();
