@@ -17,13 +17,8 @@
     <!--Etiquetas casos de uso en menu desplegable-->
 
     <string name="title_section1">1 - Acta de Visita</string>
-    <string name="title_section2">2 - Asignar Inventarios</string>
-    <string name="title_section3">6 - Asociar Imagen a Elemento</string>
-    <string name="title_section4">5 - Consultar Inventarios Asignados</string>
-    <string name="title_section5">3 - Consultar Asignación de  Inventarios</string>
-    <string name="title_section6">4 - Actualizar Inventario</string>
-    <string name="title_section7">7 - Consulta Rapida</string>
-    <string name="title_section8">8 - Leer Placa</string>
+    <string name="title_section2">2 - Levantamiento Físico de Inventarios</string>
+    <string name="title_section3">3 - Asociar Imagen a Elemento</string>
 
     <!--///////////////////////////// -->
 
@@ -61,6 +56,7 @@
     <string name="String_dependencia">Dependencia</string>
     <string name="String_ubicacion">Ubicación</string>
     <string name="String_tipo_confirmacion">Estado de Aprobación</string>
+    <string name="String_tipo_movimiento">Tipo de Movimiento</string>
     <string name="String_criterio_busqueda">Criterios de búsqueda</string>
     <string name="String_estado">Estado</string>
     <string name="String_estadoActualizacion">Estado de Actualización</string>

@@ -1,48 +1,40 @@
-package com.arkamovil.android.procesos;
+package com.arkamovil.android.borrar;
 
 import android.app.Activity;
 import android.content.res.Resources;
-import android.os.Handler;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.arkamovil.android.Informacion.Asignaciones;
 import com.arkamovil.android.Informacion.Informacion_Elementos;
 import com.arkamovil.android.R;
-import com.arkamovil.android.servicios_web.WS_Asignaciones;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TablaConsultarInventariosAsignados {
-
-    private static TableLayout tabla;
-    private static TableLayout cabecera;
+public class TablaConsultarInventario {
 
     private double f1 = 0.3;
     private double f2 = 0.4;
     private double f3 = 0.2;
+
+    private static TableLayout tabla;
+    private static TableLayout cabecera;
 
     private static TableRow.LayoutParams layoutFila;
     private static TableRow.LayoutParams layoutId;
     private static TableRow.LayoutParams layoutTexto;
     private static TableRow.LayoutParams layoutVer;
 
-    private static Asignaciones dialog;
-
-    public Thread getThread() {
-        return thread;
+    public void cerrarDialog() {
+        dialog.dismiss();
     }
 
-    private Thread thread;
-    private Handler handler = new Handler();
+    private static Informacion_Elementos dialog;
 
     private static Activity actividad;
     private static View rootView;
@@ -62,17 +54,17 @@ public class TablaConsultarInventariosAsignados {
 
     private static int MAX_FILAS = 0;
 
+
     public void crear(View rootView, Activity actividad, List<String> id, List<String> desc, List<String> placa) {
 
         this.actividad = actividad;
         this.rootView = rootView;
-        this.placa = placa;
 
         this.tamanoPantalla = rootView.getWidth();
 
-
         this.id_elemento = id;
         this.descripcion = desc;
+        this.placa = placa;
 
         if (id_elemento.size() < this.factor) {
             this.MAX_FILAS = id_elemento.size();
@@ -82,19 +74,18 @@ public class TablaConsultarInventariosAsignados {
 
         this.inicio = 0;
 
+
         cargarElementos();
 
         if (id_elemento.size() > 0) {
             agregarCabecera();
             agregarFilasTabla();
         } else {
-            Toast.makeText(actividad, "No registran elementos para el criterio de busqueda.", Toast.LENGTH_LONG).show();
-            ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_c4);
-            ImageView subir = (ImageView) rootView.findViewById(R.id.subir_c4);
-            Button pdf = (Button) rootView.findViewById(R.id.generarpdf_c4);
+            Toast.makeText(actividad, "No registran elementos para el criterio de busqueda", Toast.LENGTH_LONG).show();
+            ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_c5);
+            ImageView subir = (ImageView) rootView.findViewById(R.id.subir_c5);
             bajar.setVisibility(View.GONE);
             subir.setVisibility(View.GONE);
-            pdf.setVisibility(View.GONE);
         }
     }
 
@@ -169,17 +160,9 @@ public class TablaConsultarInventariosAsignados {
             txtVer.setLayoutParams(layoutVer);
             txtVer.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(final View v) {
-                    thread = new Thread() {
-                        public void run() {
-                            WS_Asignaciones ws_asignaciones = new WS_Asignaciones();
-                            ws_asignaciones.startWebAccess(actividad, id_elemento.get(v.getId()), v.getId());
-
-                            handler.post(createUI);
-                        }
-                    };
-
-                    thread.start();
+                public void onClick(View v) {
+//                    dialog = new Informacion_Elementos(actividad, v.getId());
+//                    dialog.show();
                 }
             });
 
@@ -195,15 +178,15 @@ public class TablaConsultarInventariosAsignados {
     public void cargarElementos() {
 
         tabla.removeAllViews();
-        cabecera.removeAllViews();
 
-        tabla = (TableLayout) rootView.findViewById(R.id.tabla_c4);
-        cabecera = (TableLayout) rootView.findViewById(R.id.cabecera_c4);
+        tabla = (TableLayout) rootView.findViewById(R.id.tabla_c5);
+        cabecera = (TableLayout) rootView.findViewById(R.id.cabecera_c5);
         layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT);
         layoutId = new TableRow.LayoutParams((int) (tamanoPantalla * f1), TableRow.LayoutParams.MATCH_PARENT);
         layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla * f2), TableRow.LayoutParams.MATCH_PARENT);
         layoutVer = new TableRow.LayoutParams((int) (tamanoPantalla * f3), TableRow.LayoutParams.MATCH_PARENT);
+
     }
 
     public void bajar(View rootView, Activity actividad) {
@@ -227,8 +210,8 @@ public class TablaConsultarInventariosAsignados {
     public void borrarTabla(View rootView, Activity actividad) {
 
 
-        tabla = (TableLayout) rootView.findViewById(R.id.tabla_c4);
-        cabecera = (TableLayout) rootView.findViewById(R.id.cabecera_c4);
+        tabla = (TableLayout) rootView.findViewById(R.id.tabla_c5);
+        cabecera = (TableLayout) rootView.findViewById(R.id.cabecera_c5);
         layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT);
         layoutId = new TableRow.LayoutParams((int) (tamanoPantalla * f1), TableRow.LayoutParams.MATCH_PARENT);
@@ -238,22 +221,4 @@ public class TablaConsultarInventariosAsignados {
         tabla.removeAllViews();
         cabecera.removeAllViews();
     }
-
-    final Runnable createUI = new Runnable() {
-
-        public void run() {
-            WS_Asignaciones ws_asignaciones = new WS_Asignaciones();
-            if (ws_asignaciones.getId_elemento().size() > 0) {
-                dialog = new Asignaciones(rootView, actividad);
-                dialog.show();
-            } else {
-                Toast.makeText(actividad, "No se han generado actualizaciones para este elemento", Toast.LENGTH_LONG).show();
-            }
-        }
-    };
-
-    public void cerrarDialog() {
-        dialog.dismiss();
-    }
-
 }

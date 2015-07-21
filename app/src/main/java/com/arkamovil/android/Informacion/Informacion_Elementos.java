@@ -15,10 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arkamovil.android.R;
-import com.arkamovil.android.casos_uso.CasoUso5;
-import com.arkamovil.android.procesos.TablaConsultarInventario;
-import com.arkamovil.android.servicios_web.WS_Elemento_dependencia;
-import com.arkamovil.android.servicios_web.WS_Elemento_funcionario;
+import com.arkamovil.android.servicios_web.WS_ElementosInventario;
 import com.arkamovil.android.servicios_web.WS_Imagen;
 
 public class Informacion_Elementos extends Dialog {
@@ -30,12 +27,14 @@ public class Informacion_Elementos extends Dialog {
     private Handler handler = new Handler();
     private String img;
     private Button cerrar;
+    private WS_ElementosInventario datos;
 
-    public Informacion_Elementos(Activity a, int i) {
+    public Informacion_Elementos(Activity a, int i, WS_ElementosInventario datos) {
         super(a);
         // TODO Auto-generated constructor stub
         this.c = a;
         this.i = i;
+        this.datos = datos;
     }
 
     @Override
@@ -48,66 +47,36 @@ public class Informacion_Elementos extends Dialog {
 
         cerrar.setEnabled(false);
 
-        TextView id = (TextView) findViewById(R.id.infor_id);
-        TextView nivel = (TextView) findViewById(R.id.info_nivel);
         TextView marca = (TextView) findViewById(R.id.info_marca);
-        TextView placa = (TextView) findViewById(R.id.info_placa);
         TextView serie = (TextView) findViewById(R.id.info_serie);
+        TextView nivel = (TextView) findViewById(R.id.info_nivel);
+        TextView ubicacion = (TextView) findViewById(R.id.info_ubicacion);
         TextView valor = (TextView) findViewById(R.id.info_valor);
-        TextView subtotal = (TextView) findViewById(R.id.info_subtotal);
-        TextView iva = (TextView) findViewById(R.id.info_iva);
-        TextView total = (TextView) findViewById(R.id.info_total);
+        TextView tipo_bien = (TextView) findViewById(R.id.info_tipobien);
+        TextView fecha_salida = (TextView) findViewById(R.id.info_fechasalida);
 
+        marca.setText(datos.getMarca().get(i));
+        serie.setText(datos.getSerie().get(i));
+        nivel.setText(datos.getNivel().get(i));
+        ubicacion.setText(datos.getUbicacion_esp().get(i));
+        valor.setText(datos.getTotal().get(i));
+        tipo_bien.setText(datos.getTipo_bien().get(i));
+        fecha_salida.setText(datos.getFecha_asig().get(i));
 
-        if(new CasoUso5().getFuncion() == 1){
-            final WS_Elemento_dependencia datos = new WS_Elemento_dependencia();
-            id.setText(datos.getId_elemento().get(i));
-            nivel.setText(datos.getNivel().get(i));
-            marca.setText(datos.getMarca().get(i));
-            placa.setText(datos.getPlaca().get(i));
-            serie.setText(datos.getSerie().get(i));
-            valor.setText(datos.getValor().get(i));
-            subtotal.setText(datos.getSubtotal().get(i));
-            iva.setText(datos.getIva().get(i));
-            total.setText(datos.getTotal().get(i));
+        thread = new Thread() {
+            public void run() {
+                WS_Imagen ws_imagen = new WS_Imagen();
+                img = ws_imagen.startWebAccess(datos.getId_elemento().get(i));
+                handler.post(createUI);
+            }
+        };
 
-            thread = new Thread() {
-                public void run() {
-                    WS_Imagen ws_imagen = new WS_Imagen();
-                    img = ws_imagen.startWebAccess(datos.getId_elemento().get(i));
-                    handler.post(createUI);
-                }
-            };
-
-            thread.start();
-        }else{
-            final WS_Elemento_funcionario datos = new WS_Elemento_funcionario();
-            id.setText(datos.getId_elemento().get(i));
-            nivel.setText(datos.getNivel().get(i));
-            marca.setText(datos.getMarca().get(i));
-            placa.setText(datos.getPlaca().get(i));
-            serie.setText(datos.getSerie().get(i));
-            valor.setText(datos.getValor().get(i));
-            subtotal.setText(datos.getSubtotal().get(i));
-            iva.setText(datos.getIva().get(i));
-            total.setText(datos.getTotal().get(i));
-
-            thread = new Thread() {
-                public void run() {
-                    WS_Imagen ws_imagen = new WS_Imagen();
-                    img = ws_imagen.startWebAccess(datos.getId_elemento().get(i));
-                    handler.post(createUI);
-                }
-            };
-
-            thread.start();
-        }
+        thread.start();
 
         cerrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TablaConsultarInventario cerrarDialog = new TablaConsultarInventario();
-                cerrarDialog.cerrarDialog();
+               dismiss();
             }
         });
 

@@ -16,8 +16,8 @@
             android:padding="10dp">
 
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:id="@+id/subir_elementos_inventario"
                 android:layout_marginTop="10dp"
                 android:src="@drawable/subir"
@@ -41,8 +41,8 @@
             </LinearLayout>
 
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:id="@+id/bajar_elementos_inventario"
                 android:layout_marginTop="10dp"
                 android:src="@drawable/bajar"

@@ -1,50 +1,33 @@
 package com.arkamovil.android.casos_uso;
 
-import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.text.format.Time;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.arkamovil.android.R;
 import com.arkamovil.android.herramientas.Despliegue;
-import com.arkamovil.android.procesos.TablaAsignarInventarios;
-import com.arkamovil.android.procesos.TablaConsultarInventario;
-import com.arkamovil.android.procesos.TablaInventarios;
 import com.arkamovil.android.servicios_web.WS_Dependencia;
-import com.arkamovil.android.servicios_web.WS_Elemento_dependencia;
-import com.arkamovil.android.servicios_web.WS_Elemento_funcionario;
-import com.arkamovil.android.servicios_web.WS_ElementosAsignar;
-import com.arkamovil.android.servicios_web.WS_EnviarElementosAsignar;
 import com.arkamovil.android.servicios_web.WS_Funcionario;
-import com.arkamovil.android.servicios_web.WS_Funcionario_Oracle;
 import com.arkamovil.android.servicios_web.WS_InventarioTipoConfirmacion;
 import com.arkamovil.android.servicios_web.WS_Sede;
-import com.arkamovil.android.servicios_web.WS_Ubicacion;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
-public class CasoUso2 extends Fragment {
+public class CriteriosLevantamientoFisico extends Fragment {
 
     private AutoCompleteTextView sede;
     private AutoCompleteTextView dependencia;
@@ -84,7 +67,7 @@ public class CasoUso2 extends Fragment {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
 
-        rootView = inflater.inflate(R.layout.fm_asignar_inventarios, container, false);
+        rootView = inflater.inflate(R.layout.fm_verificar_inventarios, container, false);
 
         sede = (AutoCompleteTextView) rootView.findViewById(R.id.sede_c2);
         dependencia = (AutoCompleteTextView) rootView.findViewById(R.id.dependencia_c2);

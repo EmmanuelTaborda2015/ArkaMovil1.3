@@ -1,4 +1,4 @@
-package com.arkamovil.android.casos_uso;
+package com.arkamovil.android.borrar;
 
 import android.content.Intent;
 import android.os.Bundle;

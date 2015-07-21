@@ -8,7 +8,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.arkamovil.android.R;
-import com.arkamovil.android.procesos.TablaAsignarInventarios;
+import com.arkamovil.android.borrar.TablaAsignarInventarios;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
@@ -164,13 +164,13 @@ public class WS_ElementosAsignar {
             tablaAsignarInventarios.crear(rootView, act, id_elemento, descripcion, placa);//funcionario y confirmacion
 
             if (id_elemento.size() > 0) {
-                ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_c2);
-                ImageView subir = (ImageView) rootView.findViewById(R.id.subir_c2);
-                Button asignar = (Button) rootView.findViewById(R.id.asignar_c2);
+//                ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_c2);
+//                ImageView subir = (ImageView) rootView.findViewById(R.id.subir_c2);
+//                Button asignar = (Button) rootView.findViewById(R.id.asignar_c2);
 
-                bajar.setVisibility(View.VISIBLE);
-                subir.setVisibility(View.VISIBLE);
-                asignar.setVisibility(View.VISIBLE);
+//                bajar.setVisibility(View.VISIBLE);
+//                subir.setVisibility(View.VISIBLE);
+//                asignar.setVisibility(View.VISIBLE);
             }
 
             Button consultar = (Button) rootView.findViewById(R.id.con_fun_c2);

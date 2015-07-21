@@ -1,4 +1,4 @@
-package com.arkamovil.android.Informacion;
+package com.arkamovil.android.borrar;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -15,11 +15,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.arkamovil.android.R;
-import com.arkamovil.android.casos_uso.CasoUso4;
 import com.arkamovil.android.herramientas.Despliegue;
-import com.arkamovil.android.procesos.TablaConsultarInventariosAsignados;
 import com.arkamovil.android.servicios_web.WS_Asignaciones;
-import com.arkamovil.android.servicios_web.WS_Elemento_funcionario;
 import com.arkamovil.android.servicios_web.WS_EnviarElementosAsignar;
 
 public class Asignaciones extends Dialog {

@@ -1,7 +1,6 @@
-package com.arkamovil.android.procesos;
+package com.arkamovil.android.borrar;
 
 import android.app.Activity;
-import android.content.res.Resources;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -10,13 +9,12 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.arkamovil.android.Informacion.Informacion_Elementos;
+import com.arkamovil.android.borrar.Informacion_Elementos_Cedula;
 import com.arkamovil.android.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class TablaConsultarInventario {
+public class TablaInventarioCedula {
 
     private double f1 = 0.3;
     private double f2 = 0.4;
@@ -34,7 +32,7 @@ public class TablaConsultarInventario {
         dialog.dismiss();
     }
 
-    private static Informacion_Elementos dialog;
+    private static Informacion_Elementos_Cedula dialog;
 
     private static Activity actividad;
     private static View rootView;
@@ -81,11 +79,11 @@ public class TablaConsultarInventario {
             agregarCabecera();
             agregarFilasTabla();
         } else {
-            Toast.makeText(actividad, "No registran elementos para el criterio de busqueda", Toast.LENGTH_LONG).show();
-            ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_c5);
-            ImageView subir = (ImageView) rootView.findViewById(R.id.subir_c5);
-            bajar.setVisibility(View.GONE);
-            subir.setVisibility(View.GONE);
+            Toast.makeText(actividad, "No registran elementos para el funcionario", Toast.LENGTH_LONG).show();
+            ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_c7);
+            ImageView subir = (ImageView) rootView.findViewById(R.id.subir_c7);
+            bajar.setVisibility(View.INVISIBLE);
+            subir.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -161,7 +159,7 @@ public class TablaConsultarInventario {
             txtVer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    dialog = new Informacion_Elementos(actividad, v.getId());
+                    dialog = new Informacion_Elementos_Cedula(actividad, v.getId());
                     dialog.show();
                 }
             });
@@ -179,8 +177,8 @@ public class TablaConsultarInventario {
 
         tabla.removeAllViews();
 
-        tabla = (TableLayout) rootView.findViewById(R.id.tabla_c5);
-        cabecera = (TableLayout) rootView.findViewById(R.id.cabecera_c5);
+        tabla = (TableLayout) rootView.findViewById(R.id.tabla_c7);
+        cabecera = (TableLayout) rootView.findViewById(R.id.cabecera_c7);
         layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT);
         layoutId = new TableRow.LayoutParams((int) (tamanoPantalla * f1), TableRow.LayoutParams.MATCH_PARENT);
@@ -210,8 +208,8 @@ public class TablaConsultarInventario {
     public void borrarTabla(View rootView, Activity actividad) {
 
 
-        tabla = (TableLayout) rootView.findViewById(R.id.tabla_c5);
-        cabecera = (TableLayout) rootView.findViewById(R.id.cabecera_c5);
+        tabla = (TableLayout) rootView.findViewById(R.id.tabla_c7);
+        cabecera = (TableLayout) rootView.findViewById(R.id.cabecera_c7);
         layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT);
         layoutId = new TableRow.LayoutParams((int) (tamanoPantalla * f1), TableRow.LayoutParams.MATCH_PARENT);

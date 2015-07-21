@@ -2,16 +2,10 @@ package com.arkamovil.android.servicios_web;
 
 import android.app.Activity;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.arkamovil.android.Informacion.Modificar_Informacion_Elementos;
-import com.arkamovil.android.Informacion.Modificar_Informacion_Elementos_Scanner;
-import com.arkamovil.android.R;
-import com.arkamovil.android.procesos.TablaConsultarInventario;
-import com.arkamovil.android.procesos.TablaModificarInventario;
+import com.arkamovil.android.borrar.Modificar_Informacion_Elementos_Scanner;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;

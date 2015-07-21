@@ -1,18 +1,15 @@
-package com.arkamovil.android.servicios_web;
+package com.arkamovil.android.borrar;
 
 import android.app.Activity;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.arkamovil.android.R;
-import com.arkamovil.android.procesos.TablaConsultarInventario;
-import com.arkamovil.android.procesos.TablaConsultarInventariosAsignados;
-import com.arkamovil.android.procesos.TablaInventarioCedula;
-import com.arkamovil.android.procesos.TablaModificarInventario;
+import com.arkamovil.android.borrar.TablaConsultarInventario;
+import com.arkamovil.android.borrar.TablaConsultarInventariosAsignados;
+import com.arkamovil.android.borrar.TablaInventarioCedula;
+import com.arkamovil.android.borrar.TablaModificarInventario;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
@@ -23,12 +20,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-public class WS_Elemento_funcionario {
+public class WS_Elemento_dependencia {
 
     private final String NAMESPACE = "urn:arka";
     private final String URL = "http://10.20.0.38/WS_ARKA/servicio/servicio.php";
-    private final String SOAP_ACTION = "urn:arka/consultar_elementos";
-    private final String METHOD_NAME = "consultar_elementos";
+    private final String SOAP_ACTION = "urn:arka/consultar_elementos_dependencia";
+    private final String METHOD_NAME = "consultar_elementos_dependencia";
 
     public Thread getThread() {
         return thread;
@@ -54,9 +51,6 @@ public class WS_Elemento_funcionario {
     private static List<String> iva = new ArrayList<String>();
     private static List<String> total = new ArrayList<String>();
     private static List<String> funcionario = new ArrayList<String>();
-    private static List<String> sede = new ArrayList<String>();
-    private static List<String> dependencia = new ArrayList<String>();
-
 
     public static List<String> getFuncionario() {
         return funcionario;
@@ -94,14 +88,6 @@ public class WS_Elemento_funcionario {
         return iva;
     }
 
-    public static List<String> getSede() {
-        return sede;
-    }
-
-    public static List<String> getDependencia() {
-        return dependencia;
-    }
-
     public static List<String> getDescripcion() {
         return descripcion;
     }
@@ -110,7 +96,7 @@ public class WS_Elemento_funcionario {
         return id_elemento;
     }
 
-    public void startWebAccess(View rootView, Activity actividad, final String nombre_fun, int caso) {
+    public void startWebAccess(View rootView, Activity actividad, final String dep, int caso) {
 
         this.rootView = rootView;
         this.act = actividad;
@@ -127,14 +113,12 @@ public class WS_Elemento_funcionario {
         iva = new ArrayList<String>();
         total = new ArrayList<String>();
         funcionario = new ArrayList<String>();
-        sede = new ArrayList<String>();
-        dependencia = new ArrayList<String>();
 
         thread = new Thread() {
             public void run() {
                 SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 
-                request.addProperty("nom_fun", nombre_fun);
+                request.addProperty("dependencia", dep);
 
                 SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
                 envelope.setOutputSoapObject(request);
@@ -153,73 +137,74 @@ public class WS_Elemento_funcionario {
                         SoapObject obj2 = (SoapObject) responseVector.get(i);
                         SoapObject obj3;
 
-                        try {
+                        try{
                             obj3 = (SoapObject) obj2.getProperty(1);
                             id_elemento.add(obj3.getProperty("value").toString());
-                        } catch (NullPointerException ex) {
+                        }catch (NullPointerException ex){
                             id_elemento.add("");
                         }
-                        try {
+                        try{
                             obj3 = (SoapObject) obj2.getProperty(3);
                             descripcion.add(obj3.getProperty("value").toString());
-                        } catch (NullPointerException ex) {
+                        }catch (NullPointerException ex){
                             descripcion.add("");
                         }
-                        try {
+                        try{
                             obj3 = (SoapObject) obj2.getProperty(5);
                             nivel.add(obj3.getProperty("value").toString());
-                        } catch (NullPointerException ex) {
+                        }catch (NullPointerException ex){
                             nivel.add("");
                         }
-                        try {
+                        try{
                             obj3 = (SoapObject) obj2.getProperty(7);
                             marca.add(obj3.getProperty("value").toString());
-                        } catch (NullPointerException ex) {
+                        }catch (NullPointerException ex){
                             marca.add("");
                         }
-                        try {
+                        try{
                             obj3 = (SoapObject) obj2.getProperty(9);
                             placa.add(obj3.getProperty("value").toString());
-                        } catch (NullPointerException ex) {
+                        }catch (NullPointerException ex){
                             placa.add("");
                         }
-                        try {
+                        try{
                             obj3 = (SoapObject) obj2.getProperty(11);
                             serie.add(obj3.getProperty("value").toString());
-                        } catch (NullPointerException ex) {
+                        }catch (NullPointerException ex){
                             serie.add("");
                         }
-                        try {
+                        try{
                             obj3 = (SoapObject) obj2.getProperty(13);
                             valor.add(obj3.getProperty("value").toString());
-                        } catch (NullPointerException ex) {
+                        }catch (NullPointerException ex){
                             valor.add("");
                         }
-                        try {
+                        try{
                             obj3 = (SoapObject) obj2.getProperty(15);
                             subtotal.add(obj3.getProperty("value").toString());
-                        } catch (NullPointerException ex) {
+                        }catch (NullPointerException ex){
                             subtotal.add("");
                         }
-                        try {
+                        try{
                             obj3 = (SoapObject) obj2.getProperty(17);
                             iva.add(obj3.getProperty("value").toString());
-                        } catch (NullPointerException ex) {
+                        }catch (NullPointerException ex){
                             iva.add("");
                         }
-                        try {
+                        try{
                             obj3 = (SoapObject) obj2.getProperty(19);
                             total.add(obj3.getProperty("value").toString());
-                        } catch (NullPointerException ex) {
+                        }catch (NullPointerException ex){
                             total.add("");
                         }
-                        try {
+                        try{
                             obj3 = (SoapObject) obj2.getProperty(21);
                             funcionario.add(obj3.getProperty("value").toString());
-                        } catch (NullPointerException ex) {
+                        }catch (NullPointerException ex){
                             funcionario.add("");
                         }
                     }
+
                 } catch (Exception exception) {
                 }
                 handler.post(createUI);
@@ -258,10 +243,10 @@ public class WS_Elemento_funcionario {
                 if (id_elemento.size() > 0) {
                     ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_c4);
                     ImageView subir = (ImageView) rootView.findViewById(R.id.subir_c4);
-                    Button pdf = (Button) rootView.findViewById(R.id.generarpdf_c4);
+                    //Button pdf = (Button) rootView.findViewById(R.id.generarpdf_c4);
                     bajar.setVisibility(View.VISIBLE);
                     subir.setVisibility(View.VISIBLE);
-                    pdf.setVisibility(View.VISIBLE);
+                    //pdf.setVisibility(View.VISIBLE);
                 }
             } else if (caso == 4) {
                 TablaInventarioCedula crear = new TablaInventarioCedula();
@@ -272,8 +257,6 @@ public class WS_Elemento_funcionario {
                     bajar.setVisibility(View.VISIBLE);
                     subir.setVisibility(View.VISIBLE);
                 }
-                Button consultar = (Button) rootView.findViewById(R.id.consultar_c7);
-                consultar.setEnabled(true);
             }
 
 

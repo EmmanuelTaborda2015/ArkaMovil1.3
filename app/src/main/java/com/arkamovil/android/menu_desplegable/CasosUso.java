@@ -10,13 +10,8 @@ import android.widget.Button;
 
 import com.arkamovil.android.R;
 import com.arkamovil.android.casos_uso.AsociarImagen;
-import com.arkamovil.android.casos_uso.CasoUso1;
-import com.arkamovil.android.casos_uso.CasoUso2;
-import com.arkamovil.android.casos_uso.CasoUso4;
-import com.arkamovil.android.casos_uso.CasoUso5;
-import com.arkamovil.android.casos_uso.CasoUso6;
-import com.arkamovil.android.casos_uso.ConsultaRapida;
-import com.arkamovil.android.casos_uso.LeerPlaca;
+import com.arkamovil.android.casos_uso.ActaVisita;
+import com.arkamovil.android.casos_uso.CriteriosLevantamientoFisico;
 
 
 public class CasosUso extends ActionBarActivity
@@ -62,31 +57,19 @@ public class CasosUso extends ActionBarActivity
         switch (number) {
             case 1:
                 if (cont == 1) {
-                    fragment = new CasoUso1();
+                    fragment = new ActaVisita();
+                    this.setTitle("Acta de Visita");
                     cont = 0;
                 }
                 cont++;
                 break;
             case 2:
-                fragment = new CasoUso2();
+                fragment = new CriteriosLevantamientoFisico();
+                this.setTitle("Levantamiento Físico de Inventarios");
                 break;
             case 3:
-                fragment = new CasoUso5();
-                break;
-            case 4:
-                fragment = new CasoUso6();
-                break;
-            case 5:
-                fragment = new CasoUso4();
-                break;
-            case 6:
                 fragment = new AsociarImagen();
-                break;
-            case 7:
-                fragment = new ConsultaRapida();
-                break;
-            case 8:
-                fragment = new LeerPlaca();
+                this.setTitle("Asociar Imagen a Elemento");
                 break;
         }
 

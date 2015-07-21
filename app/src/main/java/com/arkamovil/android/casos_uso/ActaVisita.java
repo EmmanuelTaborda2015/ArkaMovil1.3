@@ -22,7 +22,6 @@ import com.arkamovil.android.herramientas.Despliegue;
 import com.arkamovil.android.procesos.GenerarPDF_ActaVisita;
 import com.arkamovil.android.servicios_web.WS_Dependencia;
 import com.arkamovil.android.servicios_web.WS_Funcionario;
-import com.arkamovil.android.servicios_web.WS_Funcionario_Oracle;
 import com.arkamovil.android.servicios_web.WS_NumeroVisitas;
 import com.arkamovil.android.servicios_web.WS_RegistroActaVisita;
 import com.arkamovil.android.servicios_web.WS_Sede;
@@ -33,7 +32,7 @@ import java.util.Calendar;
 import java.util.List;
 
 
-public class CasoUso1 extends Fragment {
+public class ActaVisita extends Fragment {
 
     private static int year1;
     private static int month1;
@@ -93,7 +92,7 @@ public class CasoUso1 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        rootView = inflater.inflate(R.layout.fm_casouso1, container, false);
+        rootView = inflater.inflate(R.layout.fm_acta_visita, container, false);
 
         //Se definen los campos a utilizar en la clase.
         establecerCampos();

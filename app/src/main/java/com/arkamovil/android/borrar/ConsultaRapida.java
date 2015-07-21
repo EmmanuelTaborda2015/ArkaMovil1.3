@@ -1,4 +1,4 @@
-package com.arkamovil.android.casos_uso;
+package com.arkamovil.android.borrar;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,8 +12,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.arkamovil.android.R;
-import com.arkamovil.android.procesos.TablaInventarioCedula;
-import com.arkamovil.android.servicios_web.WS_Elemento_funcionario;
 
 public class ConsultaRapida extends Fragment {
 

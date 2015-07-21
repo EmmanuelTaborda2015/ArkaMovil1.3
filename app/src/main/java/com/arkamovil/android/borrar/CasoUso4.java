@@ -1,4 +1,4 @@
-package com.arkamovil.android.casos_uso;
+package com.arkamovil.android.borrar;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,13 +20,8 @@ import android.widget.ToggleButton;
 
 import com.arkamovil.android.R;
 import com.arkamovil.android.herramientas.Despliegue;
-import com.arkamovil.android.procesos.GenerarPDF_Inventarios;
-import com.arkamovil.android.procesos.TablaConsultarInventariosAsignados;
 import com.arkamovil.android.servicios_web.WS_Dependencia;
-import com.arkamovil.android.servicios_web.WS_Elemento_dependencia;
-import com.arkamovil.android.servicios_web.WS_Elemento_funcionario;
 import com.arkamovil.android.servicios_web.WS_Funcionario;
-import com.arkamovil.android.servicios_web.WS_Funcionario_Oracle;
 import com.arkamovil.android.servicios_web.WS_Sede;
 import com.arkamovil.android.servicios_web.WS_Ubicacion;
 

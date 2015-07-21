@@ -1,16 +1,6 @@
 package com.arkamovil.android.servicios_web;
 
 import android.app.Activity;
-import android.os.Handler;
-import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
-
-import com.arkamovil.android.Informacion.Asignaciones;
-import com.arkamovil.android.R;
-import com.arkamovil.android.procesos.TablaConsultarInventario;
-import com.arkamovil.android.procesos.TablaConsultarInventariosAsignados;
-import com.arkamovil.android.procesos.TablaModificarInventario;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
@@ -19,7 +9,6 @@ import org.ksoap2.transport.HttpTransportSE;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 public class WS_Asignaciones {
 

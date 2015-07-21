@@ -1,4 +1,4 @@
-package com.arkamovil.android.procesos;
+package com.arkamovil.android.borrar;
 
 import android.app.Activity;
 import android.view.Gravity;

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +16,10 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.arkamovil.android.Informacion.Informacion_Elementos;
+import com.arkamovil.android.Informacion.Observaciones;
 import com.arkamovil.android.R;
-import com.arkamovil.android.servicios_web.WS_InventarioTipoConfirmacion;
+import com.arkamovil.android.servicios_web.WS_ElementosInventario;
 
 import java.util.List;
 
@@ -25,7 +28,7 @@ public class ElementosInventario extends Fragment {
     private Thread thread;
     private Handler handler = new Handler();
 
-    private WS_InventarioTipoConfirmacion inventario;
+    private WS_ElementosInventario elementos;
 
     private View rootView;
     private int offset = 0;
@@ -36,16 +39,13 @@ public class ElementosInventario extends Fragment {
 
         rootView = inflater.inflate(R.layout.fm_inventario, container, false);
 
-        final String estado  = getArguments().getString("doc_fun");
-        final String criterio  = getArguments().getString("id_dep");
-//        final String dato  = getArguments().getString("dato");
-//
-        Toast.makeText(getActivity(), estado + " " + criterio + " "  , Toast.LENGTH_LONG).show();
+        final String func  = getArguments().getString("doc_fun");
+        final String depe  = getArguments().getString("id_dep");
 
         thread = new Thread() {
             public void run() {
-                inventario = new WS_InventarioTipoConfirmacion();
-                inventario.startWebAccess("A", "B", "C", offset, limit);
+                elementos = new WS_ElementosInventario();
+                elementos.startWebAccess(func, depe);
 
                 handler.post(createUI);
             }
@@ -76,7 +76,7 @@ public class ElementosInventario extends Fragment {
     final Runnable createUI = new Runnable() {
 
         public void run() {
-            crear(rootView, getActivity(), inventario.getDoc_fun(), inventario.getSede(), inventario.getDependencia(), inventario.getDependencia());
+            crear(rootView, getActivity(), elementos.getId_elemento(), elementos.getPlaca(), elementos.getDescripcion(), elementos.getEstado());
         }
     };
 
@@ -103,17 +103,18 @@ public class ElementosInventario extends Fragment {
     private static TableRow.LayoutParams layoutObservacion;
     private static TableRow.LayoutParams layoutDetalle;
 
+    private Informacion_Elementos dialog;
+
     private static Activity actividad;
     private static View vista;
 
     private static final int factor = 5;
 
 
-    private static List<String> nom_fun;
-    private static List<String> doc_fun;
-    private static List<String> sede;
-    private static List<String> dependencia;
-    private static List<String> ubicacion;
+    private static List<String> id_elementos;
+    private static List<String> placa;
+    private static List<String> descripcion;
+    private static List<String> estado;
 
     private static int inicio;
 
@@ -123,20 +124,20 @@ public class ElementosInventario extends Fragment {
     private static int MAX_FILAS = 0;
 
 
-    public void crear(View rootView, Activity actividad, List<String> doc_fun, List<String> sede, List<String> dependencia, List<String> ubicacion) {
+    public void crear(View rootView, Activity actividad, List<String> id_elemento, List<String> placa, List<String> descripcion, List<String> estado) {
 
         this.actividad = actividad;
         this.vista = rootView;
 
-        this.doc_fun = doc_fun;
-        this.sede = sede;
-        this.dependencia = dependencia;
-        this.ubicacion = ubicacion;
+        id_elementos = id_elemento;
+        this.placa = placa;
+        this.descripcion = descripcion;
+        this.estado = estado;
 
         this.tamanoPantalla = rootView.getWidth();
 
-        if (doc_fun.size() < this.factor) {
-            this.MAX_FILAS = doc_fun.size();
+        if (id_elemento.size() < this.factor) {
+            this.MAX_FILAS = id_elementos.size();
         } else {
             this.MAX_FILAS = this.factor;
         }
@@ -145,11 +146,11 @@ public class ElementosInventario extends Fragment {
 
         cargarElementos();
 
-        if (doc_fun.size() > 0) {
+        if (id_elementos.size() > 0) {
             agregarCabecera();
             agregarFilasTabla();
         } else {
-            Toast.makeText(actividad, "No existen inventarios para los criterios seleccionados.", Toast.LENGTH_LONG).show();
+            Toast.makeText(actividad, "Se ha presentado un error, por favor intente de nuevo.", Toast.LENGTH_LONG).show();
         }
 
 
@@ -173,13 +174,13 @@ public class ElementosInventario extends Fragment {
         txtObservacion = new TextView(actividad);
         txtDetalle = new TextView(actividad);
 
-        txtPlaca.setText("Documento");
+        txtPlaca.setText("Placa");
         txtPlaca.setGravity(Gravity.CENTER_HORIZONTAL);
         txtPlaca.setTextAppearance(actividad, R.style.etiqueta);
         txtPlaca.setBackgroundResource(R.drawable.tabla_celda_cabecera);
         txtPlaca.setLayoutParams(layoutPlaca);
 
-        txtDescripcion.setText("Nombre");
+        txtDescripcion.setText("Descripcion");
         txtDescripcion.setGravity(Gravity.CENTER_HORIZONTAL);
         txtDescripcion.setTextAppearance(actividad, R.style.etiqueta);
         txtDescripcion.setBackgroundResource(R.drawable.tabla_celda_cabecera);
@@ -191,13 +192,13 @@ public class ElementosInventario extends Fragment {
         txtEstadoAprob.setBackgroundResource(R.drawable.tabla_celda_cabecera);
         txtEstadoAprob.setLayoutParams(layoutEstadoAprob);
 
-        txtObservacion.setText("Info");
+        txtObservacion.setText("Info.");
         txtObservacion.setGravity(Gravity.CENTER_HORIZONTAL);
         txtObservacion.setTextAppearance(actividad, R.style.etiqueta);
         txtObservacion.setBackgroundResource(R.drawable.tabla_celda_cabecera);
         txtObservacion.setLayoutParams(layoutObservacion);
 
-        txtDetalle.setText("Obser");
+        txtDetalle.setText("Obser.");
         txtDetalle.setGravity(Gravity.CENTER_HORIZONTAL);
         txtDetalle.setTextAppearance(actividad, R.style.etiqueta);
         txtDetalle.setBackgroundResource(R.drawable.tabla_celda_cabecera);
@@ -231,13 +232,13 @@ public class ElementosInventario extends Fragment {
             txtObservacion = new ImageView(actividad);
             txtDetalle = new ImageView(actividad);
 
-            txtPlaca.setText(doc_fun.get(inicio + i));
+            txtPlaca.setText(placa.get(inicio + i));
             txtPlaca.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
             txtPlaca.setTextAppearance(actividad, R.style.etiqueta);
             txtPlaca.setBackgroundResource(R.drawable.tabla_celda);
             txtPlaca.setLayoutParams(layoutPlaca);
 
-            txtDescripcion.setText(doc_fun.get(inicio + i));
+            txtDescripcion.setText(descripcion.get(inicio + i));
             txtDescripcion.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
             txtDescripcion.setTextAppearance(actividad, R.style.etiqueta);
             txtDescripcion.setBackgroundResource(R.drawable.tabla_celda);
@@ -247,6 +248,12 @@ public class ElementosInventario extends Fragment {
             txtEstadoAprob.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
             txtEstadoAprob.setTextAppearance(actividad, R.style.etiqueta);
             txtEstadoAprob.setBackgroundResource(R.drawable.tabla_celda);
+            Log.v("mensaje", estado.get(this.inicio + i));
+            if("t".equals(estado.get(this.inicio + i))){
+                txtEstadoAprob.setChecked(true);
+            }
+            txtEstadoAprob.setEnabled(true);
+
             txtEstadoAprob.setLayoutParams(layoutEstadoAprob);
 
             txtObservacion.setImageResource(R.drawable.ver);
@@ -256,8 +263,8 @@ public class ElementosInventario extends Fragment {
             txtObservacion.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //dialog = new Informacion_Elementos_Cedula(actividad, v.getId());
-                    //dialog.show();
+                    dialog = new Informacion_Elementos(actividad, v.getId(), elementos);
+                    dialog.show();
                 }
             });
 
@@ -268,8 +275,8 @@ public class ElementosInventario extends Fragment {
             txtDetalle.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //dialog = new Informacion_Elementos_Cedula(actividad, v.getId());
-                    //dialog.show();
+                    Observaciones dialog = new Observaciones(actividad, v.getId());
+                    dialog.show();
                 }
             });
 
@@ -302,7 +309,7 @@ public class ElementosInventario extends Fragment {
 
     public void bajar() {
 
-        if (this.inicio <= (doc_fun.size() - (factor + 1))) {
+        if (this.inicio <= (id_elementos.size() - (factor + 1))) {
             cargarElementos();
             this.inicio++;
             agregarFilasTabla();

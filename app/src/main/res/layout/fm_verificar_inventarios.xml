@@ -168,46 +168,6 @@
                     android:id="@+id/con_fun_c2" />
 
             </LinearLayout>
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:id="@+id/subir_c2"
-                android:layout_marginTop="10dp"
-                android:src="@drawable/subir"
-                android:layout_gravity="center_horizontal" />
-
-            <TableLayout
-                android:id="@+id/cabecera_c2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dp"></TableLayout>
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TableLayout
-                    android:id="@+id/tabla_c2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"></TableLayout>
-            </LinearLayout>
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:id="@+id/bajar_c2"
-                android:layout_marginTop="10dp"
-                android:src="@drawable/bajar"
-                android:layout_gravity="center_horizontal" />
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="ASIGNAR"
-                android:layout_marginTop="15dp"
-                android:id="@+id/asignar_c2" />
         </LinearLayout>
 
     </RelativeLayout>

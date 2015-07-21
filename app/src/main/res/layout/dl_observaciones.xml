@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <RelativeLayout
+        android:id="@+id/RelativeLayout01"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent">
+
+        <LinearLayout
+            android:id="@+id/LinearLayout02"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@color/DocgerBlue"
+            android:padding="20dp"
+            android:paddingBottom="20dp">
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/LinearLayout01"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@color/DocgerBlue"
+            android:padding="20dp"
+            android:paddingBottom="20dp">
+
+
+            <TextView
+                android:id="@+id/label_observacion_fun"
+                android:text="Obsevación del Funcionario"
+                style="@style/labelArkaMovil" />
+
+            <EditText
+
+                android:enabled="false"
+                android:maxLines="5"
+                android:lines="3"
+                android:gravity="left|top"
+                style="@style/textViewArkaMovil"
+                android:id="@+id/obser_funcionario" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/NEGRO"
+                />
+
+            <TextView
+                android:id="@+id/label_tipoconf"
+                android:text="@string/String_tipo_movimiento"
+                style="@style/labelArkaMovil"/>
+
+            <LinearLayout
+                android:id="@+id/liner_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:background="@color/BLANCO">
+
+
+                <Spinner
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tipo_movimiento" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/label_observacion_alm"
+                android:text="Obsevación del Almacén"
+                android:gravity="left|top"
+                style="@style/labelArkaMovil" />
+
+            <EditText
+                android:maxLines="5"
+                android:lines="3"
+                style="@style/textViewArkaMovil"
+                android:id="@+id/obser_almacen" />
+
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Guardar"
+                android:id="@+id/guardar_obser"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="center_horizontal" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cerar"
+                android:id="@+id/cerrar_obser"
+                android:layout_gravity="center_horizontal" />
+
+        </LinearLayout>
+    </RelativeLayout>
+</ScrollView>

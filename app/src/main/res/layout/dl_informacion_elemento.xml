@@ -41,27 +41,6 @@
                 android:paddingBottom="5dp" />
 
             <TextView
-                android:id="@+id/label_inf_id"
-                android:text="Id Elemento"
-                style="@style/labelArkaMovil" />
-
-            <AutoCompleteTextView
-                style="@style/buttonTextArkaMovil"
-                android:enabled="false"
-                android:id="@+id/infor_id" />
-
-
-            <TextView
-                android:id="@+id/label_inf_nivel"
-                android:text="Nivel"
-                style="@style/labelArkaMovil" />
-
-            <AutoCompleteTextView
-                style="@style/buttonTextArkaMovil"
-                android:enabled="false"
-                android:id="@+id/info_nivel" />
-
-            <TextView
                 android:id="@+id/label_inf_marca"
                 android:text="Marca"
                 style="@style/labelArkaMovil" />
@@ -71,15 +50,6 @@
                 android:enabled="false"
                 android:id="@+id/info_marca" />
 
-            <TextView
-                android:id="@+id/label_inf_placa"
-                android:text="Placa"
-                style="@style/labelArkaMovil" />
-
-            <AutoCompleteTextView
-                style="@style/buttonTextArkaMovil"
-                android:enabled="false"
-                android:id="@+id/info_placa" />
 
             <TextView
                 android:id="@+id/label_inf_serie"
@@ -92,8 +62,28 @@
                 android:id="@+id/info_serie" />
 
             <TextView
+                android:id="@+id/label_inf_nivel"
+                android:text="Nivel"
+                style="@style/labelArkaMovil" />
+
+            <AutoCompleteTextView
+                style="@style/buttonTextArkaMovil"
+                android:enabled="false"
+                android:id="@+id/info_nivel" />
+
+            <TextView
+                android:id="@+id/label_inf_ubicacion"
+                android:text="Ubicación Especifíca"
+                style="@style/labelArkaMovil" />
+
+            <AutoCompleteTextView
+                style="@style/buttonTextArkaMovil"
+                android:enabled="false"
+                android:id="@+id/info_ubicacion" />
+
+            <TextView
                 android:id="@+id/label_inf_valor"
-                android:text="Valor"
+                android:text="Valor Total"
                 style="@style/labelArkaMovil" />
 
             <AutoCompleteTextView
@@ -102,34 +92,25 @@
                 android:id="@+id/info_valor" />
 
             <TextView
-                android:id="@+id/label_inf_subtotal"
-                android:text="Subtotal"
+                android:id="@+id/label_inf_tipobien"
+                android:text="Tipo de Bien"
                 style="@style/labelArkaMovil" />
 
             <AutoCompleteTextView
                 style="@style/buttonTextArkaMovil"
                 android:enabled="false"
-                android:id="@+id/info_subtotal" />
+                android:id="@+id/info_tipobien" />
 
             <TextView
-                android:id="@+id/label_inf_iva"
-                android:text="Iva"
+                android:id="@+id/label_inf_fechasalida"
+                android:text="Fecha de Salida"
                 style="@style/labelArkaMovil" />
 
             <AutoCompleteTextView
                 style="@style/buttonTextArkaMovil"
                 android:enabled="false"
-                android:id="@+id/info_iva" />
+                android:id="@+id/info_fechasalida" />
 
-            <TextView
-                android:id="@+id/label_inf_total"
-                android:text="Total"
-                style="@style/labelArkaMovil" />
-
-            <AutoCompleteTextView
-                style="@style/buttonTextArkaMovil"
-                android:enabled="false"
-                android:id="@+id/info_total" />
 
 
             <Button

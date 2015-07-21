@@ -1,4 +1,4 @@
-package com.arkamovil.android.Informacion;
+package com.arkamovil.android.borrar;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -11,12 +11,9 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arkamovil.android.R;
-import com.arkamovil.android.procesos.TablaInventarioCedula;
-import com.arkamovil.android.servicios_web.WS_Elemento_funcionario;
 import com.arkamovil.android.servicios_web.WS_Imagen;
 
 public class Informacion_Elementos_Cedula extends Dialog {
@@ -47,27 +44,27 @@ public class Informacion_Elementos_Cedula extends Dialog {
 
         cerrar.setEnabled(false);
 
-        TextView id = (TextView) findViewById(R.id.infor_id);
-        TextView nivel = (TextView) findViewById(R.id.info_nivel);
-        TextView marca = (TextView) findViewById(R.id.info_marca);
-        TextView placa = (TextView) findViewById(R.id.info_placa);
-        TextView serie = (TextView) findViewById(R.id.info_serie);
-        TextView valor = (TextView) findViewById(R.id.info_valor);
-        TextView subtotal = (TextView) findViewById(R.id.info_subtotal);
-        TextView iva = (TextView) findViewById(R.id.info_iva);
-        TextView total = (TextView) findViewById(R.id.info_total);
+//        TextView id = (TextView) findViewById(R.id.infor_id);
+//        TextView nivel = (TextView) findViewById(R.id.info_nivel);
+//        TextView marca = (TextView) findViewById(R.id.info_marca);
+//        TextView placa = (TextView) findViewById(R.id.info_placa);
+//        TextView serie = (TextView) findViewById(R.id.info_serie);
+//        TextView valor = (TextView) findViewById(R.id.info_valor);
+//        TextView subtotal = (TextView) findViewById(R.id.info_subtotal);
+//        TextView iva = (TextView) findViewById(R.id.info_iva);
+//        TextView total = (TextView) findViewById(R.id.info_total);
 
         datos = new WS_Elemento_funcionario();
 
-        id.setText(datos.getId_elemento().get(i));
-        nivel.setText(datos.getNivel().get(i));
-        marca.setText(datos.getMarca().get(i));
-        placa.setText(datos.getPlaca().get(i));
-        serie.setText(datos.getSerie().get(i));
-        valor.setText(datos.getValor().get(i));
-        subtotal.setText(datos.getSubtotal().get(i));
-        iva.setText(datos.getIva().get(i));
-        total.setText(datos.getTotal().get(i));
+//        id.setText(datos.getId_elemento().get(i));
+//        nivel.setText(datos.getNivel().get(i));
+//        marca.setText(datos.getMarca().get(i));
+//        placa.setText(datos.getPlaca().get(i));
+//        serie.setText(datos.getSerie().get(i));
+//        valor.setText(datos.getValor().get(i));
+//        subtotal.setText(datos.getSubtotal().get(i));
+//        iva.setText(datos.getIva().get(i));
+//        total.setText(datos.getTotal().get(i));
 
         thread = new Thread() {
             public void run() {

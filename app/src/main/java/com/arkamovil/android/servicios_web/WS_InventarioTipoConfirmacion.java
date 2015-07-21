@@ -1,14 +1,6 @@
 package com.arkamovil.android.servicios_web;
 
-import android.app.Activity;
-import android.os.Handler;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-
-import com.arkamovil.android.R;
-import com.arkamovil.android.procesos.TablaInventarios;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;

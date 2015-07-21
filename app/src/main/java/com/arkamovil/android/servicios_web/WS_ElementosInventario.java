@@ -31,11 +31,59 @@ public class WS_ElementosInventario {
     private List<String> ubicacion_esp = new ArrayList<String>();
     private List<String> id_levantamiento = new ArrayList<String>();
 
-    public void startWebAccess(final String doc_funcioanario, final String id_dep) {
+    public List<String> getId_levantamiento() {
+        return id_levantamiento;
+    }
+
+    public List<String> getUbicacion_esp() {
+        return ubicacion_esp;
+    }
+
+    public List<String> getFecha_asig() {
+        return fecha_asig;
+    }
+
+    public List<String> getTipo_bien() {
+        return tipo_bien;
+    }
+
+    public List<String> getTotal() {
+        return total;
+    }
+
+    public List<String> getNivel() {
+        return nivel;
+    }
+
+    public List<String> getSerie() {
+        return serie;
+    }
+
+    public List<String> getMarca() {
+        return marca;
+    }
+
+    public List<String> getEstado() {
+        return estado;
+    }
+
+    public List<String> getDescripcion() {
+        return descripcion;
+    }
+
+    public List<String> getPlaca() {
+        return placa;
+    }
+
+    public List<String> getId_elemento() {
+        return id_elemento;
+    }
+
+    public void startWebAccess(final String doc_funcionario, final String id_dep) {
 
         SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 
-        request.addProperty("funcionario", doc_funcioanario);
+        request.addProperty("funcionario", doc_funcionario);
         request.addProperty("dependencia", id_dep);
 
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
@@ -81,7 +129,7 @@ public class WS_ElementosInventario {
                     obj3 = (SoapObject) obj2.getProperty(9);
                     marca.add(obj3.getProperty("value").toString());
                 } catch (NullPointerException ex) {
-                    marca.add("");
+                    marca.add("Sin Información");
                 }
                 try {
                     obj3 = (SoapObject) obj2.getProperty(11);
@@ -93,13 +141,13 @@ public class WS_ElementosInventario {
                     obj3 = (SoapObject) obj2.getProperty(13);
                     nivel.add(obj3.getProperty("value").toString());
                 } catch (NullPointerException ex) {
-                    nivel.add("");
+                    nivel.add("Sin Información");
                 }
                 try {
                     obj3 = (SoapObject) obj2.getProperty(15);
                     total.add(obj3.getProperty("value").toString());
                 } catch (NullPointerException ex) {
-                    total.add("");
+                    total.add("Sin Información");
                 }
                 try {
                     obj3 = (SoapObject) obj2.getProperty(17);
@@ -111,13 +159,13 @@ public class WS_ElementosInventario {
                     obj3 = (SoapObject) obj2.getProperty(19);
                     fecha_asig.add(obj3.getProperty("value").toString());
                 } catch (NullPointerException ex) {
-                    fecha_asig.add("");
+                    fecha_asig.add("Sin Información");
                 }
                 try {
                     obj3 = (SoapObject) obj2.getProperty(21);
                     ubicacion_esp.add(obj3.getProperty("value").toString());
                 } catch (NullPointerException ex) {
-                    ubicacion_esp.add("");
+                    ubicacion_esp.add("Sin Información");
                 }
                 try {
                     obj3 = (SoapObject) obj2.getProperty(23);
