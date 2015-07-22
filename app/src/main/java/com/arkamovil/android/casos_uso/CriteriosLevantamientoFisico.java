@@ -95,12 +95,12 @@ public class CriteriosLevantamientoFisico extends Fragment {
 
 
         Spinner tipo_confirmacion=(Spinner) rootView.findViewById(R.id.tipo_confirmacion);
-        String []opciones={"Seleccione ...", "Aprobados","No Aprobados","Sin Verificar"};
+        String []opciones={"Seleccione ...", "Sin verificar", "Aprobados", "No Aprobados"};
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(rootView.getContext(),android.R.layout.simple_spinner_item, opciones);
         tipo_confirmacion.setAdapter(adapter);
 
-        Spinner criterio_busqueda=(Spinner) rootView.findViewById(R.id.criterios_busqueda);
+        final Spinner criterio_busqueda=(Spinner) rootView.findViewById(R.id.criterios_busqueda);
         String []opciones2={"Seleccione ...", "Todos", "Sede y/o Dependencia", "Funcionario"};
 
         ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(rootView.getContext(),android.R.layout.simple_spinner_item, opciones2);
@@ -254,7 +254,7 @@ public class CriteriosLevantamientoFisico extends Fragment {
                     Fragment fragment = new LevantamientoFisico();
                     Bundle parametro = new Bundle();
                     parametro.putString("estado", (estado_aprob - 1) + "");
-                    parametro.putString("criterio", "todos");
+                    parametro.putString("criterio", (criterio-1)+"");
                     parametro.putString("dato", "");
                     fragment.setArguments(parametro);
                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -296,7 +296,7 @@ public class CriteriosLevantamientoFisico extends Fragment {
                                 Fragment fragment = new LevantamientoFisico();
                                 Bundle parametro = new Bundle();
                                 parametro.putString("estado", (estado_aprob-1)+"");
-                                parametro.putString("criterio", "dependencia");
+                                parametro.putString("criterio", (criterio-1)+"");
                                 parametro.putString("dato", lista_id_sede.get(seleccion)+ "," + lista_id_dependencia.get(seleccion1) );
                                 fragment.setArguments(parametro);
                                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -312,7 +312,7 @@ public class CriteriosLevantamientoFisico extends Fragment {
                             Fragment fragment = new LevantamientoFisico();
                             Bundle parametro = new Bundle();
                             parametro.putString("estado", (estado_aprob-1)+"");
-                            parametro.putString("criterio", "sede");
+                            parametro.putString("criterio", (criterio-1)+"");
                             parametro.putString("dato", lista_id_sede.get(seleccion) );
                             fragment.setArguments(parametro);
                             FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -352,7 +352,7 @@ public class CriteriosLevantamientoFisico extends Fragment {
                     Fragment fragment = new LevantamientoFisico();
                     Bundle parametro = new Bundle();
                     parametro.putString("estado", (estado_aprob-1)+"");
-                    parametro.putString("criterio", "funcionario");
+                    parametro.putString("criterio", (criterio-1)+"");
                     parametro.putString("dato", lista_documento.get(seleccion3) );
                     fragment.setArguments(parametro);
                     FragmentTransaction transaction = getFragmentManager().beginTransaction();

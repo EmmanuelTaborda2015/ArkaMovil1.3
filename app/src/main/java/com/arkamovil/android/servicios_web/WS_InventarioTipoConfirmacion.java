@@ -30,14 +30,6 @@ public class WS_InventarioTipoConfirmacion {
     private List<String> id_espacio = new ArrayList<String>();
     private List<String> espacio = new ArrayList<String>();
 
-    public List<String> getEspacio() {
-        return espacio;
-    }
-
-    public List<String> getId_espacio() {
-        return id_espacio;
-    }
-
     public List<String> getDependencia() {
         return dependencia;
     }
@@ -123,18 +115,6 @@ public class WS_InventarioTipoConfirmacion {
                     dependencia.add(obj3.getProperty("value").toString());
                 } catch (NullPointerException ex) {
                     dependencia.add("");
-                }
-                try {
-                    obj3 = (SoapObject) obj2.getProperty(13);
-                    id_espacio.add(obj3.getProperty("value").toString());
-                } catch (NullPointerException ex) {
-                    id_espacio.add("");
-                }
-                try {
-                    obj3 = (SoapObject) obj2.getProperty(15);
-                    espacio.add(obj3.getProperty("value").toString());
-                } catch (NullPointerException ex) {
-                    espacio.add("");
                 }
             }
         } catch (Exception exception) {

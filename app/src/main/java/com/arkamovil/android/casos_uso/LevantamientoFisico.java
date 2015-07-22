@@ -74,7 +74,7 @@ public class LevantamientoFisico extends Fragment {
     final Runnable createUI = new Runnable() {
 
         public void run() {
-            crear(rootView, getActivity(), inventario.getNomb_fun(), inventario.getDoc_fun(), inventario.getId_sede(), inventario.getSede(), inventario.getId_dependencia(), inventario.getDependencia(), inventario.getId_espacio(), inventario.getEspacio());
+            crear(rootView, getActivity(), inventario.getNomb_fun(), inventario.getDoc_fun(), inventario.getId_sede(), inventario.getSede(), inventario.getId_dependencia(), inventario.getDependencia());
         }
     };
 
@@ -123,7 +123,7 @@ public class LevantamientoFisico extends Fragment {
     private static int MAX_FILAS = 0;
 
 
-    public void crear(View rootView, Activity actividad, List<String> nom_fun, List<String> doc_fun, List<String> id_sede, List<String> sede, List<String> id_dependencia, List<String> dependencia, List<String> id_espacio, List<String> espacio) {
+    public void crear(View rootView, Activity actividad, List<String> nom_fun, List<String> doc_fun, List<String> id_sede, List<String> sede, List<String> id_dependencia, List<String> dependencia) {
 
         this.actividad = actividad;
         this.vista = rootView;
@@ -154,6 +154,11 @@ public class LevantamientoFisico extends Fragment {
             agregarFilasTabla();
         } else {
             Toast.makeText(actividad, "No existen inventarios para los criterios seleccionados.", Toast.LENGTH_LONG).show();
+            Fragment fragment = new CriteriosLevantamientoFisico();
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.replace(R.id.container, fragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
         }
 
 
