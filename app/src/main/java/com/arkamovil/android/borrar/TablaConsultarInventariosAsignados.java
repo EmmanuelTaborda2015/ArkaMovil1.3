@@ -11,9 +11,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.arkamovil.android.borrar.Asignaciones;
 import com.arkamovil.android.R;
-import com.arkamovil.android.servicios_web.WS_Asignaciones;
 
 import java.util.List;
 

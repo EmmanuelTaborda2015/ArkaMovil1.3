@@ -20,6 +20,8 @@ import com.arkamovil.android.Informacion.Informacion_Elementos;
 import com.arkamovil.android.Informacion.Observaciones;
 import com.arkamovil.android.R;
 import com.arkamovil.android.servicios_web.WS_ElementosInventario;
+import com.arkamovil.android.servicios_web.WS_Imagen;
+import com.arkamovil.android.servicios_web.WS_Observaciones;
 
 import java.util.List;
 
@@ -29,17 +31,22 @@ public class ElementosInventario extends Fragment {
     private Handler handler = new Handler();
 
     private WS_ElementosInventario elementos;
+    private WS_Observaciones observaciones;
+
+    private int index_info = -1;
+    private int index_obser = -1;
 
     private View rootView;
     private int offset = 0;
     private int limit = 0;
+    private String func;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         rootView = inflater.inflate(R.layout.fm_inventario, container, false);
 
-        final String func  = getArguments().getString("doc_fun");
+        func  = getArguments().getString("doc_fun");
         final String depe  = getArguments().getString("id_dep");
 
         thread = new Thread() {
@@ -79,6 +86,15 @@ public class ElementosInventario extends Fragment {
             crear(rootView, getActivity(), elementos.getId_elemento(), elementos.getPlaca(), elementos.getDescripcion(), elementos.getEstado());
         }
     };
+
+    final Runnable Obser = new Runnable() {
+
+        public void run() {
+            Observaciones dialog = new Observaciones(actividad, observaciones, elementos.getId_elemento().get(index_obser), elementos.getId_levantamiento().get(index_obser), func);
+            dialog.show();
+        }
+    };
+
 
     public void limpiarTabla() {
         borrarTabla();
@@ -263,6 +279,7 @@ public class ElementosInventario extends Fragment {
             txtObservacion.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    index_info = v.getId();
                     dialog = new Informacion_Elementos(actividad, v.getId(), elementos);
                     dialog.show();
                 }
@@ -275,11 +292,19 @@ public class ElementosInventario extends Fragment {
             txtDetalle.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Observaciones dialog = new Observaciones(actividad, v.getId());
-                    dialog.show();
+                    index_obser = v.getId();
+                    thread = new Thread() {
+                        public void run() {
+                            observaciones = new WS_Observaciones();
+                            observaciones.startWebAccess(elementos.getId_levantamiento().get(index_obser));
+                            handler.post(Obser);
+                        }
+                    };
+
+                    thread.start();
+
                 }
             });
-
 
             fila.addView(txtPlaca);
             fila.addView(txtDescripcion);

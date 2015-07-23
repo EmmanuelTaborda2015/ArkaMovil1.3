@@ -16,8 +16,6 @@ import android.widget.Toast;
 
 import com.arkamovil.android.R;
 import com.arkamovil.android.herramientas.Despliegue;
-import com.arkamovil.android.servicios_web.WS_Asignaciones;
-import com.arkamovil.android.servicios_web.WS_EnviarElementosAsignar;
 
 public class Asignaciones extends Dialog {
 

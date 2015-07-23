@@ -1,4 +1,4 @@
-package com.arkamovil.android.servicios_web;
+package com.arkamovil.android.borrar;
 
 import android.app.Activity;
 import android.os.Handler;

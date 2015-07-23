@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.arkamovil.android.borrar.Modificar_Informacion_Elementos_Scanner;
+import com.arkamovil.android.borrar.WS_Asignaciones;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;

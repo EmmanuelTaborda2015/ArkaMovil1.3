@@ -18,7 +18,6 @@ import android.text.format.Time;
 import android.util.Log;
 
 import com.arkamovil.android.R;
-import com.arkamovil.android.servicios_web.WS_Asignaciones;
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Element;
