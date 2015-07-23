@@ -31,7 +31,7 @@ public class WS_GuardarObservaciones {
             httpTransport.call(SOAP_ACTION, envelope);
             Object response = envelope.getResponse();
             webResponse = response.toString();
-
+            Log.v("WebResponse", webResponse);
         } catch (Exception exception) {
         }
         return webResponse;

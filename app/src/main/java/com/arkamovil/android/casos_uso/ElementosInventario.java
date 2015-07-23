@@ -90,7 +90,7 @@ public class ElementosInventario extends Fragment {
     final Runnable Obser = new Runnable() {
 
         public void run() {
-            Observaciones dialog = new Observaciones(actividad, observaciones, elementos.getId_elemento().get(index_obser), elementos.getId_levantamiento().get(index_obser), func);
+            Observaciones dialog = new Observaciones(actividad, observaciones, elementos, func, index_obser);
             dialog.show();
         }
     };

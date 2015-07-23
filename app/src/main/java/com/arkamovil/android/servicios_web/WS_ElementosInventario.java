@@ -79,6 +79,10 @@ public class WS_ElementosInventario {
         return id_elemento;
     }
 
+    public void setId_levantamiento(int posicion, String id){
+        id_levantamiento.set(posicion, id);
+    }
+
     public void startWebAccess(final String doc_funcionario, final String id_dep) {
 
         SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);

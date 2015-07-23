@@ -97,15 +97,14 @@ public class CriteriosLevantamientoFisico extends Fragment {
         Spinner tipo_confirmacion=(Spinner) rootView.findViewById(R.id.tipo_confirmacion);
         String []opciones={"Seleccione ...", "Sin verificar", "Aprobados", "No Aprobados"};
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(rootView.getContext(),android.R.layout.simple_spinner_item, opciones);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(rootView.getContext(),R.layout.spinner_item, opciones);
         tipo_confirmacion.setAdapter(adapter);
 
         final Spinner criterio_busqueda=(Spinner) rootView.findViewById(R.id.criterios_busqueda);
         String []opciones2={"Seleccione ...", "Todos", "Sede y/o Dependencia", "Funcionario"};
 
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(rootView.getContext(),android.R.layout.simple_spinner_item, opciones2);
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(rootView.getContext(),R.layout.spinner_item, opciones2);
         criterio_busqueda.setAdapter(adapter2);
-
 
         tipo_confirmacion.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {

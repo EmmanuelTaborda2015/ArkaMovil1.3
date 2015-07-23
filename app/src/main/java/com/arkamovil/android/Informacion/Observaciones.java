@@ -28,22 +28,32 @@ public class Observaciones extends Dialog {
 
 
     private Activity c;
+
     private WS_Observaciones datos;
+    WS_ElementosInventario elementos;
+
     private String id_elemento;
     private String id_levantamiento;
     private String funcionario;
+    private  int indexObservacion;
+    private String getId_levantamientoGenerado;
+
 
     private Thread thread;
     private Handler handler = new Handler();
 
-    public Observaciones(Activity a, WS_Observaciones observaciones, String id_elemento, String id_levantamiento, String funcionario) {
+    public Observaciones(Activity a, WS_Observaciones observaciones, WS_ElementosInventario elementos, String funcionario, int indexObservacion) {
         super(a);
         // TODO Auto-generated constructor stub
         this.c = a;
+
         this.datos = observaciones;
-        this.id_elemento = id_elemento;
-        this.id_levantamiento = id_levantamiento;
+        this.elementos = elementos;
+
+        this.id_elemento = elementos.getId_elemento().get(indexObservacion);
+        this.id_levantamiento =  elementos.getId_levantamiento().get(indexObservacion);
         this.funcionario = funcionario;
+        this.indexObservacion = indexObservacion;
     }
 
     @Override
@@ -51,7 +61,7 @@ public class Observaciones extends Dialog {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dl_observaciones);
-
+Log.v("elemento", id_elemento);
         Button cerrar = (Button) findViewById(R.id.cerrar_obser);
         Button guardar = (Button) findViewById(R.id.guardar_obser);
 
@@ -90,7 +100,7 @@ public class Observaciones extends Dialog {
                     public void run() {
                         if(!"".equals(obs_almacen.getText()) || tipo_movimiento.getSelectedItemPosition() > 0) {
                             WS_GuardarObservaciones ws_guardarObservaciones = new WS_GuardarObservaciones();
-                            ws_guardarObservaciones.startWebAccess(id_elemento, id_levantamiento, funcionario, String.valueOf(obs_almacen.getText()), String.valueOf(tipo_movimiento.getSelectedItemPosition() - 1));
+                            getId_levantamientoGenerado = ws_guardarObservaciones.startWebAccess(id_elemento, id_levantamiento, funcionario, String.valueOf(obs_almacen.getText()), String.valueOf(tipo_movimiento.getSelectedItemPosition() - 1));
                             handler.post(createUI);
                         }
                     }
@@ -109,6 +119,9 @@ public class Observaciones extends Dialog {
     final Runnable createUI = new Runnable() {
 
         public void run() {
+            if("".equals(id_levantamiento)){
+                elementos.setId_levantamiento(indexObservacion, getId_levantamientoGenerado);
+            }
             dismiss();
         }
     };
