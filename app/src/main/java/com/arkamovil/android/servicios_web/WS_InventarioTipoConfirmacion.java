@@ -29,6 +29,10 @@ public class WS_InventarioTipoConfirmacion {
 
     private List<String> radicado = new ArrayList<String>();
 
+    public List<String> getRadicado() {
+        return radicado;
+    }
+
     public List<String> getDependencia() {
         return dependencia;
     }
@@ -114,6 +118,12 @@ public class WS_InventarioTipoConfirmacion {
                     dependencia.add(obj3.getProperty("value").toString());
                 } catch (NullPointerException ex) {
                     dependencia.add("");
+                }
+                try {
+                    obj3 = (SoapObject) obj2.getProperty(13);
+                    radicado.add(obj3.getProperty("value").toString());
+                } catch (NullPointerException ex) {
+                    radicado.add("");
                 }
             }
         } catch (Exception exception) {

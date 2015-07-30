@@ -95,7 +95,7 @@ public class CriteriosLevantamientoFisico extends Fragment {
 
 
         Spinner tipo_confirmacion=(Spinner) rootView.findViewById(R.id.tipo_confirmacion);
-        String []opciones={"Seleccione ...", "Sin verificar", "Aprobados", "No Aprobados", "Radicados", "No Radicados"};
+        String []opciones={"Seleccione ...", "Sin verificar", "Aprobados", "No aprobados", "Radicados", "No radicados"};
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(rootView.getContext(),R.layout.spinner_item, opciones);
         tipo_confirmacion.setAdapter(adapter);

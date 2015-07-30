@@ -3,8 +3,10 @@ package com.arkamovil.android.casos_uso;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,16 +25,21 @@ import android.widget.Toast;
 import com.arkamovil.android.R;
 import com.arkamovil.android.servicios_web.WS_Funcionario;
 import com.arkamovil.android.servicios_web.WS_InventarioTipoConfirmacion;
+import com.arkamovil.android.servicios_web.WS_Radicar;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 public class Radicacion extends Fragment {
 
     private Thread thread;
+    private Thread threadRadicar;
     private Handler handler = new Handler();
 
-    Button radicar;
+    Button botonRadicar;
 
     ImageView subir;
     ImageView bajar;
@@ -114,14 +121,27 @@ public class Radicacion extends Fragment {
             }
         });
 
-        radicar = (Button) rootView.findViewById(R.id.boton_radicado);
+        botonRadicar = (Button) rootView.findViewById(R.id.boton_radicado);
         subir = (ImageView) rootView.findViewById(R.id.subir_radicado);
         bajar = (ImageView) rootView.findViewById(R.id.bajar_radicado);
 
 
         subir.setVisibility(View.GONE);
         bajar.setVisibility(View.GONE);
-        radicar.setVisibility(View.GONE);
+        botonRadicar.setVisibility(View.GONE);
+
+        botonRadicar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final List<String> dep = new ArrayList<String>();
+                for (int i=0; i < posicionRadicado.size(); i++) {
+                    dep.add(id_dependencia.get(posicionRadicado.get(i)));
+                    Log.v("ema", id_dependencia.get(posicionRadicado.get(i)));
+                }
+                WS_Radicar radicar = new WS_Radicar();
+                radicar.startWebAccess(doc_fun.get(0), dep);
+            }
+        });
 
         bajar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,7 +163,14 @@ public class Radicacion extends Fragment {
     final Runnable createUI = new Runnable() {
 
         public void run() {
-            crear(rootView, getActivity(), inventario.getNomb_fun(), inventario.getDoc_fun(), inventario.getId_sede(), inventario.getSede(), inventario.getId_dependencia(), inventario.getDependencia());
+            crear(rootView, getActivity(), inventario.getNomb_fun(), inventario.getDoc_fun(), inventario.getId_sede(), inventario.getSede(), inventario.getId_dependencia(), inventario.getDependencia(), inventario.getRadicado());
+        }
+    };
+
+    final Runnable RadicacionUI = new Runnable() {
+
+        public void run() {
+            Toast.makeText(getActivity(), "Han sido radicados los elementos.", Toast.LENGTH_LONG).show();
         }
     };
 
@@ -180,6 +207,11 @@ public class Radicacion extends Fragment {
     private static List<String> sede;
     private static List<String> id_dependencia;
     private static List<String> dependencia;
+    private static List<String> radicado;
+
+    private List<Boolean> arrayRadicado = new ArrayList<Boolean>();
+    private List<Integer> posicionRadicado = new ArrayList<Integer>();
+
 
     private static int inicio;
 
@@ -189,10 +221,11 @@ public class Radicacion extends Fragment {
     private static int MAX_FILAS = 0;
 
 
-    public void crear(View rootView, Activity actividad, List<String> nom_fun, List<String> doc_fun, List<String> id_sede, List<String> sede, List<String> id_dependencia, List<String> dependencia) {
+    public void crear(View rootView, Activity actividad, List<String> nom_fun, List<String> doc_fun, List<String> id_sede, List<String> sede, List<String> id_dependencia, List<String> dependencia, List<String> radicado) {
 
         this.actividad = actividad;
         this.vista = rootView;
+
 
         this.nom_fun=nom_fun;
         this.doc_fun=doc_fun;
@@ -200,6 +233,7 @@ public class Radicacion extends Fragment {
         this.sede=sede;
         this.id_dependencia=id_dependencia;
         this.dependencia=dependencia;
+        this.radicado = radicado;
 
         this.tamanoPantalla = rootView.getWidth();
 
@@ -216,7 +250,7 @@ public class Radicacion extends Fragment {
         if (doc_fun.size() > 0) {
             agregarCabecera();
             agregarFilasTabla();
-            radicar.setVisibility(View.VISIBLE);
+            botonRadicar.setVisibility(View.VISIBLE);
             if(doc_fun.size() > factor){
                 subir.setVisibility(View.VISIBLE);
                 bajar.setVisibility(View.VISIBLE);
@@ -258,11 +292,13 @@ public class Radicacion extends Fragment {
         cabecera.addView(fila);
     }
 
+
     public void agregarFilasTabla() {
 
         TableRow fila;
         TextView txtdependencia;
         CheckBox txtverInventario;
+
 
         for (int i = 0; i < MAX_FILAS; i++) {
             fila = new TableRow(actividad);
@@ -279,11 +315,32 @@ public class Radicacion extends Fragment {
 
             txtverInventario.setId(this.inicio + i);
             txtverInventario.setBackgroundResource(R.drawable.tabla_celda);
+            if ("t".equals(radicado.get(inicio + i))) {
+                txtverInventario.setChecked(true);
+                txtverInventario.setEnabled(false);
+            }
+            final CheckBox finalTxtverInventario = txtverInventario;
             txtverInventario.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    if(finalTxtverInventario.isChecked()){
+                        for (int i=0; i<posicionRadicado.size(); i++){
+                            if(posicionRadicado.get(i) == v.getId()){
+                                posicionRadicado.remove(i);
+                                arrayRadicado.remove(i);
+                            }
+                        }
+                        posicionRadicado.add(v.getId());
+                        arrayRadicado.add(true);
+                    }else{
+                        for (int i=0; i<posicionRadicado.size(); i++){
+                            if(posicionRadicado.get(i) == v.getId()){
+                                posicionRadicado.remove(i);
+                                arrayRadicado.remove(i);
+                            }
+                        }
 
-
+                    }
                 }
             });
 
