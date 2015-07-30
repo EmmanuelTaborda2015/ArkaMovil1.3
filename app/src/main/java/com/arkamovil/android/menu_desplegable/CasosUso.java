@@ -12,6 +12,7 @@ import com.arkamovil.android.R;
 import com.arkamovil.android.casos_uso.AsociarImagen;
 import com.arkamovil.android.casos_uso.ActaVisita;
 import com.arkamovil.android.casos_uso.CriteriosLevantamientoFisico;
+import com.arkamovil.android.casos_uso.Radicacion;
 
 
 public class CasosUso extends ActionBarActivity
@@ -68,6 +69,10 @@ public class CasosUso extends ActionBarActivity
                 this.setTitle("Levantamiento Físico de Inventarios");
                 break;
             case 3:
+                fragment = new Radicacion();
+                this.setTitle("Radicación");
+                break;
+            case 4:
                 fragment = new AsociarImagen();
                 this.setTitle("Asociar Imagen a Elemento");
                 break;

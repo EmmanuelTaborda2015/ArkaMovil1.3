@@ -9,6 +9,11 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -16,16 +21,35 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arkamovil.android.R;
+import com.arkamovil.android.servicios_web.WS_Funcionario;
 import com.arkamovil.android.servicios_web.WS_InventarioTipoConfirmacion;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class LevantamientoFisico extends Fragment {
+public class Radicacion extends Fragment {
 
     private Thread thread;
     private Handler handler = new Handler();
 
+    Button radicar;
+
+    ImageView subir;
+    ImageView bajar;
+
     private WS_InventarioTipoConfirmacion inventario;
+    private AutoCompleteTextView funcionario;
+
+    private List<String> lista_sede = new ArrayList<String>();
+    private List<String> lista_id_sede = new ArrayList<String>();
+
+    private List<String> lista_dependencia = new ArrayList<String>();
+    private List<String> lista_id_dependencia = new ArrayList<String>();
+
+    private static List<String> lista_funcionario = new ArrayList<String>();
+    private static List<String> lista_documento = new ArrayList<String>();
+
+    private int seleccion3 = -1;
 
     private View rootView;
     private int offset = 0;
@@ -34,25 +58,70 @@ public class LevantamientoFisico extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        rootView = inflater.inflate(R.layout.fm_levantamiento_fisico, container, false);
+        rootView = inflater.inflate(R.layout.fm_radicacion, container, false);
 
-        final String estado  = getArguments().getString("estado");
-        final String criterio  = getArguments().getString("criterio");
-        final String dato  = getArguments().getString("dato");
+        funcionario = (AutoCompleteTextView) rootView.findViewById(R.id.funcionario_radicado);
 
-        thread = new Thread() {
-            public void run() {
-                inventario = new WS_InventarioTipoConfirmacion();
-                inventario.startWebAccess(estado, criterio, dato, offset, limit);
+        final String estado = "5";
+        final String criterio  = "2";
 
-                handler.post(createUI);
+        WS_Funcionario ws_funcionario = new WS_Funcionario();
+        ws_funcionario.startWebAccess(getActivity(), funcionario, "null");
+
+        lista_funcionario = ws_funcionario.getFun_nombre();
+        lista_documento = ws_funcionario.getFun_identificacion();
+
+        final Button consultar = (Button) rootView.findViewById(R.id.con_fun_radicado);
+        consultar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                    for (int i = 0; i < lista_funcionario.size(); i++) {
+                        if (String.valueOf(funcionario.getText()).equalsIgnoreCase(lista_documento.get(i) + " - " +lista_funcionario.get(i))) {
+                            seleccion3 = i;
+                        }
+                    }
+                    if (seleccion3 > -1) {
+
+                        final String dato = lista_documento.get(seleccion3);
+
+                        thread = new Thread() {
+                            public void run() {
+                                inventario = new WS_InventarioTipoConfirmacion();
+                                inventario.startWebAccess(estado, criterio, dato, offset, limit);
+
+                                handler.post(createUI);
+                            }
+                        };
+
+                        thread.start();
+
+                    } else {
+                        Toast.makeText(getActivity(), "El funcionario ingresado no es valido, por favor verifiquelo e intente de nuevo.", Toast.LENGTH_LONG).show();
+                    }
             }
-        };
 
-        thread.start();
+        });
 
-        ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_levantamiento_fisico);
-        ImageView subir = (ImageView) rootView.findViewById(R.id.subir_levantamiento_fisico);
+        funcionario.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+
+            }
+        });
+
+        radicar = (Button) rootView.findViewById(R.id.boton_radicado);
+        subir = (ImageView) rootView.findViewById(R.id.subir_radicado);
+        bajar = (ImageView) rootView.findViewById(R.id.bajar_radicado);
+
+
+        subir.setVisibility(View.GONE);
+        bajar.setVisibility(View.GONE);
+        radicar.setVisibility(View.GONE);
 
         bajar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,17 +156,16 @@ public class LevantamientoFisico extends Fragment {
 
     private double f1 = 0.18;
     private double f2 = 0.35;
-    private double f3 = 0.35;
-    private double f4 = 0.12;
+    private double f3 = 0.75;
+    private double f4 = 0.20;
 
     private static TableLayout tabla;
     private static TableLayout cabecera;
 
     private static TableRow.LayoutParams layoutFila;
-    private static TableRow.LayoutParams layoutId;
-    private static TableRow.LayoutParams layoutTexto;
-    private static TableRow.LayoutParams layoutFuncionario;
-    private static TableRow.LayoutParams layoutMod;
+
+    private static TableRow.LayoutParams layoutDependencia;
+    private static TableRow.LayoutParams layoutRadicar;
 
     private static Activity actividad;
     private static View vista;
@@ -112,8 +180,6 @@ public class LevantamientoFisico extends Fragment {
     private static List<String> sede;
     private static List<String> id_dependencia;
     private static List<String> dependencia;
-    private static List<String> id_espacio;
-    private static List<String> espacio;
 
     private static int inicio;
 
@@ -134,8 +200,6 @@ public class LevantamientoFisico extends Fragment {
         this.sede=sede;
         this.id_dependencia=id_dependencia;
         this.dependencia=dependencia;
-        this.id_espacio=id_espacio;
-        this.espacio=espacio;
 
         this.tamanoPantalla = rootView.getWidth();
 
@@ -152,13 +216,14 @@ public class LevantamientoFisico extends Fragment {
         if (doc_fun.size() > 0) {
             agregarCabecera();
             agregarFilasTabla();
+            radicar.setVisibility(View.VISIBLE);
+            if(doc_fun.size() > factor){
+                subir.setVisibility(View.VISIBLE);
+                bajar.setVisibility(View.VISIBLE);
+            }
+
         } else {
-            Toast.makeText(actividad, "No existen inventarios para los criterios seleccionados.", Toast.LENGTH_LONG).show();
-            Fragment fragment = new CriteriosLevantamientoFisico();
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.replace(R.id.container, fragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
+            Toast.makeText(actividad, "No existen inventarios por radicar para los criterios seleccionados.", Toast.LENGTH_LONG).show();
         }
 
 
@@ -167,45 +232,27 @@ public class LevantamientoFisico extends Fragment {
     public void agregarCabecera() {
 
         TableRow fila;
-        TextView txtPlaca;
-        TextView txtDescripcion;
         TextView txtUbicacion;
         TextView txtDetalle;
 
         fila = new TableRow(actividad);
         fila.setLayoutParams(layoutFila);
 
-        txtPlaca = new TextView(actividad);
-        txtDescripcion = new TextView(actividad);
         txtUbicacion = new TextView(actividad);
         txtDetalle = new TextView(actividad);
 
-        txtPlaca.setText("Documento");
-        txtPlaca.setGravity(Gravity.CENTER_HORIZONTAL);
-        txtPlaca.setTextAppearance(actividad, R.style.etiqueta);
-        txtPlaca.setBackgroundResource(R.drawable.tabla_celda_cabecera);
-        txtPlaca.setLayoutParams(layoutId);
-
-        txtDescripcion.setText("Nombre");
-        txtDescripcion.setGravity(Gravity.CENTER_HORIZONTAL);
-        txtDescripcion.setTextAppearance(actividad, R.style.etiqueta);
-        txtDescripcion.setBackgroundResource(R.drawable.tabla_celda_cabecera);
-        txtDescripcion.setLayoutParams(layoutTexto);
-
-        txtUbicacion.setText("Ubicación");
+        txtUbicacion.setText("Ubicación del Inventario");
         txtUbicacion.setGravity(Gravity.CENTER_HORIZONTAL);
         txtUbicacion.setTextAppearance(actividad, R.style.etiqueta);
         txtUbicacion.setBackgroundResource(R.drawable.tabla_celda_cabecera);
-        txtUbicacion.setLayoutParams(layoutFuncionario);
+        txtUbicacion.setLayoutParams(layoutDependencia);
 
-        txtDetalle.setText("Detalles");
+        txtDetalle.setText("Radicar");
         txtDetalle.setGravity(Gravity.CENTER_HORIZONTAL);
         txtDetalle.setTextAppearance(actividad, R.style.etiqueta);
         txtDetalle.setBackgroundResource(R.drawable.tabla_celda_cabecera);
-        txtDetalle.setLayoutParams(layoutMod);
+        txtDetalle.setLayoutParams(layoutRadicar);
 
-        fila.addView(txtPlaca);
-        fila.addView(txtDescripcion);
         fila.addView(txtUbicacion);
         fila.addView(txtDetalle);
         cabecera.addView(fila);
@@ -214,62 +261,33 @@ public class LevantamientoFisico extends Fragment {
     public void agregarFilasTabla() {
 
         TableRow fila;
-        TextView txtnombre;
-        TextView txtdocumento;
         TextView txtdependencia;
-        ImageView txtverInventario;
+        CheckBox txtverInventario;
 
         for (int i = 0; i < MAX_FILAS; i++) {
             fila = new TableRow(actividad);
             fila.setLayoutParams(layoutFila);
 
-            txtnombre = new TextView(actividad);
-            txtdocumento = new TextView(actividad);
             txtdependencia = new TextView(actividad);
-            txtverInventario = new ImageView(actividad);
-
-            txtnombre.setText(doc_fun.get(inicio + i));
-            txtnombre.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
-            txtnombre.setTextAppearance(actividad, R.style.etiqueta);
-            txtnombre.setBackgroundResource(R.drawable.tabla_celda);
-            txtnombre.setLayoutParams(layoutId);
-
-            txtdocumento.setText(nom_fun.get(inicio + i));
-            txtdocumento.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
-            txtdocumento.setTextAppearance(actividad, R.style.etiqueta);
-            txtdocumento.setBackgroundResource(R.drawable.tabla_celda);
-            txtdocumento.setLayoutParams(layoutTexto);
+            txtverInventario = new CheckBox(actividad);
 
             txtdependencia.setText(dependencia.get(inicio + i));
             txtdependencia.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
             txtdependencia.setTextAppearance(actividad, R.style.etiqueta);
             txtdependencia.setBackgroundResource(R.drawable.tabla_celda);
-            txtdependencia.setLayoutParams(layoutFuncionario);
+            txtdependencia.setLayoutParams(layoutDependencia);
 
-            txtverInventario.setImageResource(R.drawable.ver);
             txtverInventario.setId(this.inicio + i);
             txtverInventario.setBackgroundResource(R.drawable.tabla_celda);
-            txtverInventario.setLayoutParams(layoutMod);
             txtverInventario.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    Fragment fragment = new ElementosInventario();
-                    Bundle parametro = new Bundle();
-                    parametro.putString("doc_fun", doc_fun.get(v.getId()));
-                    parametro.putString("id_dep", id_dependencia.get(v.getId()));
-                    fragment.setArguments(parametro);
-                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                    transaction.replace(R.id.container, fragment);
-                    transaction.addToBackStack(null);
-                    transaction.commit();
 
                 }
             });
 
-
-            fila.addView(txtnombre);
-            fila.addView(txtdocumento);
+            txtverInventario.setLayoutParams(layoutRadicar);
             fila.addView(txtdependencia);
             fila.addView(txtverInventario);
 
@@ -279,14 +297,13 @@ public class LevantamientoFisico extends Fragment {
 
     public void cargarElementos() {
 
-        tabla = (TableLayout) vista.findViewById(R.id.tabla_levantamiento_fisico);
-        cabecera = (TableLayout) vista.findViewById(R.id.cabecera_levantamiento_fisico);
+        tabla = (TableLayout) vista.findViewById(R.id.tabla_radicado);
+        cabecera = (TableLayout) vista.findViewById(R.id.cabecera_radicado);
         layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT);
-        layoutId = new TableRow.LayoutParams((int) (tamanoPantalla * f1), TableRow.LayoutParams.MATCH_PARENT);
-        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla * f2), TableRow.LayoutParams.MATCH_PARENT);
-        layoutFuncionario = new TableRow.LayoutParams((int) (tamanoPantalla * f3), TableRow.LayoutParams.MATCH_PARENT);
-        layoutMod = new TableRow.LayoutParams((int) (tamanoPantalla * f4), TableRow.LayoutParams.MATCH_PARENT);
+
+        layoutDependencia = new TableRow.LayoutParams((int) (tamanoPantalla * f3), TableRow.LayoutParams.MATCH_PARENT);
+        layoutRadicar = new TableRow.LayoutParams((int) (tamanoPantalla * f4), TableRow.LayoutParams.MATCH_PARENT);
 
         tabla.removeAllViews();
 
@@ -312,14 +329,13 @@ public class LevantamientoFisico extends Fragment {
 
     public void borrarTabla() {
 
-        tabla = (TableLayout) vista.findViewById(R.id.tabla_levantamiento_fisico);
-        cabecera = (TableLayout) vista.findViewById(R.id.cabecera_levantamiento_fisico);
+        tabla = (TableLayout) vista.findViewById(R.id.tabla_radicado);
+        cabecera = (TableLayout) vista.findViewById(R.id.cabecera_radicado);
         layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT,
                 TableRow.LayoutParams.WRAP_CONTENT);
-        layoutId = new TableRow.LayoutParams((int) (tamanoPantalla * f1), TableRow.LayoutParams.MATCH_PARENT);
-        layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla * f2), TableRow.LayoutParams.MATCH_PARENT);
-        layoutFuncionario = new TableRow.LayoutParams((int) (tamanoPantalla * f3), TableRow.LayoutParams.MATCH_PARENT);
-        layoutMod = new TableRow.LayoutParams((int) (tamanoPantalla * f4), TableRow.LayoutParams.MATCH_PARENT);
+
+        layoutDependencia = new TableRow.LayoutParams((int) (tamanoPantalla * f3), TableRow.LayoutParams.MATCH_PARENT);
+        layoutRadicar = new TableRow.LayoutParams((int) (tamanoPantalla * f4), TableRow.LayoutParams.MATCH_PARENT);
 
         tabla.removeAllViews();
         cabecera.removeAllViews();

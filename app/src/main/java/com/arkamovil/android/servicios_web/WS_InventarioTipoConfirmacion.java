@@ -27,8 +27,7 @@ public class WS_InventarioTipoConfirmacion {
     private List<String> id_dependencia = new ArrayList<String>();
     private List<String> dependencia = new ArrayList<String>();
 
-    private List<String> id_espacio = new ArrayList<String>();
-    private List<String> espacio = new ArrayList<String>();
+    private List<String> radicado = new ArrayList<String>();
 
     public List<String> getDependencia() {
         return dependencia;

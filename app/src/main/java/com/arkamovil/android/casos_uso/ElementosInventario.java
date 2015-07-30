@@ -60,8 +60,8 @@ public class ElementosInventario extends Fragment {
 
         thread.start();
 
-        ImageView bajar = (ImageView) rootView.findViewById(R.id.subir_elementos_inventario);
-        ImageView subir = (ImageView) rootView.findViewById(R.id.bajar_elementos_inventario);
+        ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_elementos_inventario);
+        ImageView subir = (ImageView) rootView.findViewById(R.id.subir_elementos_inventario);
 
         bajar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -264,12 +264,10 @@ public class ElementosInventario extends Fragment {
             txtEstadoAprob.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
             txtEstadoAprob.setTextAppearance(actividad, R.style.etiqueta);
             txtEstadoAprob.setBackgroundResource(R.drawable.tabla_celda);
-            Log.v("mensaje", estado.get(this.inicio + i));
             if("t".equals(estado.get(this.inicio + i))){
                 txtEstadoAprob.setChecked(true);
+                txtEstadoAprob.setEnabled(false);
             }
-            txtEstadoAprob.setEnabled(true);
-
             txtEstadoAprob.setLayoutParams(layoutEstadoAprob);
 
             txtObservacion.setImageResource(R.drawable.ver);

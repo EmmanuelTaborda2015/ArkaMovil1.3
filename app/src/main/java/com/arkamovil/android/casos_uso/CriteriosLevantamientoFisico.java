@@ -60,8 +60,8 @@ public class CriteriosLevantamientoFisico extends Fragment {
     private int seleccion2 = -1;
     private int seleccion3 = -1;
 
-    private  int estado_aprob = -1;
-    private  int criterio = -1;
+    private  int estado_aprob = 0;
+    private  int criterio = 2;
 
 
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
@@ -95,7 +95,7 @@ public class CriteriosLevantamientoFisico extends Fragment {
 
 
         Spinner tipo_confirmacion=(Spinner) rootView.findViewById(R.id.tipo_confirmacion);
-        String []opciones={"Seleccione ...", "Sin verificar", "Aprobados", "No Aprobados"};
+        String []opciones={"Seleccione ...", "Sin verificar", "Aprobados", "No Aprobados", "Radicados", "No Radicados"};
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(rootView.getContext(),R.layout.spinner_item, opciones);
         tipo_confirmacion.setAdapter(adapter);
