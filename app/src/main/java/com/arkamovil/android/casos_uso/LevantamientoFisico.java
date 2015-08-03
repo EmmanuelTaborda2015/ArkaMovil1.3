@@ -31,6 +31,9 @@ public class LevantamientoFisico extends Fragment {
     private int offset = 0;
     private int limit = 0;
 
+    ImageView subir;
+    ImageView bajar;
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
@@ -51,8 +54,11 @@ public class LevantamientoFisico extends Fragment {
 
         thread.start();
 
-        ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_levantamiento_fisico);
-        ImageView subir = (ImageView) rootView.findViewById(R.id.subir_levantamiento_fisico);
+        bajar = (ImageView) rootView.findViewById(R.id.bajar_levantamiento_fisico);
+        subir = (ImageView) rootView.findViewById(R.id.subir_levantamiento_fisico);
+
+        bajar.setVisibility(View.GONE);
+        subir.setVisibility(View.GONE);
 
         bajar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,7 +108,7 @@ public class LevantamientoFisico extends Fragment {
     private static Activity actividad;
     private static View vista;
 
-    private static final int factor = 5;
+    private static final int factor = 10;
 
 
     private static List<String> id_elemento;
@@ -159,6 +165,11 @@ public class LevantamientoFisico extends Fragment {
             transaction.replace(R.id.container, fragment);
             transaction.addToBackStack(null);
             transaction.commit();
+        }
+
+        if(doc_fun.size() > factor){
+            bajar.setVisibility(View.VISIBLE);
+            subir.setVisibility(View.VISIBLE);
         }
 
 

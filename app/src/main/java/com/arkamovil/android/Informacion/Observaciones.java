@@ -61,8 +61,8 @@ public class Observaciones extends Dialog {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dl_observaciones);
 Log.v("elemento", id_elemento);
-        Button cerrar = (Button) findViewById(R.id.cerrar_obser);
-        Button guardar = (Button) findViewById(R.id.guardar_obser);
+        final Button cerrar = (Button) findViewById(R.id.cerrar_obser);
+        final Button guardar = (Button) findViewById(R.id.guardar_obser);
 
         EditText obs_fun = (EditText) findViewById(R.id.obser_funcionario);
         final EditText observaciones_almacen = (EditText) findViewById(R.id.observaciones_almacen);
@@ -74,23 +74,28 @@ Log.v("elemento", id_elemento);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(c.getApplication(), R.layout.spinner_item, opciones);
         tipo_movimiento.setAdapter(adapter);
 
+        int obsfun = 0;
+        int obsalm = 0;
+
         for(int i = 0; i<datos.getId_levantamiento().size(); i++) {
             if("0".equals(datos.getCreador_observacion().get(i))){
                 obs_fun.setText(obs_fun.getText() + datos.getFecha_registro().get(i) + ", " + datos.getObservacion().get(i)+ "\n");
+                obsfun++;
             }else if ("1".equals(datos.getCreador_observacion().get(i))){
                 String movimiento = "";
                 if(!"".equals(datos.getTipo_movimiento().get(i))){
                     if("0".equals(datos.getTipo_movimiento().get(i))){
-                        movimiento= "Faltante por hurto";
+                        movimiento= " Posible movimiento: Faltante por hurto";
                     }else if ("1".equals(datos.getTipo_movimiento().get(i))){
-                        movimiento= "Faltante por dependencia";
+                        movimiento= " Posible movimiento: Faltante por dependencia";
                     }else if ("2".equals(datos.getTipo_movimiento().get(i))){
-                        movimiento= "Traslado";
+                        movimiento= " Posible movimiento: Traslado";
                     }else if ("3".equals(datos.getTipo_movimiento().get(i))){
-                        movimiento= "Baja";
+                        movimiento= " Posible movimiento: Baja";
                     }
                 }
-                observaciones_almacen.setText(observaciones_almacen.getText() + datos.getFecha_registro().get(i) + ", " + datos.getObservacion().get(i)+ ", Posible movimiento: " + movimiento +"\n");
+                observaciones_almacen.setText(observaciones_almacen.getText() + datos.getFecha_registro().get(i) + " " + datos.getObservacion().get(i)+  movimiento +"\n");
+                obsalm++;
             }
         }
 
@@ -98,7 +103,12 @@ Log.v("elemento", id_elemento);
             obs_fun.setText("Sin observaciones");
             observaciones_almacen.setText("Sin observaciones");
         }
-
+        if(obsfun==0){
+            obs_fun.setText("Sin observaciones");
+        }
+        if(obsalm==0){
+            observaciones_almacen.setText("Sin observaciones");
+        }
 
          cerrar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,32 +120,38 @@ Log.v("elemento", id_elemento);
             guardar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    thread = new Thread() {
-                        public void run() {
-                            if (!"".equals(obs_almacen.getText()) || tipo_movimiento.getSelectedItemPosition() > 0) {
-                                WS_GuardarObservaciones ws_guardarObservaciones = new WS_GuardarObservaciones();
-                                getId_levantamientoGenerado = ws_guardarObservaciones.startWebAccess(id_elemento, id_levantamiento, funcionario, String.valueOf(obs_almacen.getText()), String.valueOf(tipo_movimiento.getSelectedItemPosition() - 1));
-                                handler.post(createUI);
-                            }
-                        }
-                    };
+                    guardar.setEnabled(false);
+                    cerrar.setEnabled(false);
 
-                    thread.start();
+                            if (!"".equals(String.valueOf(obs_almacen.getText())) || tipo_movimiento.getSelectedItemPosition() > 0) {
+                                thread = new Thread() {
+                                    public void run() {
+                                        WS_GuardarObservaciones ws_guardarObservaciones = new WS_GuardarObservaciones();
+                                        getId_levantamientoGenerado = ws_guardarObservaciones.startWebAccess(id_elemento, id_levantamiento, funcionario, String.valueOf(obs_almacen.getText()), String.valueOf(tipo_movimiento.getSelectedItemPosition() - 1));
+                                        handler.post(createUI);
+                                    }
+                                };
+
+                                thread.start();
+
+                            }else{
+                                Toast.makeText(c, "No ha ingresado ninguna observación.", Toast.LENGTH_LONG).show();
+                                guardar.setEnabled(true);
+                                cerrar.setEnabled(true);
+                            }
             }
         });
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        Toast.makeText(c, "De clic en el botón \"CERRAR\" cuando este activo", Toast.LENGTH_LONG).show();
-//    }
+    @Override
+    public void onBackPressed() {
+        Toast.makeText(c, "Oprima el botón \"CERRAR\" cuando este activo", Toast.LENGTH_LONG).show();
+    }
 
     final Runnable createUI = new Runnable() {
 
         public void run() {
-            if("".equals(id_levantamiento)){
-                //elementos.setId_levantamiento(indexObservacion, getId_levantamientoGenerado);
-            }
+            Toast.makeText(c, "Ha sido registrada su observación", Toast.LENGTH_LONG).show();
             dismiss();
         }
     };

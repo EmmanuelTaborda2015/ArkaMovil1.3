@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
         android:id="@+id/RelativeLayout01"
         android:layout_width="match_parent"
         android:layout_height="fill_parent">
@@ -36,7 +40,7 @@
 
                 android:enabled="true"
                 android:editable="false"
-                android:lines="1"
+                android:lines="5"
                 android:scrollbars="vertical"
                 android:gravity="left|top"
                 style="@style/textViewArkaMovil"
@@ -51,7 +55,7 @@
 
                 android:enabled="true"
                 android:editable="false"
-                android:lines="1"
+                android:lines="5"
                 android:scrollbars="vertical"
                 android:gravity="left|top"
                 style="@style/textViewArkaMovil"
@@ -114,3 +118,6 @@
 
         </LinearLayout>
     </RelativeLayout>
+
+    </ScrollView>
+

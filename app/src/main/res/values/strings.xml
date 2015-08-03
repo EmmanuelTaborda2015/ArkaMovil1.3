@@ -17,8 +17,8 @@
     <!--Etiquetas casos de uso en menu desplegable-->
 
     <string name="title_section1">1 - Acta de Visita</string>
-    <string name="title_section2">2 - Levantamiento Físico de Inventarios</string>
-    <string name="title_section3">3 - Asociar Imagen a Elemento</string>
+    <string name="title_section2">2 - Consulta general de estado</string>
+    <string name="title_section3">4 - Asociar Imagen a Elemento</string>
     <string name="title_section4">3 - Radicación</string>
 
     <!--///////////////////////////// -->

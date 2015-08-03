@@ -68,11 +68,11 @@ public class CasosUso extends ActionBarActivity
                 fragment = new CriteriosLevantamientoFisico();
                 this.setTitle("Levantamiento Físico de Inventarios");
                 break;
+//            case 3:
+//                fragment = new Radicacion();
+//                this.setTitle("Radicación");
+//                break;
             case 3:
-                fragment = new Radicacion();
-                this.setTitle("Radicación");
-                break;
-            case 4:
                 fragment = new AsociarImagen();
                 this.setTitle("Asociar Imagen a Elemento");
                 break;

@@ -30,6 +30,9 @@ public class ElementosInventario extends Fragment {
     private Thread thread;
     private Handler handler = new Handler();
 
+    ImageView subir;
+    ImageView bajar;
+
     private WS_ElementosInventario elementos;
     private WS_Observaciones observaciones;
 
@@ -60,8 +63,11 @@ public class ElementosInventario extends Fragment {
 
         thread.start();
 
-        ImageView bajar = (ImageView) rootView.findViewById(R.id.bajar_elementos_inventario);
-        ImageView subir = (ImageView) rootView.findViewById(R.id.subir_elementos_inventario);
+        bajar = (ImageView) rootView.findViewById(R.id.bajar_elementos_inventario);
+        subir = (ImageView) rootView.findViewById(R.id.subir_elementos_inventario);
+
+        bajar.setVisibility(View.GONE);
+        subir.setVisibility(View.GONE);
 
         bajar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,7 +130,7 @@ public class ElementosInventario extends Fragment {
     private static Activity actividad;
     private static View vista;
 
-    private static final int factor = 5;
+    private static final int factor = 10;
 
 
     private static List<String> id_elementos;
@@ -169,7 +175,10 @@ public class ElementosInventario extends Fragment {
             Toast.makeText(actividad, "Se ha presentado un error, por favor intente de nuevo.", Toast.LENGTH_LONG).show();
         }
 
-
+        if(id_elemento.size() > factor){
+            subir.setVisibility(View.VISIBLE);
+            bajar.setVisibility(View.VISIBLE);
+        }
     }
 
     public void agregarCabecera() {
