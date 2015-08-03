@@ -19,28 +19,39 @@ public class WS_Observaciones {
     private final String METHOD_NAME = "consultar_observacion";
 
 
-    private List<String> observacion_funcionario = new ArrayList<String>();
-    private List<String> observacion_almacen = new ArrayList<String>();
+    private List<String> observacion = new ArrayList<String>();
     private List<String> tipo_movimiento = new ArrayList<String>();
+    private List<String> id_levantamiento = new ArrayList<String>();
+    private List<String> fecha_registro = new ArrayList<String>();
+    private List<String> creador_observacion = new ArrayList<String>();
+
+    public List<String> getCreador_observacion() {
+        return creador_observacion;
+    }
+
+    public List<String> getFecha_registro() {
+        return fecha_registro;
+    }
 
     public List<String> getTipo_movimiento() {
         return tipo_movimiento;
     }
 
-    public List<String> getObservacion_almacen() {
-        return observacion_almacen;
+    public List<String> getObservacion() {
+        return observacion;
     }
 
-    public List<String> getObservacion_funcionario() {
-        return observacion_funcionario;
+    public List<String> getId_levantamiento() {
+        return id_levantamiento;
     }
 
-    public void startWebAccess(String id_levantamiento) {
+
+    public void startWebAccess(String id_elemento) {
 
 
         SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 
-        request.addProperty("id_levantamiento", id_levantamiento);
+        request.addProperty("id_elemento", id_elemento);
 
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         envelope.setOutputSoapObject(request);
@@ -59,21 +70,33 @@ public class WS_Observaciones {
                 SoapObject obj3;
                 try {
                     obj3 = (SoapObject) obj2.getProperty(1);
-                    observacion_funcionario.add(obj3.getProperty("value").toString());
+                    id_levantamiento.add(obj3.getProperty("value").toString());
                 } catch (NullPointerException ex) {
-                    observacion_funcionario.add("Sin observaciones");
+                    id_levantamiento.add("");
                 }
                 try {
                     obj3 = (SoapObject) obj2.getProperty(3);
-                    observacion_almacen.add(obj3.getProperty("value").toString());
+                    observacion.add(obj3.getProperty("value").toString());
                 } catch (NullPointerException ex) {
-                    observacion_almacen.add("");
+                    observacion.add("Sin observaciones");
                 }
                 try {
                     obj3 = (SoapObject) obj2.getProperty(5);
                     tipo_movimiento.add(obj3.getProperty("value").toString());
                 } catch (NullPointerException ex) {
                     tipo_movimiento.add("");
+                }
+                try {
+                    obj3 = (SoapObject) obj2.getProperty(7);
+                    fecha_registro.add(obj3.getProperty("value").toString());
+                } catch (NullPointerException ex) {
+                    fecha_registro.add("");
+                }
+                try {
+                    obj3 = (SoapObject) obj2.getProperty(9);
+                    creador_observacion.add(obj3.getProperty("value").toString());
+                } catch (NullPointerException ex) {
+                    creador_observacion.add("");
                 }
             }
         } catch (Exception exception) {

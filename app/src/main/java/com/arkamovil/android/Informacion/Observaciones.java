@@ -51,7 +51,6 @@ public class Observaciones extends Dialog {
         this.elementos = elementos;
 
         this.id_elemento = elementos.getId_elemento().get(indexObservacion);
-        this.id_levantamiento =  elementos.getId_levantamiento().get(indexObservacion);
         this.funcionario = funcionario;
         this.indexObservacion = indexObservacion;
     }
@@ -66,6 +65,7 @@ Log.v("elemento", id_elemento);
         Button guardar = (Button) findViewById(R.id.guardar_obser);
 
         EditText obs_fun = (EditText) findViewById(R.id.obser_funcionario);
+        final EditText observaciones_almacen = (EditText) findViewById(R.id.observaciones_almacen);
         final EditText obs_almacen = (EditText) findViewById(R.id.obser_almacen);
 
         final Spinner tipo_movimiento = (Spinner) findViewById(R.id.tipo_movimiento);
@@ -74,53 +74,67 @@ Log.v("elemento", id_elemento);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(c.getApplication(), R.layout.spinner_item, opciones);
         tipo_movimiento.setAdapter(adapter);
 
-        if (!"".equals(id_levantamiento)) {
-            obs_fun.setText(datos.getObservacion_funcionario().get(0));
-            obs_almacen.setText(datos.getObservacion_almacen().get(0));
-
-            if (!"".equals(datos.getTipo_movimiento().get(0))) {
-                Log.v("emma", Integer.parseInt(datos.getTipo_movimiento().get(0)) + "");
-                tipo_movimiento.setSelection(Integer.parseInt(datos.getTipo_movimiento().get(0)) + 1);
+        for(int i = 0; i<datos.getId_levantamiento().size(); i++) {
+            if("0".equals(datos.getCreador_observacion().get(i))){
+                obs_fun.setText(obs_fun.getText() + datos.getFecha_registro().get(i) + ", " + datos.getObservacion().get(i)+ "\n");
+            }else if ("1".equals(datos.getCreador_observacion().get(i))){
+                String movimiento = "";
+                if(!"".equals(datos.getTipo_movimiento().get(i))){
+                    if("0".equals(datos.getTipo_movimiento().get(i))){
+                        movimiento= "Faltante por hurto";
+                    }else if ("1".equals(datos.getTipo_movimiento().get(i))){
+                        movimiento= "Faltante por dependencia";
+                    }else if ("2".equals(datos.getTipo_movimiento().get(i))){
+                        movimiento= "Traslado";
+                    }else if ("3".equals(datos.getTipo_movimiento().get(i))){
+                        movimiento= "Baja";
+                    }
+                }
+                observaciones_almacen.setText(observaciones_almacen.getText() + datos.getFecha_registro().get(i) + ", " + datos.getObservacion().get(i)+ ", Posible movimiento: " + movimiento +"\n");
             }
-        } else {
-            obs_fun.setText("Sin observaciones");
         }
 
-        cerrar.setOnClickListener(new View.OnClickListener() {
+        if(datos.getId_levantamiento().size()==0){
+            obs_fun.setText("Sin observaciones");
+            observaciones_almacen.setText("Sin observaciones");
+        }
+
+
+         cerrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();
             }
-        });
+         });
 
-        guardar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                thread = new Thread() {
-                    public void run() {
-                        if(!"".equals(obs_almacen.getText()) || tipo_movimiento.getSelectedItemPosition() > 0) {
-                            WS_GuardarObservaciones ws_guardarObservaciones = new WS_GuardarObservaciones();
-                            getId_levantamientoGenerado = ws_guardarObservaciones.startWebAccess(id_elemento, id_levantamiento, funcionario, String.valueOf(obs_almacen.getText()), String.valueOf(tipo_movimiento.getSelectedItemPosition() - 1));
-                            handler.post(createUI);
+            guardar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    thread = new Thread() {
+                        public void run() {
+                            if (!"".equals(obs_almacen.getText()) || tipo_movimiento.getSelectedItemPosition() > 0) {
+                                WS_GuardarObservaciones ws_guardarObservaciones = new WS_GuardarObservaciones();
+                                getId_levantamientoGenerado = ws_guardarObservaciones.startWebAccess(id_elemento, id_levantamiento, funcionario, String.valueOf(obs_almacen.getText()), String.valueOf(tipo_movimiento.getSelectedItemPosition() - 1));
+                                handler.post(createUI);
+                            }
                         }
-                    }
-                };
+                    };
 
-                thread.start();
+                    thread.start();
             }
         });
     }
 
-    @Override
-    public void onBackPressed() {
-        Toast.makeText(c, "De clic en el botón \"CERRAR\" cuando este activo", Toast.LENGTH_LONG).show();
-    }
+//    @Override
+//    public void onBackPressed() {
+//        Toast.makeText(c, "De clic en el botón \"CERRAR\" cuando este activo", Toast.LENGTH_LONG).show();
+//    }
 
     final Runnable createUI = new Runnable() {
 
         public void run() {
             if("".equals(id_levantamiento)){
-                elementos.setId_levantamiento(indexObservacion, getId_levantamientoGenerado);
+                //elementos.setId_levantamiento(indexObservacion, getId_levantamientoGenerado);
             }
             dismiss();
         }

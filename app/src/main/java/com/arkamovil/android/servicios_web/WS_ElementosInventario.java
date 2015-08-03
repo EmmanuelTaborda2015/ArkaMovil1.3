@@ -29,11 +29,6 @@ public class WS_ElementosInventario {
     private List<String> tipo_bien = new ArrayList<String>();
     private List<String> fecha_asig = new ArrayList<String>();
     private List<String> ubicacion_esp = new ArrayList<String>();
-    private List<String> id_levantamiento = new ArrayList<String>();
-
-    public List<String> getId_levantamiento() {
-        return id_levantamiento;
-    }
 
     public List<String> getUbicacion_esp() {
         return ubicacion_esp;
@@ -77,10 +72,6 @@ public class WS_ElementosInventario {
 
     public List<String> getId_elemento() {
         return id_elemento;
-    }
-
-    public void setId_levantamiento(int posicion, String id){
-        id_levantamiento.set(posicion, id);
     }
 
     public void startWebAccess(final String doc_funcionario, final String id_dep) {
@@ -170,12 +161,6 @@ public class WS_ElementosInventario {
                     ubicacion_esp.add(obj3.getProperty("value").toString());
                 } catch (NullPointerException ex) {
                     ubicacion_esp.add("Sin Información");
-                }
-                try {
-                    obj3 = (SoapObject) obj2.getProperty(23);
-                    id_levantamiento.add(obj3.getProperty("value").toString());
-                } catch (NullPointerException ex) {
-                    id_levantamiento.add("");
                 }
             }
         } catch (Exception exception) {

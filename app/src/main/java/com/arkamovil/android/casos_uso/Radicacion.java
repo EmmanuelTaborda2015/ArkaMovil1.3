@@ -163,7 +163,7 @@ public class Radicacion extends Fragment {
     final Runnable createUI = new Runnable() {
 
         public void run() {
-            crear(rootView, getActivity(), inventario.getNomb_fun(), inventario.getDoc_fun(), inventario.getId_sede(), inventario.getSede(), inventario.getId_dependencia(), inventario.getDependencia(), inventario.getRadicado());
+            crear(rootView, getActivity(), inventario.getNomb_fun(), inventario.getDoc_fun(), inventario.getId_sede(), inventario.getSede(), inventario.getId_dependencia(), inventario.getDependencia());
         }
     };
 
@@ -221,7 +221,7 @@ public class Radicacion extends Fragment {
     private static int MAX_FILAS = 0;
 
 
-    public void crear(View rootView, Activity actividad, List<String> nom_fun, List<String> doc_fun, List<String> id_sede, List<String> sede, List<String> id_dependencia, List<String> dependencia, List<String> radicado) {
+    public void crear(View rootView, Activity actividad, List<String> nom_fun, List<String> doc_fun, List<String> id_sede, List<String> sede, List<String> id_dependencia, List<String> dependencia) {
 
         this.actividad = actividad;
         this.vista = rootView;

@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
-
-    <RelativeLayout
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/RelativeLayout01"
         android:layout_width="match_parent"
         android:layout_height="fill_parent">
@@ -33,17 +29,33 @@
 
             <TextView
                 android:id="@+id/label_observacion_fun"
-                android:text="Obsevación del Funcionario"
+                android:text="Obsevaciones del Funcionario"
                 style="@style/labelArkaMovil" />
 
             <EditText
 
-                android:enabled="false"
-                android:maxLines="5"
-                android:lines="3"
+                android:enabled="true"
+                android:editable="false"
+                android:lines="1"
+                android:scrollbars="vertical"
                 android:gravity="left|top"
                 style="@style/textViewArkaMovil"
                 android:id="@+id/obser_funcionario" />
+
+            <TextView
+                android:id="@+id/label_observacion_almacen"
+                android:text="Obsevaciones del almacen"
+                style="@style/labelArkaMovil" />
+
+            <EditText
+
+                android:enabled="true"
+                android:editable="false"
+                android:lines="1"
+                android:scrollbars="vertical"
+                android:gravity="left|top"
+                style="@style/textViewArkaMovil"
+                android:id="@+id/observaciones_almacen" />
 
             <View
                 android:layout_width="fill_parent"
@@ -55,13 +67,13 @@
 
             <TextView
                 android:id="@+id/label_tipoconf"
-                android:text="@string/String_tipo_movimiento"
+                android:text="Posible movimiento"
                 style="@style/labelArkaMovil"/>
 
             <LinearLayout
                 android:id="@+id/liner_spinner"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:background="@color/BLANCO">
 
@@ -96,10 +108,9 @@
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Cerar"
+                android:text="Cerrar"
                 android:id="@+id/cerrar_obser"
                 android:layout_gravity="center_horizontal" />
 
         </LinearLayout>
     </RelativeLayout>
-</ScrollView>

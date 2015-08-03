@@ -266,8 +266,9 @@ public class ElementosInventario extends Fragment {
             txtEstadoAprob.setBackgroundResource(R.drawable.tabla_celda);
             if("t".equals(estado.get(this.inicio + i))){
                 txtEstadoAprob.setChecked(true);
-                txtEstadoAprob.setEnabled(false);
+
             }
+            txtEstadoAprob.setEnabled(false);
             txtEstadoAprob.setLayoutParams(layoutEstadoAprob);
 
             txtObservacion.setImageResource(R.drawable.ver);
@@ -294,7 +295,7 @@ public class ElementosInventario extends Fragment {
                     thread = new Thread() {
                         public void run() {
                             observaciones = new WS_Observaciones();
-                            observaciones.startWebAccess(elementos.getId_levantamiento().get(index_obser));
+                            observaciones.startWebAccess(elementos.getId_elemento().get(index_obser));
                             handler.post(Obser);
                         }
                     };

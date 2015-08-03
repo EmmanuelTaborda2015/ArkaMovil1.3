@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -255,6 +256,8 @@ public class CriteriosLevantamientoFisico extends Fragment {
                     parametro.putString("estado", (estado_aprob - 1) + "");
                     parametro.putString("criterio", (criterio-1)+"");
                     parametro.putString("dato", "");
+                    Log.v("emma", estado_aprob+"");
+                    Log.v("emma", criterio+"");
                     fragment.setArguments(parametro);
                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
                     transaction.replace(R.id.container, fragment);
