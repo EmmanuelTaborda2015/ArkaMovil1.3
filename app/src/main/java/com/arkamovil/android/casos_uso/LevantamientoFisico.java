@@ -28,6 +28,8 @@ public class LevantamientoFisico extends Fragment {
     private Thread thread;
     private Handler handler = new Handler();
 
+    private String estado;
+
     private WS_InventarioTipoConfirmacion inventario;
 
     private View rootView;
@@ -42,7 +44,7 @@ public class LevantamientoFisico extends Fragment {
 
         rootView = inflater.inflate(R.layout.fm_levantamiento_fisico, container, false);
 
-        final String estado  = getArguments().getString("estado");
+        estado  = getArguments().getString("estado");
         final String criterio  = getArguments().getString("criterio");
         final String dato  = getArguments().getString("dato");
 
@@ -86,6 +88,17 @@ public class LevantamientoFisico extends Fragment {
 
         public void run() {
             circuloProgreso.dismiss();
+            if("0".equals(estado)){
+                getActivity().setTitle("Levantamiento Físico de Inventarios - Sin Verificar");
+            }else if("1".equals(estado)){
+                getActivity().setTitle("Levantamiento Físico de Inventarios - Sin Aprobados");
+            }else if("2".equals(estado)){
+                getActivity().setTitle("Levantamiento Físico de Inventarios - No Aprobados");
+            }else if("3".equals(estado)){
+                getActivity().setTitle("Levantamiento Físico de Inventarios - Radicados");
+            }else if("4".equals(estado)){
+                getActivity().setTitle("Levantamiento Físico de Inventarios - No Radicados");
+            }
             crear(rootView, getActivity(), inventario.getNomb_fun(), inventario.getDoc_fun(), inventario.getId_sede(), inventario.getSede(), inventario.getId_dependencia(), inventario.getDependencia());
         }
     };
