@@ -33,7 +33,7 @@
 
             <TextView
                 android:id="@+id/label_observacion_fun"
-                android:text="Obsevaciones del Funcionario"
+                android:text="Observaciones del Funcionario"
                 style="@style/labelArkaMovil" />
 
             <EditText
@@ -48,7 +48,7 @@
 
             <TextView
                 android:id="@+id/label_observacion_almacen"
-                android:text="Obsevaciones del almacen"
+                android:text="Observaciones del Almacén"
                 style="@style/labelArkaMovil" />
 
             <EditText
@@ -71,7 +71,7 @@
 
             <TextView
                 android:id="@+id/label_tipoconf"
-                android:text="Posible movimiento"
+                android:text="Posible Movimiento"
                 style="@style/labelArkaMovil"/>
 
             <LinearLayout

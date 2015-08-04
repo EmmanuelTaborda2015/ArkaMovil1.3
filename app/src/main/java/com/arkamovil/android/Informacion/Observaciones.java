@@ -83,18 +83,22 @@ Log.v("elemento", id_elemento);
                 obsfun++;
             }else if ("1".equals(datos.getCreador_observacion().get(i))){
                 String movimiento = "";
+                String observacion = "";
                 if(!"".equals(datos.getTipo_movimiento().get(i))){
                     if("0".equals(datos.getTipo_movimiento().get(i))){
-                        movimiento= " Posible movimiento: Faltante por hurto";
+                        movimiento= ", Posible movimiento: Faltante por hurto";
                     }else if ("1".equals(datos.getTipo_movimiento().get(i))){
-                        movimiento= " Posible movimiento: Faltante por dependencia";
+                        movimiento= ", Posible movimiento: Faltante por dependencia";
                     }else if ("2".equals(datos.getTipo_movimiento().get(i))){
-                        movimiento= " Posible movimiento: Traslado";
+                        movimiento= ", Posible movimiento: Traslado";
                     }else if ("3".equals(datos.getTipo_movimiento().get(i))){
-                        movimiento= " Posible movimiento: Baja";
+                        movimiento= ", Posible movimiento: Baja";
                     }
                 }
-                observaciones_almacen.setText(observaciones_almacen.getText() + datos.getFecha_registro().get(i) + " " + datos.getObservacion().get(i)+  movimiento +"\n");
+                if(!"".equals(datos.getObservacion().get(i))){
+                    observacion = ", " + datos.getObservacion().get(i);
+                }
+                observaciones_almacen.setText(observaciones_almacen.getText() + datos.getFecha_registro().get(i) + observacion +  movimiento +"\n");
                 obsalm++;
             }
         }

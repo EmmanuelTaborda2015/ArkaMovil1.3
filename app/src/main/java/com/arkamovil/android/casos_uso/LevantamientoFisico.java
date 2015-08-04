@@ -1,6 +1,7 @@
 package com.arkamovil.android.casos_uso;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -22,6 +23,8 @@ import java.util.List;
 
 public class LevantamientoFisico extends Fragment {
 
+    private ProgressDialog circuloProgreso;
+
     private Thread thread;
     private Handler handler = new Handler();
 
@@ -42,6 +45,8 @@ public class LevantamientoFisico extends Fragment {
         final String estado  = getArguments().getString("estado");
         final String criterio  = getArguments().getString("criterio");
         final String dato  = getArguments().getString("dato");
+
+        circuloProgreso = ProgressDialog.show(getActivity(), "", "Espere por favor ...", true);
 
         thread = new Thread() {
             public void run() {
@@ -80,6 +85,7 @@ public class LevantamientoFisico extends Fragment {
     final Runnable createUI = new Runnable() {
 
         public void run() {
+            circuloProgreso.dismiss();
             crear(rootView, getActivity(), inventario.getNomb_fun(), inventario.getDoc_fun(), inventario.getId_sede(), inventario.getSede(), inventario.getId_dependencia(), inventario.getDependencia());
         }
     };
@@ -264,6 +270,7 @@ public class LevantamientoFisico extends Fragment {
             txtverInventario.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
 
                     Fragment fragment = new ElementosInventario();
                     Bundle parametro = new Bundle();

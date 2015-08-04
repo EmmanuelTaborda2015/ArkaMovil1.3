@@ -256,8 +256,7 @@ public class CriteriosLevantamientoFisico extends Fragment {
                     parametro.putString("estado", (estado_aprob - 1) + "");
                     parametro.putString("criterio", (criterio-1)+"");
                     parametro.putString("dato", "");
-                    Log.v("emma", estado_aprob+"");
-                    Log.v("emma", criterio+"");
+
                     fragment.setArguments(parametro);
                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
                     transaction.replace(R.id.container, fragment);

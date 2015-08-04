@@ -1,6 +1,7 @@
 package com.arkamovil.android.casos_uso;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -30,6 +31,8 @@ public class ElementosInventario extends Fragment {
     private Thread thread;
     private Handler handler = new Handler();
 
+    private ProgressDialog circuloProgreso;
+
     ImageView subir;
     ImageView bajar;
 
@@ -52,8 +55,11 @@ public class ElementosInventario extends Fragment {
         func  = getArguments().getString("doc_fun");
         final String depe  = getArguments().getString("id_dep");
 
+        circuloProgreso = ProgressDialog.show(getActivity(), "", "Espere por favor ...", true);
+
         thread = new Thread() {
             public void run() {
+
                 elementos = new WS_ElementosInventario();
                 elementos.startWebAccess(func, depe);
 
@@ -89,6 +95,7 @@ public class ElementosInventario extends Fragment {
     final Runnable createUI = new Runnable() {
 
         public void run() {
+            circuloProgreso.dismiss();
             crear(rootView, getActivity(), elementos.getId_elemento(), elementos.getPlaca(), elementos.getDescripcion(), elementos.getEstado());
         }
     };
@@ -96,6 +103,7 @@ public class ElementosInventario extends Fragment {
     final Runnable Obser = new Runnable() {
 
         public void run() {
+            circuloProgreso.dismiss();
             Observaciones dialog = new Observaciones(actividad, observaciones, elementos, func, index_obser);
             dialog.show();
         }
@@ -288,8 +296,10 @@ public class ElementosInventario extends Fragment {
                 @Override
                 public void onClick(View v) {
                     index_info = v.getId();
+                    circuloProgreso = ProgressDialog.show(getActivity(), "", "Espere por favor ...", true);
                     dialog = new Informacion_Elementos(actividad, v.getId(), elementos);
                     dialog.show();
+                    circuloProgreso.dismiss();
                 }
             });
 
@@ -300,6 +310,7 @@ public class ElementosInventario extends Fragment {
             txtDetalle.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    circuloProgreso = ProgressDialog.show(getActivity(), "", "Espere por favor ...", true);
                     index_obser = v.getId();
                     thread = new Thread() {
                         public void run() {

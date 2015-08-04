@@ -130,7 +130,7 @@ public class WS_ElementosInventario {
                     obj3 = (SoapObject) obj2.getProperty(11);
                     serie.add(obj3.getProperty("value").toString());
                 } catch (NullPointerException ex) {
-                    serie.add("");
+                    serie.add("Sin Información");
                 }
                 try {
                     obj3 = (SoapObject) obj2.getProperty(13);
