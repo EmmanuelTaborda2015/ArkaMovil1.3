@@ -70,6 +70,8 @@ public class CriteriosLevantamientoFisico extends Fragment {
 
         rootView = inflater.inflate(R.layout.fm_verificar_inventarios, container, false);
 
+        getActivity().setTitle("Levantamiento Físico de Inventarios");
+
         sede = (AutoCompleteTextView) rootView.findViewById(R.id.sede_c2);
         dependencia = (AutoCompleteTextView) rootView.findViewById(R.id.dependencia_c2);
         funcionario = (AutoCompleteTextView) rootView.findViewById(R.id.funcionario_c2);

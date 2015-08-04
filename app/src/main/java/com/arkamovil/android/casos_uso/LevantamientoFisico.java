@@ -91,7 +91,7 @@ public class LevantamientoFisico extends Fragment {
             if("0".equals(estado)){
                 getActivity().setTitle("Levantamiento Físico de Inventarios - Sin Verificar");
             }else if("1".equals(estado)){
-                getActivity().setTitle("Levantamiento Físico de Inventarios - Sin Aprobados");
+                getActivity().setTitle("Levantamiento Físico de Inventarios - Aprobados");
             }else if("2".equals(estado)){
                 getActivity().setTitle("Levantamiento Físico de Inventarios - No Aprobados");
             }else if("3".equals(estado)){
