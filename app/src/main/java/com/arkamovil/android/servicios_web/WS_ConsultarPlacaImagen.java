@@ -1,5 +1,7 @@
 package com.arkamovil.android.servicios_web;
 
+import android.util.Log;
+
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
@@ -32,7 +34,7 @@ public class WS_ConsultarPlacaImagen {
                 Object response = envelope.getResponse();
                 webResponse = response.toString();
             }catch (NullPointerException ex){
-                webResponse = "";
+                webResponse = "false";
             }
         } catch (Exception exception) {
         }

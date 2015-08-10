@@ -10,16 +10,25 @@ import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
+import com.arkamovil.android.Informacion.Informacion_Elemento_Placa;
+import com.arkamovil.android.Informacion.Informacion_Elementos;
 import com.arkamovil.android.R;
 import com.arkamovil.android.servicios_web.WS_CargarImagen;
 import com.arkamovil.android.servicios_web.WS_ConsultarPlacaImagen;
+import com.arkamovil.android.servicios_web.WS_ElementoPlaca;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -38,16 +47,22 @@ public class AsociarImagen extends Fragment {
     private int opcion = 0;
     private final static String NOMBRE_DIRECTORIO = "ImagenesElementos";
     private Button btnCamara;
+    private LinearLayout l1;
+    private  Button consultar_placa;
     private Button scanear;
     private Button asignar;
     private static String imagen;
     private static String id_elemento;
     private static String id;
 
+    private Informacion_Elemento_Placa dialog;
+
     private Thread thread;
     private Thread thread_placa;
+    private Thread thread_Informacion;
     private Handler handler = new Handler();
 
+    private WS_ElementoPlaca ws_elementoPlaca;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -58,6 +73,70 @@ public class AsociarImagen extends Fragment {
         btnCamara = (Button) rootView.findViewById(R.id.camara);
         asignar = (Button) rootView.findViewById(R.id.asignarimagen);
 
+        l1 = (LinearLayout) rootView.findViewById(R.id.linear_elemento);
+        l1.setVisibility(View.GONE);
+
+        final LinearLayout l2 = (LinearLayout) rootView.findViewById(R.id.linear_ingresar_placa);
+        l2.setVisibility(View.GONE);
+
+        //final Button esc = (Button) rootView.findViewById(R.id.esc_placa);
+        final Button ing_placa = (Button) rootView.findViewById(R.id.ingresar_placa);
+        consultar_placa = (Button) rootView.findViewById(R.id.con_placa);
+
+        l1.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+            thread_Informacion = new Thread() {
+                public void run() {
+
+                    ws_elementoPlaca = new WS_ElementoPlaca();
+                    ws_elementoPlaca.startWebAccess(id_elemento);
+                    handler.post(Informacion);
+                }
+            };
+
+            thread_Informacion.start();
+        }
+        });
+
+        ing_placa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean on = ((ToggleButton) v).isChecked();
+                if (on) {
+                    l2.setVisibility(View.VISIBLE);
+                    //l1.setVisibility(View.GONE);
+                } else {
+                    l2.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        consultar_placa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final AutoCompleteTextView txtPlaca = (AutoCompleteTextView) rootView.findViewById(R.id.ing_placa);
+                final String cont = String.valueOf(txtPlaca.getText());
+                consultar_placa.setEnabled(false);
+                btnCamara.setEnabled(false);
+
+                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+
+                thread_placa = new Thread() {
+                    public void run() {
+
+                        WS_ConsultarPlacaImagen placa = new WS_ConsultarPlacaImagen();
+                        id = placa.startWebAccess(cont);
+
+                        handler.post(Elemento);
+                    }
+                };
+
+                thread_placa.start();
+            }
+        });
         //btnCamara.setEnabled(false);
         //asignar.setEnabled(false);
 
@@ -101,6 +180,7 @@ public class AsociarImagen extends Fragment {
 
                 btnCamara.setEnabled(false);
                 asignar.setEnabled(false);
+                l2.setVisibility(View.GONE);
 
                 Intent intent = new Intent("com.arkamovil.android.SCAN");
                 startActivityForResult(intent, 0);
@@ -242,13 +322,25 @@ public class AsociarImagen extends Fragment {
         public void run() {
             if ("false".equals(id)) {
                 Toast.makeText(getActivity(), "No se encontro ningun elemento con la placa escaneada", Toast.LENGTH_LONG).show();
+                consultar_placa.setEnabled(true);
             } else {
                 id_elemento = id;
                 foto = Environment.getExternalStorageDirectory() + "/imagen" + id_elemento + ".jpg";
                 btnCamara.setEnabled(true);
+                consultar_placa.setEnabled(true);
                 asignar.setEnabled(false);
+                l1.setVisibility(View.VISIBLE);
             }
             scanear.setEnabled(true);
+        }
+    };
+
+    final Runnable Informacion = new Runnable() {
+
+        public void run() {
+            dialog = new Informacion_Elemento_Placa(getActivity(),0, ws_elementoPlaca);
+            dialog.show();
+            Log.v("emma", "Me toco");
         }
     };
 }

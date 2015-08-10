@@ -60,7 +60,6 @@ public class Observaciones extends Dialog {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dl_observaciones);
-Log.v("elemento", id_elemento);
         final Button cerrar = (Button) findViewById(R.id.cerrar_obser);
         final Button guardar = (Button) findViewById(R.id.guardar_obser);
 
