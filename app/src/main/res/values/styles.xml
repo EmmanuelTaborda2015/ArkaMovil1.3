@@ -51,7 +51,7 @@
     <item name="android:paddingLeft">10dp</item>
     <item name="android:paddingRight">10dp</item>
     <item name="android:ems">10</item>
-    <item name="android:digits">"1234567890qwertyuiopñlkjhgfdsazxcvbnm"</item>
+    <item name="android:digits">"1234567890qwertyuiopñlkjhgfdsazxcvbnmQWERTYUIOPÑLKJHGFDSAZXCVBNM "</item>
     <item name="android:maxLength">50</item>
     <item name="android:background">@drawable/campotexto</item>
 </style>

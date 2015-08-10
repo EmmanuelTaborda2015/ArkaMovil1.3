@@ -1,5 +1,6 @@
 package com.arkamovil.android.casos_uso;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -54,6 +55,8 @@ public class AsociarImagen extends Fragment {
     private static String imagen;
     private static String id_elemento;
     private static String id;
+    private ProgressDialog circuloProgreso;
+
 
     private Informacion_Elemento_Placa dialog;
 
@@ -76,16 +79,18 @@ public class AsociarImagen extends Fragment {
         l1 = (LinearLayout) rootView.findViewById(R.id.linear_elemento);
         l1.setVisibility(View.GONE);
 
-        final LinearLayout l2 = (LinearLayout) rootView.findViewById(R.id.linear_ingresar_placa);
-        l2.setVisibility(View.GONE);
+        //final LinearLayout l2 = (LinearLayout) rootView.findViewById(R.id.linear_ingresar_placa);
+        //l2.setVisibility(View.GONE);
 
         //final Button esc = (Button) rootView.findViewById(R.id.esc_placa);
-        final Button ing_placa = (Button) rootView.findViewById(R.id.ingresar_placa);
+        //final Button ing_placa = (Button) rootView.findViewById(R.id.ingresar_placa);
         consultar_placa = (Button) rootView.findViewById(R.id.con_placa);
 
         l1.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+
+            circuloProgreso = ProgressDialog.show(getActivity(), "", "Espere por favor ...", true);
 
             thread_Informacion = new Thread() {
                 public void run() {
@@ -100,18 +105,18 @@ public class AsociarImagen extends Fragment {
         }
         });
 
-        ing_placa.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean on = ((ToggleButton) v).isChecked();
-                if (on) {
-                    l2.setVisibility(View.VISIBLE);
+        //ing_placa.setOnClickListener(new View.OnClickListener() {
+            //@Override
+            //public void onClick(View v) {
+                //boolean on = ((ToggleButton) v).isChecked();
+                //if (on) {
+                    //l2.setVisibility(View.VISIBLE);
                     //l1.setVisibility(View.GONE);
-                } else {
-                    l2.setVisibility(View.GONE);
-                }
-            }
-        });
+                //} else {
+                   //l2.setVisibility(View.GONE);
+                //}
+            //}
+        //});
 
         consultar_placa.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -120,6 +125,7 @@ public class AsociarImagen extends Fragment {
                 final String cont = String.valueOf(txtPlaca.getText());
                 consultar_placa.setEnabled(false);
                 btnCamara.setEnabled(false);
+                scanear.setEnabled(false);
 
                 final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
@@ -180,7 +186,7 @@ public class AsociarImagen extends Fragment {
 
                 btnCamara.setEnabled(false);
                 asignar.setEnabled(false);
-                l2.setVisibility(View.GONE);
+                //l2.setVisibility(View.GONE);
 
                 Intent intent = new Intent("com.arkamovil.android.SCAN");
                 startActivityForResult(intent, 0);
@@ -233,14 +239,14 @@ public class AsociarImagen extends Fragment {
 
         if (opcion == 1) {
             ImageView iv = (ImageView) rootView.findViewById(R.id.imageView1);
-            iv.setImageBitmap(decodeSampledBitmapFromResource(foto, 100, 100));
+            iv.setImageBitmap(decodeSampledBitmapFromResource(foto, 300, 300));
 
             File file = new File(foto);
             if (file.exists()) {
                 InputStream inputStream = null;
 
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                decodeSampledBitmapFromResource(foto, 100, 100).compress(Bitmap.CompressFormat.PNG, 100, baos); //bm is the bitmap object
+                decodeSampledBitmapFromResource(foto, 300, 300).compress(Bitmap.CompressFormat.PNG, 100, baos); //bm is the bitmap object
                 byte[] b = baos.toByteArray();
 
                 String encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
@@ -320,7 +326,8 @@ public class AsociarImagen extends Fragment {
     final Runnable Elemento = new Runnable() {
 
         public void run() {
-            if ("false".equals(id)) {
+            scanear.setEnabled(true);
+            if ("false".equals(id) || "".equals(id)) {
                 Toast.makeText(getActivity(), "No se encontro ningun elemento con la placa escaneada", Toast.LENGTH_LONG).show();
                 consultar_placa.setEnabled(true);
             } else {
@@ -340,7 +347,8 @@ public class AsociarImagen extends Fragment {
         public void run() {
             dialog = new Informacion_Elemento_Placa(getActivity(),0, ws_elementoPlaca);
             dialog.show();
-            Log.v("emma", "Me toco");
+            circuloProgreso.dismiss();
+
         }
     };
 }

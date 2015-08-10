@@ -213,7 +213,7 @@ public class ActaVisita extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 for (int i = 0; i < lista_documento.size(); i++) {
-                    if (String.valueOf(docRes.getText()).equals(lista_documento.get(i))) {
+                    if (String.valueOf(docRes.getText()).equals(String.valueOf(lista_documento.get(i))+" - " + String.valueOf(lista_funcionario.get(i)))) {
                         seleccion3 = i;
                     }
                 }
@@ -296,14 +296,14 @@ public class ActaVisita extends Fragment {
                     thread_registrarActa = new Thread() {
                         public void run() {
                             WS_RegistroActaVisita enviar = new WS_RegistroActaVisita();
-                            enviar.startWebAccess(lista_id_sede.get(seleccion), lista_id_dependencia.get(seleccion1), docRes_s, observacion_s, fecha, proxVisita, lista_id_ubicacion.get(seleccion2));
+                            enviar.startWebAccess(lista_id_sede.get(seleccion), lista_id_dependencia.get(seleccion1), lista_documento.get(seleccion3), observacion_s, fecha, proxVisita, lista_id_ubicacion.get(seleccion2));
                         }
                     };
 
                     thread_registrarActa.start();
 
                     GenerarPDF_ActaVisita generar = new GenerarPDF_ActaVisita();
-                    generar.generar(getResources(), fecha, sede_s, dependencia_s, nombRes_s, docRes_s, observacion_s, numVisita_s, proxVisita);
+                    generar.generar(getResources(), fecha, sede_s, dependencia_s, lista_funcionario.get(seleccion3), lista_documento.get(seleccion3), observacion_s, numVisita_s, proxVisita);
 
                     limpiar();
 

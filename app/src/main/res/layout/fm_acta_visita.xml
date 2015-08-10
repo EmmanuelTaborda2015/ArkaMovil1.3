@@ -74,7 +74,7 @@
                     style="@style/buttonTextArkaMovil"
                     android:inputType="number"
 
-                    android:maxLength="15"
+                    android:maxLength="100"
                     android:id="@+id/cedularesponsable_c1" />
 
                 <TextView

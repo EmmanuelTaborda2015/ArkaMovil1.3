@@ -30,44 +30,23 @@
                     android:id="@+id/escanear_c3"
                     android:layout_gravity="center_horizontal" />
 
-                <ToggleButton
+                <TextView
+                    android:id="@+id/label_placa"
+                    android:text="Ingrese el Número de Placa a Consultar"
+                    style="@style/labelArkaMovil" />
+
+                <AutoCompleteTextView
+                    style="@style/buttonTextArkaMovil"
+                    android:inputType="number"
+                    android:maxLength="50"
+                    android:id="@+id/ing_placa" />
+
+                <Button
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/ingresar_placa"
-                    android:layout_marginTop="10dp"
-                    android:background="@color/GRIS2"
-                    android:textOff="INGRESAR PLACA"
-                    android:textOn="INGRESAR PLACA" />
-
-                <LinearLayout
-                    android:id="@+id/linear_ingresar_placa"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:layout_marginBottom="10dp"
-                    android:orientation="vertical"
-                    android:background="@drawable/borde_layout">
-
-                    <TextView
-                        android:id="@+id/label_placa"
-                        android:text="Placa"
-                        style="@style/labelArkaMovil" />
-
-                    <AutoCompleteTextView
-                        style="@style/buttonTextArkaMovil"
-                        android:inputType="number"
-                        android:maxLength="50"
-                        android:id="@+id/ing_placa" />
-
-                    <Button
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="consultar"
-                        android:layout_marginTop="5dp"
-                        android:id="@+id/con_placa" />
-
-                </LinearLayout>
-
-
+                    android:text="consultar"
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/con_placa" />
 
             </LinearLayout>
 
