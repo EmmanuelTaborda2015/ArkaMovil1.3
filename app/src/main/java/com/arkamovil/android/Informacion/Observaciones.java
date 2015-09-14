@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -18,7 +19,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.arkamovil.android.Login;
 import com.arkamovil.android.R;
+import com.arkamovil.android.servicios_web.WS_ElementoPlaca;
 import com.arkamovil.android.servicios_web.WS_ElementosInventario;
 import com.arkamovil.android.servicios_web.WS_GuardarObservaciones;
 import com.arkamovil.android.servicios_web.WS_Imagen;
@@ -129,8 +132,9 @@ public class Observaciones extends Dialog {
                             if (!"".equals(String.valueOf(obs_almacen.getText())) || tipo_movimiento.getSelectedItemPosition() > 0) {
                                 thread = new Thread() {
                                     public void run() {
+                                        String id_dispositivo = Settings.Secure.getString(c.getContentResolver(), Settings.Secure.ANDROID_ID);
                                         WS_GuardarObservaciones ws_guardarObservaciones = new WS_GuardarObservaciones();
-                                        getId_levantamientoGenerado = ws_guardarObservaciones.startWebAccess(id_elemento, id_levantamiento, funcionario, String.valueOf(obs_almacen.getText()), String.valueOf(tipo_movimiento.getSelectedItemPosition() - 1));
+                                        getId_levantamientoGenerado = ws_guardarObservaciones.startWebAccess(id_elemento, id_levantamiento, funcionario, String.valueOf(obs_almacen.getText()), String.valueOf(tipo_movimiento.getSelectedItemPosition() - 1), new Login().getUsuarioSesion(), id_dispositivo);
                                         handler.post(createUI);
                                     }
                                 };

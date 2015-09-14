@@ -17,11 +17,13 @@ public class WS_ConsultarPlacaImagen {
     private String webResponse = "";
 
 
-    public String startWebAccess(String placa){
+    public String startWebAccess(String placa, String usuario, String dispositivo){
 
         SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 
         request.addProperty("placa", placa);
+        request.addProperty("usuario", usuario);
+        request.addProperty("dispositivo", dispositivo);
 
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         envelope.setOutputSoapObject(request);

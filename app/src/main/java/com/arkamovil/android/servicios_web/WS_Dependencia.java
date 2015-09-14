@@ -36,7 +36,7 @@ public class WS_Dependencia {
     private List<String> id_dependencia = new ArrayList<String>();
 
 
-    public void startWebAccess(final Activity act, final AutoCompleteTextView spin, final String sede) {
+    public void startWebAccess(final Activity act, final AutoCompleteTextView spin, final String sede, final String usuario, final String dispositivo) {
 
         this.act = act;
         this.spin = spin;
@@ -46,6 +46,8 @@ public class WS_Dependencia {
                 SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 
                 request.addProperty("sede", sede);
+                request.addProperty("usuario", usuario);
+                request.addProperty("dispositivo", dispositivo);
 
                 SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
                 envelope.setOutputSoapObject(request);

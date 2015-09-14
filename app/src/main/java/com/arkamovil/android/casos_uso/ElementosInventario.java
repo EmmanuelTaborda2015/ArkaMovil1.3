@@ -4,12 +4,16 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TableLayout;
@@ -19,10 +23,14 @@ import android.widget.Toast;
 
 import com.arkamovil.android.Informacion.Informacion_Elementos;
 import com.arkamovil.android.Informacion.Observaciones;
+import com.arkamovil.android.Login;
 import com.arkamovil.android.R;
+import com.arkamovil.android.procesos.FinalizarSesion;
+import com.arkamovil.android.servicios_web.WS_ElementoPlaca;
 import com.arkamovil.android.servicios_web.WS_ElementosInventario;
 import com.arkamovil.android.servicios_web.WS_Imagen;
 import com.arkamovil.android.servicios_web.WS_Observaciones;
+import com.arkamovil.android.servicios_web.WS_ValidarSesion;
 
 import java.util.List;
 
@@ -32,6 +40,10 @@ public class ElementosInventario extends Fragment {
     private Handler handler = new Handler();
 
     private ProgressDialog circuloProgreso;
+
+    private Thread thread_validarSesion;
+    private Handler handler_validarSesion = new Handler();
+    private String webResponse_sesion;
 
     ImageView subir;
     ImageView bajar;
@@ -52,6 +64,24 @@ public class ElementosInventario extends Fragment {
 
         rootView = inflater.inflate(R.layout.fm_inventario, container, false);
 
+        rootView.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+
+                thread_validarSesion = new Thread() {
+                    public void run() {
+                        Looper.prepare();
+                        String id_dispositivo = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
+                        WS_ValidarSesion verificar = new WS_ValidarSesion();
+                        webResponse_sesion = verificar.startWebAccess(new Login().getUsuarioSesion(), id_dispositivo);
+                        handler_validarSesion.post(ValidarSesion);
+                    }
+                };
+                thread_validarSesion.start();
+
+                return true;
+            }
+        });
+
         func  = getArguments().getString("doc_fun");
         final String depe  = getArguments().getString("id_dep");
 
@@ -60,8 +90,9 @@ public class ElementosInventario extends Fragment {
         thread = new Thread() {
             public void run() {
 
+                String id_dispositivo = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
                 elementos = new WS_ElementosInventario();
-                elementos.startWebAccess(func, depe);
+                elementos.startWebAccess(func, depe, new Login().getUsuarioSesion(), id_dispositivo);
 
                 handler.post(createUI);
             }
@@ -314,8 +345,13 @@ public class ElementosInventario extends Fragment {
                     index_obser = v.getId();
                     thread = new Thread() {
                         public void run() {
+
+                            Looper.prepare();
+
+                            String id_dispositivo = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
                             observaciones = new WS_Observaciones();
-                            observaciones.startWebAccess(elementos.getId_elemento().get(index_obser));
+                            observaciones.startWebAccess(elementos.getId_elemento().get(index_obser), new Login().getUsuarioSesion(), id_dispositivo);
+
                             handler.post(Obser);
                         }
                     };
@@ -384,5 +420,21 @@ public class ElementosInventario extends Fragment {
         tabla.removeAllViews();
         cabecera.removeAllViews();
     }
+
+    final Runnable ValidarSesion = new Runnable() {
+
+        public void run() {
+
+            if("sesion_expirada".equals(webResponse_sesion)){
+                new FinalizarSesion().sesionExpirada(getActivity());
+                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+            }else if("sesion_fraudulenta".equals(webResponse_sesion)){
+                new FinalizarSesion().sesionInvalida(getActivity());
+                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+            }
+        }
+    };
 }
 

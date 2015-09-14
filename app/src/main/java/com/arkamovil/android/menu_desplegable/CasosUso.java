@@ -2,6 +2,9 @@ package com.arkamovil.android.menu_desplegable;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
+import android.provider.Settings;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
@@ -11,6 +14,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 
 import com.arkamovil.android.Login;
@@ -20,12 +24,18 @@ import com.arkamovil.android.casos_uso.ActaVisita;
 import com.arkamovil.android.casos_uso.CriteriosLevantamientoFisico;
 import com.arkamovil.android.casos_uso.Radicacion;
 import com.arkamovil.android.procesos.FinalizarSesion;
+import com.arkamovil.android.servicios_web.WS_CerrarSesion;
+import com.arkamovil.android.servicios_web.WS_ValidarSesion;
 
 
 public class CasosUso extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     int cont = 0;
+
+    private Thread thread_cerrarSesion;
+    private Handler handler_cerrarSesion = new Handler();
+    private String webResponse_cerrarSesion;
 
     public static int getSalir() {
         return salir;
@@ -102,8 +112,17 @@ public class CasosUso extends ActionBarActivity
 
             case 4:
                 this.salir = 1;
-                Intent i = new Intent (CasosUso.this, Login.class) ;
-                startActivity(i);
+                thread_cerrarSesion = new Thread() {
+                    public void run() {
+                        Looper.prepare();
+                        String id_dispositivo = Settings.Secure.getString(getApplication().getContentResolver(), Settings.Secure.ANDROID_ID);
+                        WS_CerrarSesion ws_cerrarSesion = new WS_CerrarSesion();
+                        webResponse_cerrarSesion = ws_cerrarSesion.startWebAccess(new Login().getUsuarioSesion(), id_dispositivo);
+                        handler_cerrarSesion.post(cerrarSesion);
+                    }
+                };
+                thread_cerrarSesion.start();
+
                 break;
         }
 
@@ -142,4 +161,14 @@ public class CasosUso extends ActionBarActivity
         }
 
     }
+
+    final Runnable cerrarSesion = new Runnable() {
+
+        public void run() {
+            if("true".equals(webResponse_cerrarSesion)){
+                Intent i = new Intent (CasosUso.this, Login.class) ;
+                startActivity(i);
+            }
+        }
+    };
 }

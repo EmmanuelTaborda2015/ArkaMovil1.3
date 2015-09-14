@@ -51,7 +51,7 @@ public class WS_InventarioTipoConfirmacion {
         return doc_fun;
     }
 
-    public void startWebAccess(final String estado, final String criterio, final String dato, final int offset, final int limit) {
+    public void startWebAccess(final String estado, final String criterio, final String dato, final int offset, final int limit, String usuario, String dispositivo) {
 
         SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 
@@ -60,6 +60,8 @@ public class WS_InventarioTipoConfirmacion {
         request.addProperty("dato", dato);
         request.addProperty("offset", offset);
         request.addProperty("limit", limit);
+        request.addProperty("usuario", usuario);
+        request.addProperty("dispositivo", dispositivo);
 
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         envelope.setOutputSoapObject(request);

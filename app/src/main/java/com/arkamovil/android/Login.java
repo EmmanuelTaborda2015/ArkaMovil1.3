@@ -1,5 +1,6 @@
 package com.arkamovil.android;
 
+import android.provider.Settings;
 import android.provider.Settings.Secure;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -17,6 +18,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.arkamovil.android.menu_desplegable.CasosUso;
+import com.arkamovil.android.procesos.FinalizarSesion;
+import com.arkamovil.android.servicios_web.WS_CerrarSesion;
 import com.arkamovil.android.servicios_web.WS_Funcionario;
 import com.arkamovil.android.servicios_web.WS_Login;
 
@@ -31,6 +34,10 @@ public class Login extends ActionBarActivity {
     private EditText usuario;
     private EditText contrasena;
     private Button boton;
+
+    private Thread thread_cerrarSesion;
+    private Handler handler_cerrarSesion = new Handler();
+    private String webResponse_cerrarSesion;
 
     public int getSalir() {
         return salir;
@@ -89,17 +96,17 @@ public class Login extends ActionBarActivity {
                     contador++;
                 }
                 if (contador == 0) {
-                    thread = new Thread() {
+
+                    thread_cerrarSesion = new Thread() {
                         public void run() {
-                            //Se crea el objeto de la clase (Web Service Login), y se le envian los parametros Context, usuario y contraseña ingresadas.
-                            String id_dispositivo = Secure.getString(getApplication().getContentResolver(), Secure.ANDROID_ID);
-                            WS_Login verificar = new WS_Login();
-                            webResponse = verificar.startWebAccess(String.valueOf(usuario.getText()), String.valueOf(contrasena.getText()), id_dispositivo);
-                            handler.post(createUI);
+                            Looper.prepare();
+                            String id_dispositivo = Settings.Secure.getString(getApplication().getContentResolver(), Settings.Secure.ANDROID_ID);
+                            WS_CerrarSesion ws_cerrarSesion = new WS_CerrarSesion();
+                            webResponse_cerrarSesion = ws_cerrarSesion.startWebAccess(new Login().getUsuarioSesion(), id_dispositivo);
+                            handler_cerrarSesion.post(cerrarSesion);
                         }
                     };
-
-                    thread.start();
+                    thread_cerrarSesion.start();
 
                 } else {
                     boton.setEnabled(true);
@@ -152,6 +159,23 @@ public class Login extends ActionBarActivity {
                 Toast.makeText(getApplicationContext(), "Usuario y/o Contraseña invalida", Toast.LENGTH_LONG).show();
             }
             boton.setEnabled(true);
+        }
+    };
+    final Runnable cerrarSesion = new Runnable() {
+
+        public void run() {
+                thread = new Thread() {
+                    public void run() {
+                        //Se crea el objeto de la clase (Web Service Login), y se le envian los parametros Context, usuario y contraseña ingresadas.
+                        String id_dispositivo = Secure.getString(getApplication().getContentResolver(), Secure.ANDROID_ID);
+                        WS_Login verificar = new WS_Login();
+                        webResponse = verificar.startWebAccess(String.valueOf(usuario.getText()), String.valueOf(contrasena.getText()), id_dispositivo);
+                        handler.post(createUI);
+                    }
+                };
+
+                thread.start();
+
         }
     };
 

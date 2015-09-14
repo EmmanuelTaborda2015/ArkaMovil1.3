@@ -18,12 +18,14 @@ public class WS_Radicar {
 
     private String webResponse = "";
 
-    public String startWebAccess( String funcionario,  List<String> dependencia) {
+    public String startWebAccess( String funcionario,  List<String> dependencia, String usuario, String dispositivo) {
 
         SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 
         request.addProperty("funcionario", funcionario);
         request.addProperty("dependencia", dependencia);
+        request.addProperty("usuario", usuario);
+        request.addProperty("dispositivo", dispositivo);
 
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         envelope.setOutputSoapObject(request);

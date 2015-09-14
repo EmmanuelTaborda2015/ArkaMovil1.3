@@ -2,14 +2,19 @@ package com.arkamovil.android.casos_uso;
 
 import android.app.DatePickerDialog;
 import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -21,13 +26,16 @@ import android.widget.Toast;
 import com.arkamovil.android.Login;
 import com.arkamovil.android.R;
 import com.arkamovil.android.herramientas.Despliegue;
+import com.arkamovil.android.procesos.FinalizarSesion;
 import com.arkamovil.android.procesos.GenerarPDF_ActaVisita;
 import com.arkamovil.android.servicios_web.WS_Dependencia;
+import com.arkamovil.android.servicios_web.WS_ElementoPlaca;
 import com.arkamovil.android.servicios_web.WS_Funcionario;
 import com.arkamovil.android.servicios_web.WS_NumeroVisitas;
 import com.arkamovil.android.servicios_web.WS_RegistroActaVisita;
 import com.arkamovil.android.servicios_web.WS_Sede;
 import com.arkamovil.android.servicios_web.WS_Ubicacion;
+import com.arkamovil.android.servicios_web.WS_ValidarSesion;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -44,6 +52,15 @@ public class ActaVisita extends Fragment {
     private static int day2;
     private TextView tvDisplayDate1;
     private TextView tvDisplayDate2;
+
+    private  WS_Funcionario ws_funcionario;
+
+    private Thread thread_WS_Fucncionario;
+    private Handler handler2 = new Handler();
+
+    private Thread thread_validarSesion;
+    private Handler handler_validarSesion = new Handler();
+    private String webResponse_sesion;
 
     private AutoCompleteTextView sede;
     private AutoCompleteTextView dependencia;
@@ -90,11 +107,34 @@ public class ActaVisita extends Fragment {
     private int seleccion2 = 0;
     private int seleccion3 = 0;
 
+    private int focus = 0;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         rootView = inflater.inflate(R.layout.fm_acta_visita, container, false);
+
+        rootView.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+
+                thread_validarSesion = new Thread() {
+                    public void run() {
+
+                        Looper.prepare();
+
+                        String id_dispositivo = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
+                        WS_ValidarSesion verificar = new WS_ValidarSesion();
+                        webResponse_sesion = verificar.startWebAccess(new Login().getUsuarioSesion(), id_dispositivo);
+                        handler_validarSesion.post(ValidarSesion);
+                    }
+                };
+                thread_validarSesion.start();
+
+                return true;
+            }
+        });
 
         //Se definen los campos a utilizar en la clase.
         establecerCampos();
@@ -110,17 +150,8 @@ public class ActaVisita extends Fragment {
         lista_id_sede = ws_sede.getId_sede();
 
 
-        WS_Funcionario ws_funcionario = new WS_Funcionario();
-
-        ws_funcionario.cargarListaFuncionario(getActivity(), docRes, "null");
-
-        lista_funcionario = ws_funcionario.getFun_nombre();
-        lista_documento = ws_funcionario.getFun_identificacion();
-
         //Se despliegan los datos obtenidos por del web service en el campo Atocomplete sede.
         new Despliegue(sede);
-
-        new Despliegue(docRes);
 
         //se genera la funció que permite generar un evento al seleccionar un item de las sedes.
         sede.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -131,8 +162,10 @@ public class ActaVisita extends Fragment {
                         seleccion = i;
                     }
                 }
+                String id_dispositivo = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
                 WS_Dependencia ws_dependencia = new WS_Dependencia();
-                ws_dependencia.startWebAccess(getActivity(), dependencia, lista_id_sede.get(seleccion));
+                ws_dependencia.startWebAccess(getActivity(), dependencia, lista_id_sede.get(seleccion), new Login().getUsuarioSesion(), id_dispositivo);
+
                 lista_dependencia = ws_dependencia.getDependencia();
                 lista_id_dependencia = ws_dependencia.getId_dependencia();
 
@@ -148,8 +181,13 @@ public class ActaVisita extends Fragment {
 
                 thread_numvisitas = new Thread() {
                     public void run() {
+
+                        Looper.prepare();
+
+                        String id_dispositivo = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
                         WS_NumeroVisitas visitas = new WS_NumeroVisitas();
-                        webResponse = visitas.startWebAccess();
+                        webResponse = visitas.startWebAccess(new Login().getUsuarioSesion(), id_dispositivo);
+
                         handler.post(createUI);
                     }
                 };
@@ -168,8 +206,9 @@ public class ActaVisita extends Fragment {
                     }
                 }
 
+                String id_dispositivo = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
                 WS_Ubicacion ws_ubicacion = new WS_Ubicacion();
-                ws_ubicacion.startWebAccess(getActivity(), ubicacion, lista_id_dependencia.get(seleccion1));
+                ws_ubicacion.startWebAccess(getActivity(), ubicacion, lista_id_dependencia.get(seleccion1), new Login().getUsuarioSesion(), id_dispositivo);
 
                 lista_ubicacion = ws_ubicacion.getUbicacion();
                 lista_id_ubicacion = ws_ubicacion.getId_ubicacion();
@@ -186,8 +225,13 @@ public class ActaVisita extends Fragment {
 
                 thread_numvisitas = new Thread() {
                     public void run() {
+
+                        Looper.prepare();
+
+                        String id_dispositivo = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
                         WS_NumeroVisitas visitas = new WS_NumeroVisitas();
-                        webResponse = visitas.startWebAccess();
+                        webResponse = visitas.startWebAccess(new Login().getUsuarioSesion(), id_dispositivo);
+
                         handler.post(createUI);
                     }
                 };
@@ -229,6 +273,58 @@ public class ActaVisita extends Fragment {
             }
         });
 
+        docRes.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                final String text = s.toString();
+                if (s.length() >= 3 && (focus == (s.length() + 1) || focus == (s.length() - 1) || focus == s.length())) {
+                    thread_WS_Fucncionario = new Thread() {
+                        public void run() {
+                            Looper.prepare();
+                            String id_dispositivo = Settings.Secure.getString(rootView.getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+                            ws_funcionario = new WS_Funcionario();
+                            ws_funcionario.startWebAccess(text, new Login().getUsuarioSesion(), id_dispositivo);
+
+                            handler2.post(Funcionario);
+
+                        }
+                    };
+                    thread_WS_Fucncionario.start();
+                }
+
+                focus = s.length();
+
+            }
+
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                new Despliegue(docRes);
+            }
+        });
+
+        docRes.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                                            public void onFocusChange(View v, boolean hasFocus) {
+                                                if (hasFocus) {
+                                                    try {
+                                                        docRes.setText("");
+                                                        docRes.setTextColor(getResources().getColor(R.color.NEGRO));
+                                                    } catch (NumberFormatException e) {
+                                                    }
+                                                }
+                                            }
+                                        }
+        );
+
+
         Time today = new Time(Time.getCurrentTimezone());
         today.setToNow();
 
@@ -260,13 +356,14 @@ public class ActaVisita extends Fragment {
             @Override
             public void onClick(View v) {
 
-
+                Log.v("calendar", "Dentro");
                 final Calendar c = Calendar.getInstance();
                 year2 = c.get(Calendar.YEAR);
                 month2 = c.get(Calendar.MONTH);
                 day2 = c.get(Calendar.DAY_OF_MONTH);
 
                 if (contador > 0) {
+
                     DatePickerDialog dialog = new DatePickerDialog(getActivity(), datePickerListener,
                             year1, month1, day1);
                     dialog.show();
@@ -299,8 +396,12 @@ public class ActaVisita extends Fragment {
 
                     thread_registrarActa = new Thread() {
                         public void run() {
+
+                            Looper.prepare();
+
+                            String id_dispositivo = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
                             WS_RegistroActaVisita enviar = new WS_RegistroActaVisita();
-                            enviar.startWebAccess(lista_id_sede.get(seleccion), lista_id_dependencia.get(seleccion1), lista_documento.get(seleccion3), observacion_s, fecha, proxVisita, lista_id_ubicacion.get(seleccion2));
+                            enviar.startWebAccess(lista_id_sede.get(seleccion), lista_id_dependencia.get(seleccion1), lista_documento.get(seleccion3), observacion_s, fecha, proxVisita, lista_id_ubicacion.get(seleccion2), new Login().getUsuarioSesion(), id_dispositivo);
                         }
                     };
 
@@ -360,6 +461,8 @@ public class ActaVisita extends Fragment {
 
         }
     };
+
+
 
     //Se verifica si la fecha de visita es previa a la fecha de la proxima visita
 
@@ -442,4 +545,29 @@ public class ActaVisita extends Fragment {
         numVisita.setText("");
         proximaVis.setText("");
     }
+
+    final Runnable ValidarSesion = new Runnable() {
+
+        public void run() {
+
+            if("sesion_expirada".equals(webResponse_sesion)){
+                new FinalizarSesion().sesionExpirada(getActivity());
+                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+            }else if("sesion_fraudulenta".equals(webResponse_sesion)){
+                new FinalizarSesion().sesionInvalida(getActivity());
+                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+            }
+        }
+    };
+
+    final Runnable Funcionario = new Runnable() {
+        public void run() {
+
+            ws_funcionario.cargarListaFuncionario(getActivity(), docRes, "null");
+            lista_funcionario = ws_funcionario.getFun_nombre();
+            lista_documento = ws_funcionario.getFun_identificacion();
+        }
+    };
 }

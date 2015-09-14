@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.util.Base64;
 import android.view.View;
 import android.view.Window;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.arkamovil.android.Login;
 import com.arkamovil.android.R;
 import com.arkamovil.android.servicios_web.WS_Imagen;
 
@@ -69,8 +71,9 @@ public class Informacion_Elementos_Cedula extends Dialog {
         thread = new Thread() {
             public void run() {
 
+                String id_dispositivo = Settings.Secure.getString(c.getContentResolver(), Settings.Secure.ANDROID_ID);
                 WS_Imagen ws_imagen = new WS_Imagen();
-                img =  ws_imagen.startWebAccess(datos.getId_elemento().get(i));
+                img = ws_imagen.startWebAccess(datos.getId_elemento().get(i), new Login().getUsuarioSesion(), id_dispositivo);
 
                 handler.post(createUI);
             }

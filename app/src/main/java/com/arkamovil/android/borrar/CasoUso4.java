@@ -23,6 +23,7 @@ import com.arkamovil.android.Login;
 import com.arkamovil.android.R;
 import com.arkamovil.android.herramientas.Despliegue;
 import com.arkamovil.android.servicios_web.WS_Dependencia;
+import com.arkamovil.android.servicios_web.WS_ElementoPlaca;
 import com.arkamovil.android.servicios_web.WS_Funcionario;
 import com.arkamovil.android.servicios_web.WS_Sede;
 import com.arkamovil.android.servicios_web.WS_Ubicacion;
@@ -199,8 +200,9 @@ public class CasoUso4 extends Fragment {
                     }
                 }
                 //Se envia parametros de vista y de campo AutoComplete al web service de facultad.
+                String id_dispositivo = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
                 WS_Dependencia ws_dependencia = new WS_Dependencia();
-                ws_dependencia.startWebAccess(getActivity(), dependencia, lista_id_sede.get(seleccion));
+                ws_dependencia.startWebAccess(getActivity(), dependencia, lista_id_sede.get(seleccion), new Login().getUsuarioSesion(), id_dispositivo);
 
                 lista_dependencia = ws_dependencia.getDependencia();
                 lista_id_dependencia = ws_dependencia.getId_dependencia();
@@ -224,8 +226,10 @@ public class CasoUso4 extends Fragment {
                     }
                 }
                 //Se envia parametros de vista y de campo AutoComplete al web service de facultad.
+
+                String id_dispositivo = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
                 WS_Ubicacion ws_ubicacion = new WS_Ubicacion();
-                ws_ubicacion.startWebAccess(getActivity(), ubicacion, lista_id_dependencia.get(seleccion1));
+                ws_ubicacion.startWebAccess(getActivity(), ubicacion, lista_id_dependencia.get(seleccion1), new Login().getUsuarioSesion(), id_dispositivo);
 
                 lista_ubicacion = ws_ubicacion.getUbicacion();
                 lista_id_ubicacion = ws_ubicacion.getId_ubicacion();

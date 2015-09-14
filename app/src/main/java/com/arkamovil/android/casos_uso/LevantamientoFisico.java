@@ -4,20 +4,28 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.arkamovil.android.Login;
 import com.arkamovil.android.R;
+import com.arkamovil.android.procesos.FinalizarSesion;
+import com.arkamovil.android.servicios_web.WS_ElementoPlaca;
 import com.arkamovil.android.servicios_web.WS_InventarioTipoConfirmacion;
+import com.arkamovil.android.servicios_web.WS_ValidarSesion;
 
 import java.util.List;
 
@@ -32,6 +40,10 @@ public class LevantamientoFisico extends Fragment {
 
     private WS_InventarioTipoConfirmacion inventario;
 
+    private Thread thread_validarSesion;
+    private Handler handler_validarSesion = new Handler();
+    private String webResponse_sesion;
+
     private View rootView;
     private int offset = 0;
     private int limit = 0;
@@ -44,6 +56,24 @@ public class LevantamientoFisico extends Fragment {
 
         rootView = inflater.inflate(R.layout.fm_levantamiento_fisico, container, false);
 
+        rootView.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+
+                thread_validarSesion = new Thread() {
+                    public void run() {
+                        Looper.prepare();
+                        String id_dispositivo = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
+                        WS_ValidarSesion verificar = new WS_ValidarSesion();
+                        webResponse_sesion = verificar.startWebAccess(new Login().getUsuarioSesion(), id_dispositivo);
+                        handler_validarSesion.post(ValidarSesion);
+                    }
+                };
+                thread_validarSesion.start();
+
+                return true;
+            }
+        });
+
         estado  = getArguments().getString("estado");
         final String criterio  = getArguments().getString("criterio");
         final String dato  = getArguments().getString("dato");
@@ -52,8 +82,12 @@ public class LevantamientoFisico extends Fragment {
 
         thread = new Thread() {
             public void run() {
+
+                Looper.prepare();
+
+                String id_dispositivo = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
                 inventario = new WS_InventarioTipoConfirmacion();
-                inventario.startWebAccess(estado, criterio, dato, offset, limit);
+                inventario.startWebAccess(estado, criterio, dato, offset, limit, new Login().getUsuarioSesion(), id_dispositivo);
 
                 handler.post(createUI);
             }
@@ -355,5 +389,21 @@ public class LevantamientoFisico extends Fragment {
         tabla.removeAllViews();
         cabecera.removeAllViews();
     }
+
+    final Runnable ValidarSesion = new Runnable() {
+
+        public void run() {
+
+            if("sesion_expirada".equals(webResponse_sesion)){
+                new FinalizarSesion().sesionExpirada(getActivity());
+                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+            }else if("sesion_fraudulenta".equals(webResponse_sesion)){
+                new FinalizarSesion().sesionInvalida(getActivity());
+                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+            }
+        }
+    };
 }
 

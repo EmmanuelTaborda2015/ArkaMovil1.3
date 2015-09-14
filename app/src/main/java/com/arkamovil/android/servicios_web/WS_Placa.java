@@ -90,7 +90,7 @@ public class WS_Placa {
         return id_elemento;
     }
 
-    public void startWebAccess(View rootView, Activity actividad, final String numplaca) {
+    public void startWebAccess(View rootView, Activity actividad, final String numplaca, final String usuario, final String dispositivo) {
 
         this.rootView = rootView;
         this.act = actividad;
@@ -111,6 +111,8 @@ public class WS_Placa {
                 SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 
                 request.addProperty("placa", numplaca);
+                request.addProperty("usuario", usuario);
+                request.addProperty("dispositivo", dispositivo);
 
                 SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
                 envelope.setOutputSoapObject(request);

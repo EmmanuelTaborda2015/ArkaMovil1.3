@@ -51,7 +51,7 @@ public class CriteriosLevantamientoFisico extends Fragment {
     private Thread thread_WS_Fucncionario;
     private Handler handler2 = new Handler();
     private ProgressDialog circuloProgreso;
-    private String webResponse;
+
     private int focus = 0;
     private int selecciono = 0;
 
@@ -63,6 +63,7 @@ public class CriteriosLevantamientoFisico extends Fragment {
 
     private Thread thread_validarSesion;
     private Handler handler_validarSesion = new Handler();
+    private String webResponse_sesion;
 
     private List<String> lista_sede = new ArrayList<String>();
     private List<String> lista_id_sede = new ArrayList<String>();
@@ -86,9 +87,6 @@ public class CriteriosLevantamientoFisico extends Fragment {
     private  int estado_aprob = 0;
     private  int criterio = 2;
 
-    private int sesion = 0;
-
-
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
 
@@ -103,8 +101,7 @@ public class CriteriosLevantamientoFisico extends Fragment {
                                 Looper.prepare();
                                 String id_dispositivo = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
                                 WS_ValidarSesion verificar = new WS_ValidarSesion();
-                                webResponse = verificar.startWebAccess(new Login().getUsuarioSesion(), id_dispositivo);
-                                Log.v("Aqui", webResponse);
+                                webResponse_sesion = verificar.startWebAccess(new Login().getUsuarioSesion(), id_dispositivo);
                                 handler_validarSesion.post(ValidarSesion);
                             }
                         };
@@ -257,8 +254,12 @@ public class CriteriosLevantamientoFisico extends Fragment {
                     }
                 }
                 //Se envia parametros de vista y de campo AutoComplete al web service de facultad.
+
+                Looper.prepare();
+
+                String id_dispositivo = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
                 WS_Dependencia ws_dependencia = new WS_Dependencia();
-                ws_dependencia.startWebAccess(getActivity(), dependencia, lista_id_sede.get(seleccion));
+                ws_dependencia.startWebAccess(getActivity(), dependencia, lista_id_sede.get(seleccion), new Login().getUsuarioSesion(), id_dispositivo);
 
                 lista_dependencia = ws_dependencia.getDependencia();
                 lista_id_dependencia = ws_dependencia.getId_dependencia();
@@ -498,14 +499,12 @@ public class CriteriosLevantamientoFisico extends Fragment {
 
         public void run() {
 
-           if("sesion_expirada".equals(webResponse)){
-               sesion = 0;
-               new FinalizarSesion().cerrarSesion(getActivity());
+           if("sesion_expirada".equals(webResponse_sesion)){
+               new FinalizarSesion().sesionExpirada(getActivity());
                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-           }else if("sesion_fraudulenta".equals(webResponse)){
-               sesion = 0;
-               new FinalizarSesion().cerrarSesion(getActivity());
+           }else if("sesion_fraudulenta".equals(webResponse_sesion)){
+               new FinalizarSesion().sesionInvalida(getActivity());
                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
            }

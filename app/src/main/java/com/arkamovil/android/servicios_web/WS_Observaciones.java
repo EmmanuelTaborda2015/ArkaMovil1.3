@@ -46,12 +46,14 @@ public class WS_Observaciones {
     }
 
 
-    public void startWebAccess(String id_elemento) {
+    public void startWebAccess(String id_elemento, String usuario, String dispositivo) {
 
 
         SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 
         request.addProperty("id_elemento", id_elemento);
+        request.addProperty("usuario", usuario);
+        request.addProperty("dispositivo", dispositivo);
 
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         envelope.setOutputSoapObject(request);

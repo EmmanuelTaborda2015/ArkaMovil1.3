@@ -16,10 +16,13 @@ public class WS_NumeroVisitas {
     private String webResponse = "";
 
 
-    public String startWebAccess() {
+    public String startWebAccess(String usuario, String dispositivo) {
 
 
         SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
+
+        request.addProperty("usuario", usuario);
+        request.addProperty("dispositivo", dispositivo);
 
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         envelope.setOutputSoapObject(request);

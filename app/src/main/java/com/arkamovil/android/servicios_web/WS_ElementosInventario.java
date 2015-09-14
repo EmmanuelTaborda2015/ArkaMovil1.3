@@ -74,12 +74,14 @@ public class WS_ElementosInventario {
         return id_elemento;
     }
 
-    public void startWebAccess(final String doc_funcionario, final String id_dep) {
+    public void startWebAccess(final String doc_funcionario, final String id_dep, String usuario, String dispositivo) {
 
         SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 
         request.addProperty("funcionario", doc_funcionario);
         request.addProperty("dependencia", id_dep);
+        request.addProperty("usuario", usuario);
+        request.addProperty("dispositivo", dispositivo);
 
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         envelope.setOutputSoapObject(request);
