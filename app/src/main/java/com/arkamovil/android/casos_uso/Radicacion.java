@@ -73,7 +73,8 @@ public class Radicacion extends Fragment {
         final String criterio  = "2";
 
         WS_Funcionario ws_funcionario = new WS_Funcionario();
-        ws_funcionario.startWebAccess(getActivity(), funcionario, "null");
+
+        ws_funcionario.cargarListaFuncionario(getActivity(), funcionario, "null");
 
         lista_funcionario = ws_funcionario.getFun_nombre();
         lista_documento = ws_funcionario.getFun_identificacion();
@@ -136,7 +137,6 @@ public class Radicacion extends Fragment {
                 final List<String> dep = new ArrayList<String>();
                 for (int i=0; i < posicionRadicado.size(); i++) {
                     dep.add(id_dependencia.get(posicionRadicado.get(i)));
-                    Log.v("ema", id_dependencia.get(posicionRadicado.get(i)));
                 }
                 WS_Radicar radicar = new WS_Radicar();
                 radicar.startWebAccess(doc_fun.get(0), dep);

@@ -158,6 +158,8 @@
                     style="@style/buttonTextArkaMovil"
                     android:inputType="text"
                     android:maxLength="50"
+                    android:text="Ingrese Mínimo 3 Caracteres"
+                    android:textColor="@color/GRIS"
                     android:id="@+id/funcionario_c2" />
 
                 <Button

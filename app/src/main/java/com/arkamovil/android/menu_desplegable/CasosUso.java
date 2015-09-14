@@ -1,13 +1,16 @@
 package com.arkamovil.android.menu_desplegable;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.widget.Button;
 
+import com.arkamovil.android.Login;
 import com.arkamovil.android.R;
 import com.arkamovil.android.casos_uso.AsociarImagen;
 import com.arkamovil.android.casos_uso.ActaVisita;
@@ -20,17 +23,29 @@ public class CasosUso extends ActionBarActivity
 
     int cont = 0;
 
+    public static int getSalir() {
+        return salir;
+    }
+
+    private static int salir = 0;
+
     private Button scanear;
 
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
     private CharSequence mTitle;
 
+   // @Override
+    //public void onBackPressed() {
+        //Toast.makeText(c, "De clic en el botón \"CERRAR\" cuando este activo", Toast.LENGTH_LONG).show();
+    //}
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_casos_uso);
+
+        this.salir = 1;
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -75,6 +90,12 @@ public class CasosUso extends ActionBarActivity
             case 3:
                 fragment = new AsociarImagen();
                 this.setTitle("Asociar Imagen a Elemento");
+                break;
+
+            case 4:
+                this.salir = 1;
+                Intent i = new Intent (CasosUso.this, Login.class) ;
+                startActivity(i);
                 break;
         }
 

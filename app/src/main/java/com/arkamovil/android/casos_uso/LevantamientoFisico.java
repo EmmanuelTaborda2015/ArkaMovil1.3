@@ -222,7 +222,7 @@ public class LevantamientoFisico extends Fragment {
         txtDescripcion.setBackgroundResource(R.drawable.tabla_celda_cabecera);
         txtDescripcion.setLayoutParams(layoutTexto);
 
-        txtUbicacion.setText("Ubicación");
+        txtUbicacion.setText("Dependencia");
         txtUbicacion.setGravity(Gravity.CENTER_HORIZONTAL);
         txtUbicacion.setTextAppearance(actividad, R.style.etiqueta);
         txtUbicacion.setBackgroundResource(R.drawable.tabla_celda_cabecera);

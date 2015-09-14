@@ -67,7 +67,7 @@
                 android:layout_gravity="center_vertical|center_horizontal" />
             <TextView
                 android:id="@+id/label_observaciones_elemento"
-                android:text="Consultar Información del Elemento"
+                android:text="Ver Información del Elemento"
                 android:gravity="center"
                 style="@style/labelArkaMovil" />
 

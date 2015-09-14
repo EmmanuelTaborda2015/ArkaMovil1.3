@@ -108,7 +108,8 @@ public class ActaVisita extends Fragment {
 
 
         WS_Funcionario ws_funcionario = new WS_Funcionario();
-        ws_funcionario.startWebAccess(getActivity(), docRes, "null");
+
+        ws_funcionario.cargarListaFuncionario(getActivity(), docRes, "null");
 
         lista_funcionario = ws_funcionario.getFun_nombre();
         lista_documento = ws_funcionario.getFun_identificacion();

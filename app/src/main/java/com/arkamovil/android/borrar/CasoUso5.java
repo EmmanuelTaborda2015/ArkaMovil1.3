@@ -129,7 +129,8 @@ public class CasoUso5 extends Fragment {
         new Despliegue(sede);
 
         WS_Funcionario ws_funcionario = new WS_Funcionario();
-        ws_funcionario.startWebAccess(getActivity(), funcionario, "null");
+
+        ws_funcionario.cargarListaFuncionario(getActivity(), funcionario, "null");
 
         lista_funcionario = ws_funcionario.getFun_nombre();
         lista_documentos = ws_funcionario.getFun_identificacion();

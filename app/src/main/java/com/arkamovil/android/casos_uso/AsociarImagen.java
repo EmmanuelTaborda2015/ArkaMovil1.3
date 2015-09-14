@@ -126,6 +126,7 @@ public class AsociarImagen extends Fragment {
                 consultar_placa.setEnabled(false);
                 btnCamara.setEnabled(false);
                 scanear.setEnabled(false);
+                l1.setVisibility(View.GONE);
 
                 final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);

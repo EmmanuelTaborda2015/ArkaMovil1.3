@@ -12,14 +12,12 @@ public class WS_Login {
     private final String SOAP_ACTION = "urn:arka/login";
     private final String METHOD_NAME = "login";
     private String webResponse = "";
-    public String startWebAccess(String usuario, String contrasena) {
+    public String startWebAccess(String usuario, String contrasena, String id_dispositivo) {
         SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
         request.addProperty("usuario", usuario);
-        if("sistemasoas".equals(contrasena)){
-            request.addProperty("contrasenna", "eab41e38426312cf48baaaf80af9ee88b6023a44");
-        }else{
-            request.addProperty("contrasenna", "error");
-        }
+        request.addProperty("contrasenna", contrasena);
+        request.addProperty("dispositivo", id_dispositivo);
+
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         envelope.setOutputSoapObject(request);
         HttpTransportSE httpTransport = new HttpTransportSE(URL);

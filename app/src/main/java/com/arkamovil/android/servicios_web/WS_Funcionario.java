@@ -1,6 +1,11 @@
 package com.arkamovil.android.servicios_web;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -28,12 +33,18 @@ public class WS_Funcionario {
     private Thread thread;
     private Handler handler = new Handler();
 
+    public static String getWebResponse() {
+        return webResponse;
+    }
+
+    private static String webResponse;
+
     private Activity act;
     private AutoCompleteTextView spin;
 
-    private List<String> fun_identificacion = new ArrayList<String>();
-    private List<String> fun_nombre = new ArrayList<String>();
-    private List<String> fun_identif_nomb = new ArrayList<String>();
+    private static List<String> fun_identificacion;
+    private static List<String> fun_nombre;
+    private static List<String> fun_identif_nomb;
 
     public List<String> getFun_nombre() {
         return fun_nombre;
@@ -43,22 +54,30 @@ public class WS_Funcionario {
         return fun_identificacion;
     }
 
-    public void startWebAccess(final Activity act, final AutoCompleteTextView spin, final String dependencia) {
+    public void startWebAccess(String text, String usuario, String id_dispositivo, Activity actividad) {
 
-        this.act = act;
-        this.spin = spin;
+                fun_identificacion = new ArrayList<String>();
+                fun_nombre = new ArrayList<String>();
+                fun_identif_nomb = new ArrayList<String>();
 
-        thread = new Thread() {
-            public void run() {
                 SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 
-                //request.addProperty("id_objeto", dependencia);
+                request.addProperty("text", text);
+                request.addProperty("usuario", usuario);
+                request.addProperty("dispositivo", id_dispositivo);
 
                 SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
                 envelope.setOutputSoapObject(request);
 
                 HttpTransportSE httpTransport = new HttpTransportSE(URL);
 
+            try {
+                httpTransport.call(SOAP_ACTION, envelope);
+                Object response = envelope.getResponse();
+                webResponse = response.toString();
+
+            } catch (Exception exception) {
+            }
                 try {
 
                     httpTransport.call(SOAP_ACTION, envelope);
@@ -87,28 +106,37 @@ public class WS_Funcionario {
                         }catch (NullPointerException ex){
                             fun_identif_nomb.add("");
                         }
+                        Log.v("datos", fun_nombre + "  " + fun_identificacion);
                     }
 
                 } catch (Exception exception) {
                 }
-                handler.post(createUI);
-            }
-        };
-
-        thread.start();
 
     }
 
     final Runnable createUI = new Runnable() {
 
         public void run() {
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(act, android.R.layout.simple_spinner_item, fun_identif_nomb);
-            spin.setAdapter(adapter);
+            //ArrayAdapter<String> adapter = new ArrayAdapter<String>(act, android.R.layout.simple_spinner_item, fun_identif_nomb);
+            //spin.setAdapter(adapter);
 
-            if(fun_identificacion.size() == 0){
-                Toast.makeText(act, "VERIFIQUE SU CONEXIÓN A INTERNET", Toast.LENGTH_LONG).show();
-            }
+            //if(fun_identificacion.size() == 0){
+                //Toast.makeText(act, "VERIFIQUE SU CONEXIÓN A INTERNET", Toast.LENGTH_LONG).show();
+            //}
         }
     };
+
+    public void cargarListaFuncionario(final Activity act, final AutoCompleteTextView spin, final String dependencia){
+
+        this.act = act;
+        this.spin = spin;
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(act, android.R.layout.simple_spinner_item, fun_identif_nomb);
+        spin.setAdapter(adapter);
+
+        //if(fun_identificacion.size() == 0){
+            //Toast.makeText(act, "VERIFIQUE SU CONEXIÓN A INTERNET", Toast.LENGTH_LONG).show();
+        //}
+    }
 
 }

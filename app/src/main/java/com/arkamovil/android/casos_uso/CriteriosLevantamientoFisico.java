@@ -1,9 +1,17 @@
 package com.arkamovil.android.casos_uso;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,8 +26,10 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.arkamovil.android.Login;
 import com.arkamovil.android.R;
 import com.arkamovil.android.herramientas.Despliegue;
+import com.arkamovil.android.menu_desplegable.CasosUso;
 import com.arkamovil.android.servicios_web.WS_Dependencia;
 import com.arkamovil.android.servicios_web.WS_Funcionario;
 import com.arkamovil.android.servicios_web.WS_InventarioTipoConfirmacion;
@@ -33,6 +43,13 @@ public class CriteriosLevantamientoFisico extends Fragment {
     private AutoCompleteTextView sede;
     private AutoCompleteTextView dependencia;
     private AutoCompleteTextView funcionario;
+
+    private Thread thread_WS_Fucncionario;
+    private Handler handler2 = new Handler();
+    private ProgressDialog circuloProgreso;
+
+    private int focus = 0;
+    private int selecciono = 0;
 
     WS_InventarioTipoConfirmacion inventario;
 
@@ -53,6 +70,7 @@ public class CriteriosLevantamientoFisico extends Fragment {
     private List<String> lista_documento = new ArrayList<String>();
 
 
+    private  WS_Funcionario ws_funcionario;
     private static View rootView;
 
 
@@ -122,7 +140,7 @@ public class CriteriosLevantamientoFisico extends Fragment {
         criterio_busqueda.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 criterio = i;
-                if( i == 1 ){
+                if (i == 1) {
                     des1.setVisibility(View.VISIBLE);
                     l1.setVisibility(View.VISIBLE);
 
@@ -131,7 +149,7 @@ public class CriteriosLevantamientoFisico extends Fragment {
 
                     des3.setVisibility(View.GONE);
                     l3.setVisibility(View.GONE);
-                }else if( i== 2){
+                } else if (i == 2) {
                     des1.setVisibility(View.GONE);
                     l1.setVisibility(View.GONE);
 
@@ -140,7 +158,7 @@ public class CriteriosLevantamientoFisico extends Fragment {
 
                     des3.setVisibility(View.GONE);
                     l3.setVisibility(View.GONE);
-                }else if( i== 3){
+                } else if (i == 3) {
                     des1.setVisibility(View.GONE);
                     l1.setVisibility(View.GONE);
 
@@ -162,15 +180,6 @@ public class CriteriosLevantamientoFisico extends Fragment {
 
         lista_sede = ws_sede.getSede();
         lista_id_sede = ws_sede.getId_sede();
-
-
-        WS_Funcionario ws_funcionario = new WS_Funcionario();
-        ws_funcionario.startWebAccess(getActivity(), funcionario, "null");
-
-        lista_funcionario = ws_funcionario.getFun_nombre();
-        lista_documento = ws_funcionario.getFun_identificacion();
-
-        new Despliegue(funcionario);
 
         des1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -240,6 +249,7 @@ public class CriteriosLevantamientoFisico extends Fragment {
         dependencia.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                selecciono++;
                 final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
             }
@@ -383,11 +393,101 @@ public class CriteriosLevantamientoFisico extends Fragment {
             }
         });
 
+
+        funcionario.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+
+            }
+        });
+
+        funcionario.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+
+                final String text = s.toString();
+                if (s.length() >= 3 && (focus == (s.length()+1) || focus==(s.length()-1) )) {
+                    thread_WS_Fucncionario = new Thread() {
+                        public void run() {
+                            Looper.prepare();
+                            String id_dispositivo = Settings.Secure.getString(rootView.getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+                            ws_funcionario = new WS_Funcionario();
+                            ws_funcionario.startWebAccess(text, new Login().getUsuarioSesion(), id_dispositivo, getActivity());
+                            handler2.post(Funcionario);
+                        }
+                    };
+
+                    thread_WS_Fucncionario.start();
+                }
+
+                focus = s.length();
+
+            }
+
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                new Despliegue(funcionario);
+            }
+        });
+
+        funcionario.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                                                 public void onFocusChange(View v, boolean hasFocus) {
+                                                     if (hasFocus) {
+                                                         try {
+                                                             funcionario.setText("");
+                                                             funcionario.setTextColor(getResources().getColor(R.color.NEGRO));
+                                                         } catch (NumberFormatException e) {
+                                                         }
+                                                     }
+                                                 }
+                                             }
+        );
+
         return rootView;
     }
 
 
+    final Runnable Funcionario = new Runnable() {
 
+        public void run() {
+
+    Log.v("sesion", new WS_Funcionario().getWebResponse());
+            if("sesion_expirada".equals(new WS_Funcionario().getWebResponse())){
+
+                AlertDialog.Builder dialogo = new AlertDialog.Builder(getActivity());
+
+                dialogo.setTitle("SESIÓN CADUCADA");
+                dialogo.setMessage("La sesión ha caducado, Por favor inicie sesión nuevamente ");
+                dialogo.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent i = new Intent(getActivity(), Login.class);
+                        startActivity(i);
+                    }
+                });
+
+                //dialogo.create();
+
+                dialogo.show();
+            }else {
+                ws_funcionario.cargarListaFuncionario(getActivity(), funcionario, "null");
+
+                lista_funcionario = ws_funcionario.getFun_nombre();
+                lista_documento = ws_funcionario.getFun_identificacion();
+            }
+        }
+    };
 
 
 
