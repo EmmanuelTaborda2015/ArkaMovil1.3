@@ -54,7 +54,7 @@ public class WS_Funcionario {
         return fun_identificacion;
     }
 
-    public void startWebAccess(String text, String usuario, String id_dispositivo, Activity actividad) {
+    public void startWebAccess(String text, String usuario, String id_dispositivo) {
 
                 fun_identificacion = new ArrayList<String>();
                 fun_nombre = new ArrayList<String>();

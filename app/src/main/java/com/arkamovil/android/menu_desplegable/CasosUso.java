@@ -2,12 +2,15 @@ package com.arkamovil.android.menu_desplegable;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Button;
 
 import com.arkamovil.android.Login;
@@ -16,6 +19,7 @@ import com.arkamovil.android.casos_uso.AsociarImagen;
 import com.arkamovil.android.casos_uso.ActaVisita;
 import com.arkamovil.android.casos_uso.CriteriosLevantamientoFisico;
 import com.arkamovil.android.casos_uso.Radicacion;
+import com.arkamovil.android.procesos.FinalizarSesion;
 
 
 public class CasosUso extends ActionBarActivity
@@ -40,10 +44,14 @@ public class CasosUso extends ActionBarActivity
         //Toast.makeText(c, "De clic en el botón \"CERRAR\" cuando este activo", Toast.LENGTH_LONG).show();
     //}
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_casos_uso);
+
+
 
         this.salir = 1;
 
@@ -132,6 +140,6 @@ public class CasosUso extends ActionBarActivity
             ((CasosUso) activity).onSectionAttached(
                     getArguments().getInt(ARG_SECTION_NUMBER));
         }
-    }
 
+    }
 }

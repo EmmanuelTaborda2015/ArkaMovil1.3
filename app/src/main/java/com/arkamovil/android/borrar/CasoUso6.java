@@ -2,6 +2,7 @@ package com.arkamovil.android.borrar;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.arkamovil.android.Login;
 import com.arkamovil.android.R;
 import com.arkamovil.android.herramientas.Despliegue;
 import com.arkamovil.android.servicios_web.WS_Dependencia;
@@ -95,8 +97,9 @@ public class CasoUso6 extends Fragment {
 
         //Se envia parametros de vista y de dependencia seleccionada en el campo AutoComplete al web service de dependencias.
 
+        String id_dispositivo = Settings.Secure.getString(rootView.getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
         WS_Sede ws_sede = new WS_Sede();
-        ws_sede.startWebAccess(getActivity(), sede);
+        ws_sede.startWebAccess(getActivity(), sede, new Login().getUsuarioSesion(), id_dispositivo);
         lista_sede = ws_sede.getSede();
         lista_id_sede = ws_sede.getId_sede();
 

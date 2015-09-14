@@ -35,7 +35,7 @@ public class WS_Sede {
         return id_sede;
     }
 
-    public void startWebAccess(final Activity act, final AutoCompleteTextView spin) {
+    public void startWebAccess(final Activity act, final AutoCompleteTextView spin, final String usuario,  final String dispositivo) {
 
         this.act = act;
         this.spin = spin;
@@ -43,7 +43,8 @@ public class WS_Sede {
         thread = new Thread() {
             public void run() {
                 SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
-                //request.addProperty("","");
+                request.addProperty("usario",usuario);
+                request.addProperty("usario",dispositivo);
 
                 SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
                 envelope.setOutputSoapObject(request);

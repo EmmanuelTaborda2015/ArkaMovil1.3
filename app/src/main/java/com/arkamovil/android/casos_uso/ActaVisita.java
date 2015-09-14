@@ -2,6 +2,7 @@ package com.arkamovil.android.casos_uso;
 
 import android.app.DatePickerDialog;
 import android.os.Handler;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.text.format.Time;
@@ -17,6 +18,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.arkamovil.android.Login;
 import com.arkamovil.android.R;
 import com.arkamovil.android.herramientas.Despliegue;
 import com.arkamovil.android.procesos.GenerarPDF_ActaVisita;
@@ -101,8 +103,9 @@ public class ActaVisita extends Fragment {
         ubicacion.setEnabled(false);
 
         //Se cargar los datos del web service sede.
+        String id_dispositivo = Settings.Secure.getString(rootView.getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
         WS_Sede ws_sede = new WS_Sede();
-        ws_sede.startWebAccess(getActivity(), sede);
+        ws_sede.startWebAccess(getActivity(), sede, new Login().getUsuarioSesion(), id_dispositivo);
         lista_sede = ws_sede.getSede();
         lista_id_sede = ws_sede.getId_sede();
 

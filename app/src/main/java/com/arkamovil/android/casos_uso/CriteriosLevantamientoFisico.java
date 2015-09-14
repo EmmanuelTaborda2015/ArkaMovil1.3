@@ -14,6 +14,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -30,10 +31,13 @@ import com.arkamovil.android.Login;
 import com.arkamovil.android.R;
 import com.arkamovil.android.herramientas.Despliegue;
 import com.arkamovil.android.menu_desplegable.CasosUso;
+import com.arkamovil.android.procesos.FinalizarSesion;
 import com.arkamovil.android.servicios_web.WS_Dependencia;
 import com.arkamovil.android.servicios_web.WS_Funcionario;
 import com.arkamovil.android.servicios_web.WS_InventarioTipoConfirmacion;
+import com.arkamovil.android.servicios_web.WS_Login;
 import com.arkamovil.android.servicios_web.WS_Sede;
+import com.arkamovil.android.servicios_web.WS_ValidarSesion;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +51,7 @@ public class CriteriosLevantamientoFisico extends Fragment {
     private Thread thread_WS_Fucncionario;
     private Handler handler2 = new Handler();
     private ProgressDialog circuloProgreso;
-
+    private String webResponse;
     private int focus = 0;
     private int selecciono = 0;
 
@@ -57,8 +61,8 @@ public class CriteriosLevantamientoFisico extends Fragment {
     private static String string_sede;
     private static String string_funcionario;
 
-    private Thread thread;
-    private Handler handler = new Handler();
+    private Thread thread_validarSesion;
+    private Handler handler_validarSesion = new Handler();
 
     private List<String> lista_sede = new ArrayList<String>();
     private List<String> lista_id_sede = new ArrayList<String>();
@@ -82,11 +86,33 @@ public class CriteriosLevantamientoFisico extends Fragment {
     private  int estado_aprob = 0;
     private  int criterio = 2;
 
+    private int sesion = 0;
+
 
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
 
+
         rootView = inflater.inflate(R.layout.fm_verificar_inventarios, container, false);
+
+        rootView.setOnTouchListener(new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+
+                        thread_validarSesion = new Thread() {
+                            public void run() {
+                                Looper.prepare();
+                                String id_dispositivo = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
+                                WS_ValidarSesion verificar = new WS_ValidarSesion();
+                                webResponse = verificar.startWebAccess(new Login().getUsuarioSesion(), id_dispositivo);
+                                Log.v("Aqui", webResponse);
+                                handler_validarSesion.post(ValidarSesion);
+                            }
+                        };
+                        thread_validarSesion.start();
+                   
+                return true;
+            }
+        });
 
         getActivity().setTitle("Levantamiento Físico de Inventarios");
 
@@ -175,8 +201,9 @@ public class CriteriosLevantamientoFisico extends Fragment {
             }
         });
 
+        String id_dispositivo = Settings.Secure.getString(rootView.getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
         WS_Sede ws_sede = new WS_Sede();
-        ws_sede.startWebAccess(getActivity(), sede);
+        ws_sede.startWebAccess(getActivity(), sede, new Login().getUsuarioSesion(), id_dispositivo);
 
         lista_sede = ws_sede.getSede();
         lista_id_sede = ws_sede.getId_sede();
@@ -266,7 +293,7 @@ public class CriteriosLevantamientoFisico extends Fragment {
                     Fragment fragment = new LevantamientoFisico();
                     Bundle parametro = new Bundle();
                     parametro.putString("estado", (estado_aprob - 1) + "");
-                    parametro.putString("criterio", (criterio-1)+"");
+                    parametro.putString("criterio", (criterio - 1) + "");
                     parametro.putString("dato", "");
 
                     fragment.setArguments(parametro);
@@ -411,17 +438,16 @@ public class CriteriosLevantamientoFisico extends Fragment {
 
 
                 final String text = s.toString();
-                if (s.length() >= 3 && (focus == (s.length()+1) || focus==(s.length()-1) )) {
+                if (s.length() >= 3 && (focus == (s.length() + 1) || focus == (s.length() - 1))) {
                     thread_WS_Fucncionario = new Thread() {
                         public void run() {
                             Looper.prepare();
                             String id_dispositivo = Settings.Secure.getString(rootView.getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
                             ws_funcionario = new WS_Funcionario();
-                            ws_funcionario.startWebAccess(text, new Login().getUsuarioSesion(), id_dispositivo, getActivity());
+                            ws_funcionario.startWebAccess(text, new Login().getUsuarioSesion(), id_dispositivo);
                             handler2.post(Funcionario);
                         }
                     };
-
                     thread_WS_Fucncionario.start();
                 }
 
@@ -442,6 +468,7 @@ public class CriteriosLevantamientoFisico extends Fragment {
             }
         });
 
+
         funcionario.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                                                  public void onFocusChange(View v, boolean hasFocus) {
                                                      if (hasFocus) {
@@ -460,35 +487,30 @@ public class CriteriosLevantamientoFisico extends Fragment {
 
 
     final Runnable Funcionario = new Runnable() {
-
         public void run() {
-
-    Log.v("sesion", new WS_Funcionario().getWebResponse());
-            if("sesion_expirada".equals(new WS_Funcionario().getWebResponse())){
-
-                AlertDialog.Builder dialogo = new AlertDialog.Builder(getActivity());
-
-                dialogo.setTitle("SESIÓN CADUCADA");
-                dialogo.setMessage("La sesión ha caducado, Por favor inicie sesión nuevamente ");
-                dialogo.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent i = new Intent(getActivity(), Login.class);
-                        startActivity(i);
-                    }
-                });
-
-                //dialogo.create();
-
-                dialogo.show();
-            }else {
-                ws_funcionario.cargarListaFuncionario(getActivity(), funcionario, "null");
-
-                lista_funcionario = ws_funcionario.getFun_nombre();
-                lista_documento = ws_funcionario.getFun_identificacion();
-            }
+            ws_funcionario.cargarListaFuncionario(getActivity(), funcionario, "null");
+            lista_funcionario = ws_funcionario.getFun_nombre();
+            lista_documento = ws_funcionario.getFun_identificacion();
         }
     };
 
+    final Runnable ValidarSesion = new Runnable() {
+
+        public void run() {
+
+           if("sesion_expirada".equals(webResponse)){
+               sesion = 0;
+               new FinalizarSesion().cerrarSesion(getActivity());
+               final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+               imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+           }else if("sesion_fraudulenta".equals(webResponse)){
+               sesion = 0;
+               new FinalizarSesion().cerrarSesion(getActivity());
+               final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+               imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+           }
+        }
+    };
 
 
 }
