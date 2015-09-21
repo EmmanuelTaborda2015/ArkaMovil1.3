@@ -87,7 +87,9 @@ public class AsociarImagen extends Fragment {
 
                 thread_validarSesion = new Thread() {
                     public void run() {
+
                         Looper.prepare();
+
                         String id_dispositivo = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
                         WS_ValidarSesion verificar = new WS_ValidarSesion();
                         webResponse_sesion = verificar.startWebAccess(new Login().getUsuarioSesion(), id_dispositivo);
@@ -361,7 +363,7 @@ public class AsociarImagen extends Fragment {
             Toast.makeText(getActivity(), "Ha sido cargado la imagen al elemento", Toast.LENGTH_SHORT).show();
             scanear.setEnabled(true);
             btnCamara.setEnabled(true);
-            asignar.setEnabled(true);
+            asignar.setEnabled(false);
         }
     };
 
@@ -369,7 +371,7 @@ public class AsociarImagen extends Fragment {
 
         public void run() {
             scanear.setEnabled(true);
-            if ("false".equals(id) || "".equals(id)) {
+            if ("false".equals(id) || "".equals(id) || "sesion_expirada".equals(id)) {
                 Toast.makeText(getActivity(), "No se encontro ningun elemento con la placa escaneada", Toast.LENGTH_LONG).show();
                 consultar_placa.setEnabled(true);
             } else {
@@ -387,6 +389,7 @@ public class AsociarImagen extends Fragment {
     final Runnable Informacion = new Runnable() {
 
         public void run() {
+
             dialog = new Informacion_Elemento_Placa(getActivity(),0, ws_elementoPlaca);
             dialog.show();
             circuloProgreso.dismiss();

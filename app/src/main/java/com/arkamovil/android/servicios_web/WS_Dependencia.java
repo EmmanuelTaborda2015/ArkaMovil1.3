@@ -2,6 +2,7 @@ package com.arkamovil.android.servicios_web;
 
 import android.app.Activity;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -43,6 +44,9 @@ public class WS_Dependencia {
 
         thread = new Thread() {
             public void run() {
+
+                Looper.prepare();
+                
                 SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 
                 request.addProperty("sede", sede);

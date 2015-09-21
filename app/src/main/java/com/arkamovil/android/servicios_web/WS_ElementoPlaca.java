@@ -88,7 +88,7 @@ public class WS_ElementoPlaca {
     public void startWebAccess(final String id_elem, String usuario, String dispositivo) {
 
         SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
-
+        Log.v("emma", id_elem);
         request.addProperty("id_elemento", id_elem);
         request.addProperty("usuario", usuario);
         request.addProperty("dispositivo", dispositivo);

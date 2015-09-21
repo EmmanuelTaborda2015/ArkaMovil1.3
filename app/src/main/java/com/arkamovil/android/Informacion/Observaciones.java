@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings;
 import android.util.Base64;
 import android.util.Log;
@@ -132,6 +133,9 @@ public class Observaciones extends Dialog {
                             if (!"".equals(String.valueOf(obs_almacen.getText())) || tipo_movimiento.getSelectedItemPosition() > 0) {
                                 thread = new Thread() {
                                     public void run() {
+
+                                        Looper.prepare();
+
                                         String id_dispositivo = Settings.Secure.getString(c.getContentResolver(), Settings.Secure.ANDROID_ID);
                                         WS_GuardarObservaciones ws_guardarObservaciones = new WS_GuardarObservaciones();
                                         getId_levantamientoGenerado = ws_guardarObservaciones.startWebAccess(id_elemento, id_levantamiento, funcionario, String.valueOf(obs_almacen.getText()), String.valueOf(tipo_movimiento.getSelectedItemPosition() - 1), new Login().getUsuarioSesion(), id_dispositivo);

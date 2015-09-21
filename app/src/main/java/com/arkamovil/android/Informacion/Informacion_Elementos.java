@@ -6,10 +6,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings;
 import android.util.Base64;
 import android.view.View;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,6 +27,7 @@ public class Informacion_Elementos extends Dialog {
 
 
     private Activity c;
+    private View vista;
     private int i;
     private Thread thread;
     private Handler handler = new Handler();
@@ -32,9 +35,10 @@ public class Informacion_Elementos extends Dialog {
     private Button cerrar;
     private WS_ElementosInventario datos;
 
-    public Informacion_Elementos(Activity a, int i, WS_ElementosInventario datos) {
+    public Informacion_Elementos(Activity a, View vista, int i, WS_ElementosInventario datos) {
         super(a);
         // TODO Auto-generated constructor stub
+        this.vista = vista;
         this.c = a;
         this.i = i;
         this.datos = datos;
@@ -45,6 +49,7 @@ public class Informacion_Elementos extends Dialog {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dl_informacion_elemento);
+
 
         cerrar = (Button) findViewById(R.id.cerrar_infoelem);
 
@@ -68,6 +73,8 @@ public class Informacion_Elementos extends Dialog {
 
         thread = new Thread() {
             public void run() {
+
+                Looper.prepare();
 
                 String id_dispositivo = Settings.Secure.getString(c.getContentResolver(), Settings.Secure.ANDROID_ID);
                 WS_Imagen ws_imagen = new WS_Imagen();
@@ -238,6 +245,9 @@ public class Informacion_Elementos extends Dialog {
 
                 imagen.setImageBitmap(photo);
             }
+
+            final InputMethodManager imm = (InputMethodManager) getContext().getSystemService(getContext().INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
 
             cerrar.setEnabled(true);
 

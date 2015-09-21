@@ -1,6 +1,7 @@
 package com.arkamovil.android.casos_uso;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
@@ -70,6 +71,8 @@ public class ActaVisita extends Fragment {
     private EditText observacion;
     private AutoCompleteTextView numVisita;
     private TextView proximaVis;
+
+    private ProgressDialog circuloProgreso;
 
     private String proxVisita;
     private String fecha;
@@ -282,7 +285,9 @@ public class ActaVisita extends Fragment {
                 if (s.length() >= 3 && (focus == (s.length() + 1) || focus == (s.length() - 1) || focus == s.length())) {
                     thread_WS_Fucncionario = new Thread() {
                         public void run() {
+
                             Looper.prepare();
+
                             String id_dispositivo = Settings.Secure.getString(rootView.getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
                             ws_funcionario = new WS_Funcionario();
                             ws_funcionario.startWebAccess(text, new Login().getUsuarioSesion(), id_dispositivo);
@@ -356,7 +361,6 @@ public class ActaVisita extends Fragment {
             @Override
             public void onClick(View v) {
 
-                Log.v("calendar", "Dentro");
                 final Calendar c = Calendar.getInstance();
                 year2 = c.get(Calendar.YEAR);
                 month2 = c.get(Calendar.MONTH);
@@ -364,9 +368,19 @@ public class ActaVisita extends Fragment {
 
                 if (contador > 0) {
 
-                    DatePickerDialog dialog = new DatePickerDialog(getActivity(), datePickerListener,
-                            year1, month1, day1);
-                    dialog.show();
+                    thread_WS_Fucncionario = new Thread() {
+                        public void run() {
+
+                            Looper.prepare();
+
+                            DatePickerDialog dialog = new DatePickerDialog(getActivity(), datePickerListener,
+                                    year1, month1, day1);
+                            dialog.show();
+
+                        }
+                    };
+                    thread_WS_Fucncionario.start();
+
                 } else {
                     Toast.makeText(getActivity(), "Porfavor ingrese los datos en orden", Toast.LENGTH_LONG).show();
                 }
@@ -429,10 +443,11 @@ public class ActaVisita extends Fragment {
 
     private DatePickerDialog.OnDateSetListener datePickerListener
             = new DatePickerDialog.OnDateSetListener() {
-
         // when dialog box is closed, below method will be called.
         public void onDateSet(DatePicker view, int selectedYear,
                               int selectedMonth, int selectedDay) {
+
+
 
             month2 = selectedMonth;
             day2 = selectedDay;
@@ -484,7 +499,6 @@ public class ActaVisita extends Fragment {
 
         public void run() {
             AutoCompleteTextView numVisita = (AutoCompleteTextView) rootView.findViewById(R.id.numerovisita);
-            Log.v("num-vis",webResponse);
             if ("anyType{}".equalsIgnoreCase(String.valueOf(webResponse))) {
                 numVisita.setText("1");
             } else {

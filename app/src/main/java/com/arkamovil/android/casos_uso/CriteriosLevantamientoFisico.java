@@ -98,7 +98,9 @@ public class CriteriosLevantamientoFisico extends Fragment {
 
                         thread_validarSesion = new Thread() {
                             public void run() {
+
                                 Looper.prepare();
+
                                 String id_dispositivo = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
                                 WS_ValidarSesion verificar = new WS_ValidarSesion();
                                 webResponse_sesion = verificar.startWebAccess(new Login().getUsuarioSesion(), id_dispositivo);
@@ -439,7 +441,7 @@ public class CriteriosLevantamientoFisico extends Fragment {
 
 
                 final String text = s.toString();
-                if (s.length() >= 3 && (focus == (s.length() + 1) || focus == (s.length() - 1))) {
+                if (s.length() >= 3 && (focus == s.length()|| focus == (s.length() + 1) || focus == (s.length() - 1))) {
                     thread_WS_Fucncionario = new Thread() {
                         public void run() {
                             Looper.prepare();

@@ -64,6 +64,9 @@ public class ElementosInventario extends Fragment {
 
         rootView = inflater.inflate(R.layout.fm_inventario, container, false);
 
+        final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(rootView.getWindowToken(), 0);
+
         rootView.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
 
@@ -89,6 +92,8 @@ public class ElementosInventario extends Fragment {
 
         thread = new Thread() {
             public void run() {
+
+                Looper.prepare();
 
                 String id_dispositivo = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
                 elementos = new WS_ElementosInventario();
@@ -328,7 +333,7 @@ public class ElementosInventario extends Fragment {
                 public void onClick(View v) {
                     index_info = v.getId();
                     circuloProgreso = ProgressDialog.show(getActivity(), "", "Espere por favor ...", true);
-                    dialog = new Informacion_Elementos(actividad, v.getId(), elementos);
+                    dialog = new Informacion_Elementos(actividad, rootView, v.getId(), elementos);
                     dialog.show();
                     circuloProgreso.dismiss();
                 }

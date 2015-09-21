@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings;
 import android.util.Base64;
 import android.view.View;
@@ -68,6 +69,8 @@ public class Informacion_Elemento_Placa extends Dialog {
 
         thread = new Thread() {
             public void run() {
+
+                Looper.prepare();
 
                 String id_dispositivo = Settings.Secure.getString(c.getContentResolver(), Settings.Secure.ANDROID_ID);
                 WS_Imagen ws_imagen = new WS_Imagen();
