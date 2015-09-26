@@ -1,7 +1,9 @@
 package com.arkamovil.android.casos_uso;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
@@ -29,6 +31,7 @@ import com.arkamovil.android.R;
 import com.arkamovil.android.herramientas.Despliegue;
 import com.arkamovil.android.procesos.FinalizarSesion;
 import com.arkamovil.android.procesos.GenerarPDF_ActaVisita;
+import com.arkamovil.android.servicios_web.WS_CerrarSesion;
 import com.arkamovil.android.servicios_web.WS_Dependencia;
 import com.arkamovil.android.servicios_web.WS_ElementoPlaca;
 import com.arkamovil.android.servicios_web.WS_Funcionario;
@@ -57,6 +60,7 @@ public class ActaVisita extends Fragment {
     private  WS_Funcionario ws_funcionario;
 
     private Thread thread_WS_Fucncionario;
+    private Thread thread_date;
     private Handler handler2 = new Handler();
 
     private Thread thread_validarSesion;
@@ -95,6 +99,8 @@ public class ActaVisita extends Fragment {
     private int contador = 0;
     private int validador = 0;
 
+    private String id_dispositivo;
+
 
     private List<String> lista_sede = new ArrayList<String>();
     private List<String> lista_id_sede = new ArrayList<String>();
@@ -119,6 +125,8 @@ public class ActaVisita extends Fragment {
 
         rootView = inflater.inflate(R.layout.fm_acta_visita, container, false);
 
+        id_dispositivo = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
+
         rootView.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
 
@@ -127,12 +135,12 @@ public class ActaVisita extends Fragment {
 
                         Looper.prepare();
 
-                        String id_dispositivo = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
                         WS_ValidarSesion verificar = new WS_ValidarSesion();
                         webResponse_sesion = verificar.startWebAccess(new Login().getUsuarioSesion(), id_dispositivo);
                         handler_validarSesion.post(ValidarSesion);
                     }
                 };
+
                 thread_validarSesion.start();
 
                 return true;
@@ -146,7 +154,6 @@ public class ActaVisita extends Fragment {
         ubicacion.setEnabled(false);
 
         //Se cargar los datos del web service sede.
-        String id_dispositivo = Settings.Secure.getString(rootView.getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
         WS_Sede ws_sede = new WS_Sede();
         ws_sede.startWebAccess(getActivity(), sede, new Login().getUsuarioSesion(), id_dispositivo);
         lista_sede = ws_sede.getSede();
@@ -165,7 +172,6 @@ public class ActaVisita extends Fragment {
                         seleccion = i;
                     }
                 }
-                String id_dispositivo = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
                 WS_Dependencia ws_dependencia = new WS_Dependencia();
                 ws_dependencia.startWebAccess(getActivity(), dependencia, lista_id_sede.get(seleccion), new Login().getUsuarioSesion(), id_dispositivo);
 
@@ -187,7 +193,6 @@ public class ActaVisita extends Fragment {
 
                         Looper.prepare();
 
-                        String id_dispositivo = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
                         WS_NumeroVisitas visitas = new WS_NumeroVisitas();
                         webResponse = visitas.startWebAccess(new Login().getUsuarioSesion(), id_dispositivo);
 
@@ -209,7 +214,6 @@ public class ActaVisita extends Fragment {
                     }
                 }
 
-                String id_dispositivo = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
                 WS_Ubicacion ws_ubicacion = new WS_Ubicacion();
                 ws_ubicacion.startWebAccess(getActivity(), ubicacion, lista_id_dependencia.get(seleccion1), new Login().getUsuarioSesion(), id_dispositivo);
 
@@ -225,21 +229,6 @@ public class ActaVisita extends Fragment {
 
                 //Se despliegan los datos obtenidos de la dependencia.
                 new Despliegue(ubicacion);
-
-                thread_numvisitas = new Thread() {
-                    public void run() {
-
-                        Looper.prepare();
-
-                        String id_dispositivo = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
-                        WS_NumeroVisitas visitas = new WS_NumeroVisitas();
-                        webResponse = visitas.startWebAccess(new Login().getUsuarioSesion(), id_dispositivo);
-
-                        handler.post(createUI);
-                    }
-                };
-
-                thread_numvisitas.start();
 
             }
         });
@@ -288,7 +277,6 @@ public class ActaVisita extends Fragment {
 
                             Looper.prepare();
 
-                            String id_dispositivo = Settings.Secure.getString(rootView.getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
                             ws_funcionario = new WS_Funcionario();
                             ws_funcionario.startWebAccess(text, new Login().getUsuarioSesion(), id_dispositivo);
 
@@ -366,24 +354,15 @@ public class ActaVisita extends Fragment {
                 month2 = c.get(Calendar.MONTH);
                 day2 = c.get(Calendar.DAY_OF_MONTH);
 
-                if (contador > 0) {
+                //if (contador > 0) {
 
-                    thread_WS_Fucncionario = new Thread() {
-                        public void run() {
+                        DatePickerDialog dialog = new DatePickerDialog(getActivity(), datePickerListener,
+                                year1, month1, day1);
+                        dialog.show();
 
-                            Looper.prepare();
-
-                            DatePickerDialog dialog = new DatePickerDialog(getActivity(), datePickerListener,
-                                    year1, month1, day1);
-                            dialog.show();
-
-                        }
-                    };
-                    thread_WS_Fucncionario.start();
-
-                } else {
-                    Toast.makeText(getActivity(), "Porfavor ingrese los datos en orden", Toast.LENGTH_LONG).show();
-                }
+                //} else {
+                    //Toast.makeText(getActivity(), "Porfavor ingrese los datos en orden", Toast.LENGTH_LONG).show();
+                //}
             }
         });
 
@@ -407,22 +386,28 @@ public class ActaVisita extends Fragment {
                     docRes_s = String.valueOf(docRes.getText());
                     observacion_s = String.valueOf(observacion.getText());
                     numVisita_s = String.valueOf(numVisita.getText());
-
+                    circuloProgreso = ProgressDialog.show(getActivity(), "", "Generando PDF ...", true);
                     thread_registrarActa = new Thread() {
                         public void run() {
-
                             Looper.prepare();
 
-                            String id_dispositivo = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
                             WS_RegistroActaVisita enviar = new WS_RegistroActaVisita();
                             enviar.startWebAccess(lista_id_sede.get(seleccion), lista_id_dependencia.get(seleccion1), lista_documento.get(seleccion3), observacion_s, fecha, proxVisita, lista_id_ubicacion.get(seleccion2), new Login().getUsuarioSesion(), id_dispositivo);
                         }
                     };
 
                     thread_registrarActa.start();
-
+                    circuloProgreso.dismiss();
                     GenerarPDF_ActaVisita generar = new GenerarPDF_ActaVisita();
                     generar.generar(getResources(), fecha, sede_s, dependencia_s, lista_funcionario.get(seleccion3), lista_documento.get(seleccion3), observacion_s, numVisita_s, proxVisita);
+
+                    AlertDialog.Builder dialogo = new AlertDialog.Builder(getActivity());
+
+                    dialogo.setTitle("ACTA DE VISITA GENERADA");
+                    dialogo.setMessage("Se ha generado el acta de visita en la ruta -> Download -> Acta de Visita -> Actavisita" + numVisita_s);
+                    dialogo.setCancelable(true);
+                    dialogo.create();
+                    dialogo.show();
 
                     limpiar();
 

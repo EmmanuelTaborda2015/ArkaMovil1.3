@@ -52,7 +52,7 @@
         android:id="@+id/contrasenna_usuario"
         style="@style/textViewArkaMovil"
         android:text="Contraseña"
-        android:maxLength="15"
+        android:maxLength="11"
         android:textColor="@color/GRIS"
         android:layout_marginTop="10dp"/>
 

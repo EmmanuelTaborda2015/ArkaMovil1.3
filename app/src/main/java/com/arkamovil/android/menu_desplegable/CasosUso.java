@@ -16,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.arkamovil.android.Login;
 import com.arkamovil.android.R;
@@ -60,8 +61,6 @@ public class CasosUso extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_casos_uso);
-
-
 
         this.salir = 1;
 

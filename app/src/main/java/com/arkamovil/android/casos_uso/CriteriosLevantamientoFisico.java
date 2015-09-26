@@ -255,10 +255,7 @@ public class CriteriosLevantamientoFisico extends Fragment {
                         seleccion = i;
                     }
                 }
-                //Se envia parametros de vista y de campo AutoComplete al web service de facultad.
-
-                Looper.prepare();
-
+                //Se envia parametros de vista y de campo AutoComplete al web service de dependencia.
                 String id_dispositivo = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
                 WS_Dependencia ws_dependencia = new WS_Dependencia();
                 ws_dependencia.startWebAccess(getActivity(), dependencia, lista_id_sede.get(seleccion), new Login().getUsuarioSesion(), id_dispositivo);

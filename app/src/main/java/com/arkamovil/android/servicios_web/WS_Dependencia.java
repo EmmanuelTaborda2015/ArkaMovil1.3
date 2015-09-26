@@ -46,7 +46,7 @@ public class WS_Dependencia {
             public void run() {
 
                 Looper.prepare();
-                
+
                 SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 
                 request.addProperty("sede", sede);

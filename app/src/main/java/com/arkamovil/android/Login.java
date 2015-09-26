@@ -1,5 +1,11 @@
 package com.arkamovil.android;
 
+
+        import android.app.Dialog;
+        import android.content.Context;
+
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.provider.Settings;
 import android.provider.Settings.Secure;
 import android.app.Activity;
@@ -25,6 +31,7 @@ import com.arkamovil.android.servicios_web.WS_Login;
 
 public class Login extends ActionBarActivity {
 
+    private Context context = this;
     private Thread thread;
     private Thread thread_WS_Fucncionario;
     private Handler handler = new Handler();
@@ -35,6 +42,7 @@ public class Login extends ActionBarActivity {
     private EditText contrasena;
     private Button boton;
 
+    private Thread thread_sesion;
     private Thread thread_cerrarSesion;
     private Handler handler_cerrarSesion = new Handler();
     private String webResponse_cerrarSesion;
@@ -151,6 +159,31 @@ public class Login extends ActionBarActivity {
             boton.setTextColor(getResources().getColor(R.color.NEGRO));
 
             if ("true".equals(webResponse)) {
+
+
+//                thread_sesion = new Thread() {
+//                    public void run() {
+//                        try {
+//                            //Looper.prepare();
+//                            Thread.sleep(9000);
+//
+//                            Looper.prepare();
+//                            final Dialog openDialog = new Dialog(context);
+//                            openDialog.setContentView(R.layout.dl_observaciones);
+//                            openDialog.setTitle("Custom Dialog Box");
+//
+//                            openDialog.show();
+//
+//
+//                            Log.v("efecto", "emmanuel");
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                };
+//
+//                thread_sesion.start();
+
                 usuarioSesion = String.valueOf(usuario.getText());
                 Toast.makeText(getApplicationContext(), "Conectado", Toast.LENGTH_LONG).show();
                 Intent i = new Intent(getApplicationContext(), CasosUso.class);
@@ -174,7 +207,7 @@ public class Login extends ActionBarActivity {
                     }
                 };
 
-                thread.start();
+            thread.start();
 
         }
     };
