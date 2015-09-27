@@ -1,6 +1,8 @@
 package com.arkamovil.android.menu_desplegable;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
@@ -38,6 +40,10 @@ public class CasosUso extends ActionBarActivity
     private Handler handler_cerrarSesion = new Handler();
     private String webResponse_cerrarSesion;
 
+    private Thread thread_validarSesion;
+    private Handler handler_validarSesion = new Handler();
+    private String webResponse_sesion;
+
     public static int getSalir() {
         return salir;
     }
@@ -55,12 +61,30 @@ public class CasosUso extends ActionBarActivity
         //Toast.makeText(c, "De clic en el botón \"CERRAR\" cuando este activo", Toast.LENGTH_LONG).show();
     //}
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_casos_uso);
+
+
+                thread_validarSesion = new Thread() {
+                    public void run() {
+
+                        Looper.prepare();
+
+                        try {
+                            Thread.sleep(5000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        handler_validarSesion.post(ValidarSesion);
+                    }
+                };
+                thread_validarSesion.start();
+
+
+
+
 
         this.salir = 1;
 
@@ -168,6 +192,32 @@ public class CasosUso extends ActionBarActivity
                 Intent i = new Intent (CasosUso.this, Login.class) ;
                 startActivity(i);
             }
+        }
+    };
+
+    final Runnable ValidarSesion = new Runnable() {
+
+        public void run() {
+
+                final AlertDialog mDialog = new AlertDialog.Builder(CasosUso.this)
+                        .setTitle("Change PIN")
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                new FinalizarSesion().sesionExpirada(CasosUso.this);
+                            }
+                        })
+                        .setNegativeButton("Cancel",
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog,
+                                                        int which) {
+                                    }
+                                }).create();
+
+                mDialog.show();
+
         }
     };
 }

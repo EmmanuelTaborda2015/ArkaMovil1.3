@@ -28,6 +28,7 @@ import com.arkamovil.android.procesos.FinalizarSesion;
 import com.arkamovil.android.servicios_web.WS_CerrarSesion;
 import com.arkamovil.android.servicios_web.WS_Funcionario;
 import com.arkamovil.android.servicios_web.WS_Login;
+        import com.google.zxing.client.android.Contents;
 
 public class Login extends ActionBarActivity {
 
