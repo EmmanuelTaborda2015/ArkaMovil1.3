@@ -73,7 +73,7 @@ public class CasosUso extends ActionBarActivity
                         Looper.prepare();
 
                         try {
-                            Thread.sleep(5000);
+                            Thread.sleep(5*60*1000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -198,26 +198,7 @@ public class CasosUso extends ActionBarActivity
     final Runnable ValidarSesion = new Runnable() {
 
         public void run() {
-
-                final AlertDialog mDialog = new AlertDialog.Builder(CasosUso.this)
-                        .setTitle("Change PIN")
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                new FinalizarSesion().sesionExpirada(CasosUso.this);
-                            }
-                        })
-                        .setNegativeButton("Cancel",
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog,
-                                                        int which) {
-                                    }
-                                }).create();
-
-                mDialog.show();
-
+            new FinalizarSesion().sesionExpirada(CasosUso.this);
         }
     };
 }

@@ -78,24 +78,6 @@ public class Radicacion extends Fragment {
 
         rootView = inflater.inflate(R.layout.fm_radicacion, container, false);
 
-        rootView.setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-
-                thread_validarSesion = new Thread() {
-                    public void run() {
-                        Looper.prepare();
-                        String id_dispositivo = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
-                        WS_ValidarSesion verificar = new WS_ValidarSesion();
-                        webResponse_sesion = verificar.startWebAccess(new Login().getUsuarioSesion(), id_dispositivo);
-                        handler_validarSesion.post(ValidarSesion);
-                    }
-                };
-                thread_validarSesion.start();
-
-                return true;
-            }
-        });
-
         funcionario = (AutoCompleteTextView) rootView.findViewById(R.id.funcionario_radicado);
 
         final String estado = "5";
@@ -432,21 +414,5 @@ public class Radicacion extends Fragment {
         tabla.removeAllViews();
         cabecera.removeAllViews();
     }
-
-    final Runnable ValidarSesion = new Runnable() {
-
-        public void run() {
-
-            if("sesion_expirada".equals(webResponse_sesion)){
-                new FinalizarSesion().sesionExpirada(getActivity());
-                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-            }else if("sesion_fraudulenta".equals(webResponse_sesion)){
-                new FinalizarSesion().sesionInvalida(getActivity());
-                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-            }
-        }
-    };
 }
 

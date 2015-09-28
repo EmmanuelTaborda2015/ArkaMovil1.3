@@ -93,26 +93,6 @@ public class CriteriosLevantamientoFisico extends Fragment {
 
         rootView = inflater.inflate(R.layout.fm_verificar_inventarios, container, false);
 
-        rootView.setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-
-                        thread_validarSesion = new Thread() {
-                            public void run() {
-
-                                Looper.prepare();
-
-                                String id_dispositivo = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
-                                WS_ValidarSesion verificar = new WS_ValidarSesion();
-                                webResponse_sesion = verificar.startWebAccess(new Login().getUsuarioSesion(), id_dispositivo);
-                                handler_validarSesion.post(ValidarSesion);
-                            }
-                        };
-                        thread_validarSesion.start();
-                   
-                return true;
-            }
-        });
-
         getActivity().setTitle("Levantamiento Físico de Inventarios");
 
         sede = (AutoCompleteTextView) rootView.findViewById(R.id.sede_c2);

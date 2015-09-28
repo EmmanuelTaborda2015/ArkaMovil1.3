@@ -41,10 +41,6 @@ public class ElementosInventario extends Fragment {
 
     private ProgressDialog circuloProgreso;
 
-    private Thread thread_validarSesion;
-    private Handler handler_validarSesion = new Handler();
-    private String webResponse_sesion;
-
     ImageView subir;
     ImageView bajar;
 
@@ -66,24 +62,6 @@ public class ElementosInventario extends Fragment {
 
         final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(rootView.getWindowToken(), 0);
-
-        rootView.setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-
-                thread_validarSesion = new Thread() {
-                    public void run() {
-                        Looper.prepare();
-                        String id_dispositivo = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
-                        WS_ValidarSesion verificar = new WS_ValidarSesion();
-                        webResponse_sesion = verificar.startWebAccess(new Login().getUsuarioSesion(), id_dispositivo);
-                        handler_validarSesion.post(ValidarSesion);
-                    }
-                };
-                thread_validarSesion.start();
-
-                return true;
-            }
-        });
 
         func  = getArguments().getString("doc_fun");
         final String depe  = getArguments().getString("id_dep");
@@ -425,21 +403,5 @@ public class ElementosInventario extends Fragment {
         tabla.removeAllViews();
         cabecera.removeAllViews();
     }
-
-    final Runnable ValidarSesion = new Runnable() {
-
-        public void run() {
-
-            if("sesion_expirada".equals(webResponse_sesion)){
-                new FinalizarSesion().sesionExpirada(getActivity());
-                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-            }else if("sesion_fraudulenta".equals(webResponse_sesion)){
-                new FinalizarSesion().sesionInvalida(getActivity());
-                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-            }
-        }
-    };
 }
 

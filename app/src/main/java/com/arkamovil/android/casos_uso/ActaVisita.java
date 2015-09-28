@@ -127,26 +127,6 @@ public class ActaVisita extends Fragment {
 
         id_dispositivo = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
 
-        rootView.setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-
-                thread_validarSesion = new Thread() {
-                    public void run() {
-
-                        Looper.prepare();
-
-                        WS_ValidarSesion verificar = new WS_ValidarSesion();
-                        webResponse_sesion = verificar.startWebAccess(new Login().getUsuarioSesion(), id_dispositivo);
-                        handler_validarSesion.post(ValidarSesion);
-                    }
-                };
-
-                thread_validarSesion.start();
-
-                return true;
-            }
-        });
-
         //Se definen los campos a utilizar en la clase.
         establecerCampos();
 
@@ -544,22 +524,6 @@ public class ActaVisita extends Fragment {
         numVisita.setText("");
         proximaVis.setText("");
     }
-
-    final Runnable ValidarSesion = new Runnable() {
-
-        public void run() {
-
-            if("sesion_expirada".equals(webResponse_sesion)){
-                new FinalizarSesion().sesionExpirada(getActivity());
-                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-            }else if("sesion_fraudulenta".equals(webResponse_sesion)){
-                new FinalizarSesion().sesionInvalida(getActivity());
-                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-            }
-        }
-    };
 
     final Runnable Funcionario = new Runnable() {
         public void run() {

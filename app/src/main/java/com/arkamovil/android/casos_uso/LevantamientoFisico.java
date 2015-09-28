@@ -44,9 +44,20 @@ public class LevantamientoFisico extends Fragment {
     private Handler handler_validarSesion = new Handler();
     private String webResponse_sesion;
 
+    private  int iniciar = 0;
     private View rootView;
-    private int offset = 0;
-    private int limit = 0;
+
+    public static int getOffset() {
+        return offset;
+    }
+
+    private static int offset = 0;
+
+    public int getLimit() {
+        return limit;
+    }
+
+    private int limit = 10;
 
     ImageView subir;
     ImageView bajar;
@@ -55,24 +66,6 @@ public class LevantamientoFisico extends Fragment {
                              Bundle savedInstanceState) {
 
         rootView = inflater.inflate(R.layout.fm_levantamiento_fisico, container, false);
-
-        rootView.setOnTouchListener(new View.OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-
-                thread_validarSesion = new Thread() {
-                    public void run() {
-                        Looper.prepare();
-                        String id_dispositivo = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
-                        WS_ValidarSesion verificar = new WS_ValidarSesion();
-                        webResponse_sesion = verificar.startWebAccess(new Login().getUsuarioSesion(), id_dispositivo);
-                        handler_validarSesion.post(ValidarSesion);
-                    }
-                };
-                thread_validarSesion.start();
-
-                return true;
-            }
-        });
 
         estado  = getArguments().getString("estado");
         final String criterio  = getArguments().getString("criterio");
@@ -88,7 +81,6 @@ public class LevantamientoFisico extends Fragment {
                 String id_dispositivo = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
                 inventario = new WS_InventarioTipoConfirmacion();
                 inventario.startWebAccess(estado, criterio, dato, offset, limit, new Login().getUsuarioSesion(), id_dispositivo);
-
                 handler.post(createUI);
             }
         };
@@ -104,14 +96,46 @@ public class LevantamientoFisico extends Fragment {
         bajar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bajar();
+                //bajar();
+                bajar.setEnabled(false);
+                offset++;
+                thread = new Thread() {
+                    public void run() {
+
+                        Looper.prepare();
+                        String id_dispositivo = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
+                        inventario = new WS_InventarioTipoConfirmacion();
+                        inventario.startWebAccess(estado, criterio, dato, offset, limit, new Login().getUsuarioSesion(), id_dispositivo);
+
+                        handler.post(createUI);
+                    }
+                };
+
+                thread.start();
             }
         });
 
         subir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                subir();
+                //subir();
+                subir.setEnabled(false);
+                if (offset > 0) {
+                    offset--;
+                    thread = new Thread() {
+                        public void run() {
+
+                            Looper.prepare();
+                            String id_dispositivo = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
+                            inventario = new WS_InventarioTipoConfirmacion();
+                            inventario.startWebAccess(estado, criterio, dato, offset, limit, new Login().getUsuarioSesion(), id_dispositivo);
+
+                            handler.post(createUI);
+                        }
+                    };
+
+                    thread.start();
+                }
             }
         });
 
@@ -133,7 +157,14 @@ public class LevantamientoFisico extends Fragment {
             }else if("4".equals(estado)){
                 getActivity().setTitle("Levantamiento Físico de Inventarios - No Radicados");
             }
+            if(iniciar==0){
+                iniciar++;
+            }else{
+                borrarTabla();
+            }
             crear(rootView, getActivity(), inventario.getNomb_fun(), inventario.getDoc_fun(), inventario.getId_sede(), inventario.getSede(), inventario.getId_dependencia(), inventario.getDependencia());
+            bajar.setEnabled(true);
+            subir.setEnabled(true);
         }
     };
 
@@ -161,7 +192,7 @@ public class LevantamientoFisico extends Fragment {
     private static Activity actividad;
     private static View vista;
 
-    private static final int factor = 10;
+    private static final int factor = new LevantamientoFisico().getLimit();
 
 
     private static List<String> id_elemento;
@@ -220,9 +251,16 @@ public class LevantamientoFisico extends Fragment {
             transaction.commit();
         }
 
-        if(doc_fun.size() > factor){
+
+        if(doc_fun.size() == factor){
             bajar.setVisibility(View.VISIBLE);
+        }else{
+            bajar.setVisibility(View.INVISIBLE);
+        }
+        if(new LevantamientoFisico().getOffset() > 0){
             subir.setVisibility(View.VISIBLE);
+        }else{
+            subir.setVisibility(View.INVISIBLE);
         }
 
 
@@ -364,6 +402,8 @@ public class LevantamientoFisico extends Fragment {
             this.inicio++;
             agregarFilasTabla();
         }
+
+
     }
 
     public void subir() {
@@ -389,21 +429,5 @@ public class LevantamientoFisico extends Fragment {
         tabla.removeAllViews();
         cabecera.removeAllViews();
     }
-
-    final Runnable ValidarSesion = new Runnable() {
-
-        public void run() {
-
-            if("sesion_expirada".equals(webResponse_sesion)){
-                new FinalizarSesion().sesionExpirada(getActivity());
-                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-            }else if("sesion_fraudulenta".equals(webResponse_sesion)){
-                new FinalizarSesion().sesionInvalida(getActivity());
-                final InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
-            }
-        }
-    };
 }
 

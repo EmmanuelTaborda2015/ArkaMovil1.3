@@ -160,31 +160,6 @@ public class Login extends ActionBarActivity {
             boton.setTextColor(getResources().getColor(R.color.NEGRO));
 
             if ("true".equals(webResponse)) {
-
-
-//                thread_sesion = new Thread() {
-//                    public void run() {
-//                        try {
-//                            //Looper.prepare();
-//                            Thread.sleep(9000);
-//
-//                            Looper.prepare();
-//                            final Dialog openDialog = new Dialog(context);
-//                            openDialog.setContentView(R.layout.dl_observaciones);
-//                            openDialog.setTitle("Custom Dialog Box");
-//
-//                            openDialog.show();
-//
-//
-//                            Log.v("efecto", "emmanuel");
-//                        } catch (InterruptedException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                };
-//
-//                thread_sesion.start();
-
                 usuarioSesion = String.valueOf(usuario.getText());
                 Toast.makeText(getApplicationContext(), "Conectado", Toast.LENGTH_LONG).show();
                 Intent i = new Intent(getApplicationContext(), CasosUso.class);
