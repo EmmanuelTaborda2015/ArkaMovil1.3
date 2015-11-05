@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.provider.Settings;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.app.ActionBarActivity;
@@ -61,26 +62,68 @@ public class CasosUso extends ActionBarActivity
         //Toast.makeText(c, "De clic en el botón \"CERRAR\" cuando este activo", Toast.LENGTH_LONG).show();
     //}
 
+    public static final long DISCONNECT_TIMEOUT = 5*60*1000; // 5 min = 5 * 60 * 1000 ms
+
+    private Handler disconnectHandler = new Handler(){
+        public void handleMessage(Message msg) {
+        }
+    };
+
+    private Runnable disconnectCallback = new Runnable() {
+        @Override
+        public void run() {
+            new FinalizarSesion().sesionExpirada(CasosUso.this);
+            // Perform any required operation on disconnect
+        }
+    };
+
+    public void resetDisconnectTimer(){
+        disconnectHandler.removeCallbacks(disconnectCallback);
+        disconnectHandler.postDelayed(disconnectCallback, DISCONNECT_TIMEOUT);
+    }
+
+    public void stopDisconnectTimer(){
+        disconnectHandler.removeCallbacks(disconnectCallback);
+    }
+
+    @Override
+    public void onUserInteraction(){
+        resetDisconnectTimer();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        resetDisconnectTimer();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        stopDisconnectTimer();
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_casos_uso);
 
 
-                thread_validarSesion = new Thread() {
-                    public void run() {
-
-                        Looper.prepare();
-
-                        try {
-                            Thread.sleep(5*60*1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        handler_validarSesion.post(ValidarSesion);
-                    }
-                };
-                thread_validarSesion.start();
+//                thread_validarSesion = new Thread() {
+//                    public void run() {
+//
+//                        Looper.prepare();
+//
+//                        try {
+//                            Thread.sleep(5*60*1000);
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//                        handler_validarSesion.post(ValidarSesion);
+//                    }
+//                };
+//                thread_validarSesion.start();
 
 
 

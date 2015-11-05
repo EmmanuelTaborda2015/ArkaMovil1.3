@@ -10,10 +10,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -22,10 +20,7 @@ import android.widget.Toast;
 
 import com.arkamovil.android.Login;
 import com.arkamovil.android.R;
-import com.arkamovil.android.procesos.FinalizarSesion;
-import com.arkamovil.android.servicios_web.WS_ElementoPlaca;
 import com.arkamovil.android.servicios_web.WS_InventarioTipoConfirmacion;
-import com.arkamovil.android.servicios_web.WS_ValidarSesion;
 
 import java.util.List;
 
@@ -175,10 +170,11 @@ public class LevantamientoFisico extends Fragment {
 
     //************DESDE AQUÍ SE CREAN LOS EVENTOS DE LA TABLA************//
 
-    private double f1 = 0.18;
-    private double f2 = 0.35;
-    private double f3 = 0.35;
+    private double f1 = 0.15;
+    private double f2 = 0.30;
+    private double f3 = 0.20;
     private double f4 = 0.12;
+    private double f5 = 0.18;
 
     private static TableLayout tabla;
     private static TableLayout cabecera;
@@ -186,7 +182,8 @@ public class LevantamientoFisico extends Fragment {
     private static TableRow.LayoutParams layoutFila;
     private static TableRow.LayoutParams layoutId;
     private static TableRow.LayoutParams layoutTexto;
-    private static TableRow.LayoutParams layoutFuncionario;
+    private static TableRow.LayoutParams layoutSede;
+    private static TableRow.LayoutParams layoutDependencia;
     private static TableRow.LayoutParams layoutMod;
 
     private static Activity actividad;
@@ -272,6 +269,7 @@ public class LevantamientoFisico extends Fragment {
         TextView txtPlaca;
         TextView txtDescripcion;
         TextView txtUbicacion;
+        TextView txtSede;
         TextView txtDetalle;
 
         fila = new TableRow(actividad);
@@ -279,6 +277,7 @@ public class LevantamientoFisico extends Fragment {
 
         txtPlaca = new TextView(actividad);
         txtDescripcion = new TextView(actividad);
+        txtSede = new TextView(actividad);
         txtUbicacion = new TextView(actividad);
         txtDetalle = new TextView(actividad);
 
@@ -294,11 +293,17 @@ public class LevantamientoFisico extends Fragment {
         txtDescripcion.setBackgroundResource(R.drawable.tabla_celda_cabecera);
         txtDescripcion.setLayoutParams(layoutTexto);
 
+        txtSede.setText("Sede");
+        txtSede.setGravity(Gravity.CENTER_HORIZONTAL);
+        txtSede.setTextAppearance(actividad, R.style.etiqueta);
+        txtSede.setBackgroundResource(R.drawable.tabla_celda_cabecera);
+        txtSede.setLayoutParams(layoutDependencia);
+
         txtUbicacion.setText("Dependencia");
         txtUbicacion.setGravity(Gravity.CENTER_HORIZONTAL);
         txtUbicacion.setTextAppearance(actividad, R.style.etiqueta);
         txtUbicacion.setBackgroundResource(R.drawable.tabla_celda_cabecera);
-        txtUbicacion.setLayoutParams(layoutFuncionario);
+        txtUbicacion.setLayoutParams(layoutDependencia);
 
         txtDetalle.setText("Detalles");
         txtDetalle.setGravity(Gravity.CENTER_HORIZONTAL);
@@ -308,6 +313,7 @@ public class LevantamientoFisico extends Fragment {
 
         fila.addView(txtPlaca);
         fila.addView(txtDescripcion);
+        fila.addView(txtSede);
         fila.addView(txtUbicacion);
         fila.addView(txtDetalle);
         cabecera.addView(fila);
@@ -319,6 +325,7 @@ public class LevantamientoFisico extends Fragment {
         TextView txtnombre;
         TextView txtdocumento;
         TextView txtdependencia;
+        TextView txtsede;
         ImageView txtverInventario;
 
         for (int i = 0; i < MAX_FILAS; i++) {
@@ -328,6 +335,7 @@ public class LevantamientoFisico extends Fragment {
             txtnombre = new TextView(actividad);
             txtdocumento = new TextView(actividad);
             txtdependencia = new TextView(actividad);
+            txtsede = new TextView(actividad);
             txtverInventario = new ImageView(actividad);
 
             txtnombre.setText(doc_fun.get(inicio + i));
@@ -342,11 +350,17 @@ public class LevantamientoFisico extends Fragment {
             txtdocumento.setBackgroundResource(R.drawable.tabla_celda);
             txtdocumento.setLayoutParams(layoutTexto);
 
+            txtsede.setText(sede.get(inicio + i));
+            txtsede.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
+            txtsede.setTextAppearance(actividad, R.style.etiqueta);
+            txtsede.setBackgroundResource(R.drawable.tabla_celda);
+            txtsede.setLayoutParams(layoutDependencia);
+
             txtdependencia.setText(dependencia.get(inicio + i));
             txtdependencia.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
             txtdependencia.setTextAppearance(actividad, R.style.etiqueta);
             txtdependencia.setBackgroundResource(R.drawable.tabla_celda);
-            txtdependencia.setLayoutParams(layoutFuncionario);
+            txtdependencia.setLayoutParams(layoutDependencia);
 
             txtverInventario.setImageResource(R.drawable.ver);
             txtverInventario.setId(this.inicio + i);
@@ -373,6 +387,7 @@ public class LevantamientoFisico extends Fragment {
 
             fila.addView(txtnombre);
             fila.addView(txtdocumento);
+            fila.addView(txtsede);
             fila.addView(txtdependencia);
             fila.addView(txtverInventario);
 
@@ -388,7 +403,8 @@ public class LevantamientoFisico extends Fragment {
                 TableRow.LayoutParams.WRAP_CONTENT);
         layoutId = new TableRow.LayoutParams((int) (tamanoPantalla * f1), TableRow.LayoutParams.MATCH_PARENT);
         layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla * f2), TableRow.LayoutParams.MATCH_PARENT);
-        layoutFuncionario = new TableRow.LayoutParams((int) (tamanoPantalla * f3), TableRow.LayoutParams.MATCH_PARENT);
+        layoutDependencia = new TableRow.LayoutParams((int) (tamanoPantalla * f5), TableRow.LayoutParams.MATCH_PARENT);
+        layoutDependencia = new TableRow.LayoutParams((int) (tamanoPantalla * f3), TableRow.LayoutParams.MATCH_PARENT);
         layoutMod = new TableRow.LayoutParams((int) (tamanoPantalla * f4), TableRow.LayoutParams.MATCH_PARENT);
 
         tabla.removeAllViews();
@@ -423,7 +439,7 @@ public class LevantamientoFisico extends Fragment {
                 TableRow.LayoutParams.WRAP_CONTENT);
         layoutId = new TableRow.LayoutParams((int) (tamanoPantalla * f1), TableRow.LayoutParams.MATCH_PARENT);
         layoutTexto = new TableRow.LayoutParams((int) (tamanoPantalla * f2), TableRow.LayoutParams.MATCH_PARENT);
-        layoutFuncionario = new TableRow.LayoutParams((int) (tamanoPantalla * f3), TableRow.LayoutParams.MATCH_PARENT);
+        layoutDependencia = new TableRow.LayoutParams((int) (tamanoPantalla * f3), TableRow.LayoutParams.MATCH_PARENT);
         layoutMod = new TableRow.LayoutParams((int) (tamanoPantalla * f4), TableRow.LayoutParams.MATCH_PARENT);
 
         tabla.removeAllViews();
