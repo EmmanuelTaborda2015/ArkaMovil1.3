@@ -100,11 +100,15 @@ public class AsociarImagen extends Fragment {
         @Override
         public void onClick(View v) {
 
-            circuloProgreso = ProgressDialog.show(getActivity(), "", "Espere por favor ...", true);
+
+
+            //circuloProgreso = ProgressDialog.show(getActivity(), "", "Espere por favor ...", true);
+
 
             thread_Informacion = new Thread() {
                 public void run() {
 
+                    Looper.prepare();
                     String id_dispositivo = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
                     ws_elementoPlaca = new WS_ElementoPlaca();
                     ws_elementoPlaca.startWebAccess(id_elemento, new Login().getUsuarioSesion(), id_dispositivo);
@@ -367,10 +371,13 @@ public class AsociarImagen extends Fragment {
     final Runnable Informacion = new Runnable() {
 
         public void run() {
-
-            dialog = new Informacion_Elemento_Placa(getActivity(),0, ws_elementoPlaca);
-            dialog.show();
-            circuloProgreso.dismiss();
+            if(id_elemento!="") {
+                dialog = new Informacion_Elemento_Placa(getActivity(), 0, ws_elementoPlaca);
+                dialog.show();
+                //circuloProgreso.dismiss();
+            }else{
+                Toast.makeText(getActivity(), "Este elemento aun no ha sido asignado, no se puede mostrar la informaciónf", Toast.LENGTH_LONG).show();
+            }
 
         }
     };
