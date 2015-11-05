@@ -9,7 +9,10 @@ public class WS_NumeroVisitas {
 
     private final String NAMESPACE = "arkaurn:arka";
     //private final String URL = "http://10.0.2.2/ws/servicio.php?wsdl";
-    private final String URL = "http://10.20.0.38/ws_arka_android/servicio.php?wsdl";
+    //private final String URL = "http://10.20.0.38/ws_arka_android/servicio.php?wsdl";
+
+    private String URL;
+
     private final String SOAP_ACTION = "arkaurn:arka/consultar_visita";
     private final String METHOD_NAME = "consultar_visita";
 
@@ -18,6 +21,9 @@ public class WS_NumeroVisitas {
 
     public String startWebAccess(String usuario, String dispositivo) {
 
+
+        Datos url = new Datos();
+        URL = url.getURL();
 
         SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 

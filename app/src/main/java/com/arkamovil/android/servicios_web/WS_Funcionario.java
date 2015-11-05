@@ -26,7 +26,10 @@ import java.util.Vector;
 public class WS_Funcionario {
 
     private final String NAMESPACE = "urn:arka";
-    private final String URL = "http://10.20.0.38/WS_ARKA/servicio/servicio.php";
+    //private final String URL = "http://10.20.0.38/WS_ARKA/servicio/servicio.php";
+
+    private String URL;
+
     private final String SOAP_ACTION = "urn:arka/funcionario";
     private final String METHOD_NAME = "funcionario";
 
@@ -55,6 +58,9 @@ public class WS_Funcionario {
     }
 
     public void startWebAccess(String text, String usuario, String id_dispositivo) {
+
+                Datos url = new Datos();
+                URL = url.getURL();
 
                 fun_identificacion = new ArrayList<String>();
                 fun_nombre = new ArrayList<String>();

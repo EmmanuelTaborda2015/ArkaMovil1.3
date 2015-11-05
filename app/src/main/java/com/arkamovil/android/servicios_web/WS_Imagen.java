@@ -9,7 +9,10 @@ public class WS_Imagen {
 
     private final String NAMESPACE = "urn:arka";
     //private final String URL = "http://10.0.2.2/ws/servicio.php?wsdl";
-    private final String URL = "http://10.20.0.38/WS_ARKA/servicio/servicio.php";
+    //private final String URL = "http://10.20.0.38/WS_ARKA/servicio/servicio.php";
+
+    private String URL;
+    
     private final String SOAP_ACTION = "urn:arka/consultar_imagen";
     private final String METHOD_NAME = "consultar_imagen";
 
@@ -18,6 +21,8 @@ public class WS_Imagen {
 
     public String startWebAccess(String id_elemento, String usuario, String dispositivo) {
 
+        Datos url = new Datos();
+        URL = url.getURL();
 
         SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
 

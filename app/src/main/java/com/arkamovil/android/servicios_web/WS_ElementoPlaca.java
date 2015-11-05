@@ -14,7 +14,10 @@ import java.util.Vector;
 public class WS_ElementoPlaca {
 
     private final String NAMESPACE = "urn:arka";
-    private final String URL = "http://10.20.0.38/WS_ARKA/servicio/servicio.php";
+    //private final String URL = "http://10.20.0.38/WS_ARKA/servicio/servicio.php";
+
+    private String URL;
+
     private final String SOAP_ACTION = "urn:arka/elementoFuncionarioPlaca";
     private final String METHOD_NAME = "elementoFuncionarioPlaca";
 
@@ -86,6 +89,9 @@ public class WS_ElementoPlaca {
     }
 
     public void startWebAccess(final String id_elem, String usuario, String dispositivo) {
+
+        Datos url = new Datos();
+        URL = url.getURL();
 
         SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
         Log.v("emma", id_elem);

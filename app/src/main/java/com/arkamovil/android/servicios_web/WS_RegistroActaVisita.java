@@ -8,7 +8,10 @@ import org.ksoap2.transport.HttpTransportSE;
 public class WS_RegistroActaVisita {
 
     private final String NAMESPACE = "urn:arka";
-    private final String URL = "http://10.20.0.38/WS_ARKA/servicio/servicio.php";
+    //private final String URL = "http://10.20.0.38/WS_ARKA/servicio/servicio.php";
+
+    private String URL;
+
     private final String SOAP_ACTION = "urn:arka/registrarActaVisita";
     private final String METHOD_NAME = "registrarActaVisita";
 
@@ -16,6 +19,9 @@ public class WS_RegistroActaVisita {
 
 
     public String startWebAccess(String sede, String dependencia, String responsable, String obser, String fecha, String proxVisita, String ubicacion, String usuario, String dispositivo) {
+
+        Datos url = new Datos();
+        URL = url.getURL();
 
 
         SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
