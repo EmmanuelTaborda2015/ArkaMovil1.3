@@ -2,8 +2,12 @@ package com.arkamovil.android.menu_desplegable;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.wifi.WifiManager;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -29,6 +33,7 @@ import com.arkamovil.android.casos_uso.CriteriosLevantamientoFisico;
 import com.arkamovil.android.casos_uso.Radicacion;
 import com.arkamovil.android.procesos.FinalizarSesion;
 import com.arkamovil.android.servicios_web.WS_CerrarSesion;
+import com.arkamovil.android.servicios_web.WS_Periodo;
 import com.arkamovil.android.servicios_web.WS_ValidarSesion;
 
 
@@ -40,7 +45,9 @@ public class CasosUso extends ActionBarActivity
     private Thread thread_cerrarSesion;
     private Handler handler_cerrarSesion = new Handler();
     private String webResponse_cerrarSesion;
+    private AlertDialog alertaConexion;
 
+    private Thread thread_periodo;
     private Thread thread_validarSesion;
     private Handler handler_validarSesion = new Handler();
     private String webResponse_sesion;
@@ -109,6 +116,43 @@ public class CasosUso extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_casos_uso);
 
+        BroadcastReceiver broadcastReceiver  =new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                final String action = intent.getAction();
+                if (action.equals(WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION)) {
+                    if (intent.getBooleanExtra(WifiManager.EXTRA_SUPPLICANT_CONNECTED, false)){
+                        //do stuff
+                        alertaConexion.cancel();
+                        Toast.makeText(getApplicationContext(), "Conectado a Internet!!!!", Toast.LENGTH_LONG).show();
+                    } else {
+                        // wifi connection was lost
+                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        builder.setTitle("Sin Conexión a Internet");
+                        builder.setMessage("Por Favor Conectese a una red Wi-Fi o Movil");
+                        //builder.setIcon(android.R.drawable.ic_dialog_alert);
+                        builder.setCancelable(false);
+                        alertaConexion = builder.create();
+                        alertaConexion.show();
+
+                    }
+                }
+            }
+        };
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION);
+        registerReceiver(broadcastReceiver, intentFilter);
+
+
+        thread_periodo = new Thread() {
+                    public void run() {
+                        Looper.prepare();
+                        WS_Periodo ws_periodo = new WS_Periodo();
+                        String id_dispositivo = Settings.Secure.getString(getApplication().getContentResolver(), Settings.Secure.ANDROID_ID);
+                        ws_periodo.startWebAccess(new Login().getUsuarioSesion(),id_dispositivo);
+                    }
+                };
+        thread_periodo.start();
 
 //                thread_validarSesion = new Thread() {
 //                    public void run() {

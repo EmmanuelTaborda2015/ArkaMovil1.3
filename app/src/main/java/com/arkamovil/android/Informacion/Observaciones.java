@@ -1,7 +1,9 @@
 package com.arkamovil.android.Informacion;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -27,6 +29,7 @@ import com.arkamovil.android.servicios_web.WS_ElementosInventario;
 import com.arkamovil.android.servicios_web.WS_GuardarObservaciones;
 import com.arkamovil.android.servicios_web.WS_Imagen;
 import com.arkamovil.android.servicios_web.WS_Observaciones;
+import com.arkamovil.android.servicios_web.WS_Periodo;
 
 public class Observaciones extends Dialog {
 
@@ -129,27 +132,42 @@ public class Observaciones extends Dialog {
                 public void onClick(View v) {
                     guardar.setEnabled(false);
                     cerrar.setEnabled(false);
+                    WS_Periodo ws_periodo = new WS_Periodo();
+                    if(ws_periodo.getFecha_valida()==true) {
+                        if (!"".equals(String.valueOf(obs_almacen.getText())) || tipo_movimiento.getSelectedItemPosition() > 0) {
+                            thread = new Thread() {
+                                public void run() {
 
-                            if (!"".equals(String.valueOf(obs_almacen.getText())) || tipo_movimiento.getSelectedItemPosition() > 0) {
-                                thread = new Thread() {
-                                    public void run() {
+                                    Looper.prepare();
 
-                                        Looper.prepare();
+                                    String id_dispositivo = Settings.Secure.getString(c.getContentResolver(), Settings.Secure.ANDROID_ID);
+                                    WS_GuardarObservaciones ws_guardarObservaciones = new WS_GuardarObservaciones();
+                                    getId_levantamientoGenerado = ws_guardarObservaciones.startWebAccess(id_elemento, id_levantamiento, funcionario, String.valueOf(obs_almacen.getText()), String.valueOf(tipo_movimiento.getSelectedItemPosition() - 1), new Login().getUsuarioSesion(), id_dispositivo);
+                                    handler.post(createUI);
+                                }
+                            };
 
-                                        String id_dispositivo = Settings.Secure.getString(c.getContentResolver(), Settings.Secure.ANDROID_ID);
-                                        WS_GuardarObservaciones ws_guardarObservaciones = new WS_GuardarObservaciones();
-                                        getId_levantamientoGenerado = ws_guardarObservaciones.startWebAccess(id_elemento, id_levantamiento, funcionario, String.valueOf(obs_almacen.getText()), String.valueOf(tipo_movimiento.getSelectedItemPosition() - 1), new Login().getUsuarioSesion(), id_dispositivo);
-                                        handler.post(createUI);
-                                    }
-                                };
+                            thread.start();
 
-                                thread.start();
-
-                            }else{
-                                Toast.makeText(c, "No ha ingresado ninguna observación.", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(c, "No ha ingresado ninguna observación.", Toast.LENGTH_LONG).show();
+                            guardar.setEnabled(true);
+                            cerrar.setEnabled(true);
+                        }
+                    }else{
+                        AlertDialog.Builder builder = new AlertDialog.Builder(c);
+                        builder.setTitle("Fuera de Período de Levantamiento");
+                        builder.setMessage("No se Puede Registrar la Observación Porque Se Encuentra Fuera del Período de Levantamiento Físico");
+                        builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
                                 guardar.setEnabled(true);
                                 cerrar.setEnabled(true);
+                                dialog.cancel();
                             }
+                        });
+                        //builder.setIcon(android.R.drawable.ic_dialog_alert);
+                        builder.show();
+                    }
             }
         });
     }

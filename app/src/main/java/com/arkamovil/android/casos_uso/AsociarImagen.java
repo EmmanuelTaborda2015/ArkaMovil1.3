@@ -1,6 +1,7 @@
 package com.arkamovil.android.casos_uso;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,10 +15,12 @@ import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
@@ -36,6 +39,7 @@ import com.arkamovil.android.servicios_web.WS_CargarImagen;
 import com.arkamovil.android.servicios_web.WS_ConsultarPlacaImagen;
 import com.arkamovil.android.servicios_web.WS_ElementoPlaca;
 import com.arkamovil.android.servicios_web.WS_ValidarSesion;
+import com.google.zxing.integration.android.IntentIntegrator;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -211,8 +215,26 @@ public class AsociarImagen extends Fragment {
                 asignar.setEnabled(false);
                 //l2.setVisibility(View.GONE);
 
-                Intent intent = new Intent("com.arkamovil.android.SCAN");
-                startActivityForResult(intent, 0);
+                try {
+
+                    WindowManager wm = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);
+                    Display display = wm.getDefaultDisplay();
+
+                    Intent intent = new Intent(
+                            "com.google.zxing.client.android.SCAN");
+                    intent.putExtra("SCAN_WIDTH",display.getHeight());
+                    intent.putExtra("SCAN_HEIGHT", display.getWidth());
+                    intent.putExtra("SCAN_FORMATS", "QR_CODE_MODE");
+                    intent.putExtra("PROMPT_TITTLE", "ARKAMOVIL");
+                    intent.putExtra("PROMPT_MESSAGE", "Ponga en el interior del recuadro el código de barras del elemento que desea consultar (ARKAMOVIL)");
+                    startActivityForResult(intent,
+                            IntentIntegrator.REQUEST_CODE);
+                } catch (Exception e) {
+                    Log.e("BARCODE_ERROR", e.getMessage());
+                }
+
+                //Intent intent = new Intent("com.arkamovil.android.SCAN");
+                //startActivityForResult(intent, 0);
                 opcion = 2;
             }
         });

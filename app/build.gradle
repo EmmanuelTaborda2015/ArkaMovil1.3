@@ -23,7 +23,9 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:22.0.0'
     compile 'com.android.support:support-v4:22.0.0'
-    compile project(':librerias:CaptureActivity')
+    //compile project(':librerias:CaptureActivity')
     compile project(':ksoap2-android-assembly-3.0.0-jar-with-dependencies')
     compile files('/home/emmanuel/Documentos/ArkaMovil1.3/librerias/droidText.0.4.jar')
+    compile 'com.journeyapps:zxing-android-embedded:3.0.2@aar'
+    compile 'com.google.zxing:core:3.2.0'
 }

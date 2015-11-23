@@ -1,12 +1,16 @@
 package com.arkamovil.android;
 
-
         import android.app.Dialog;
+        import android.content.BroadcastReceiver;
         import android.content.Context;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.provider.Settings;
+        import android.content.IntentFilter;
+        import android.net.NetworkInfo;
+        import android.net.wifi.WifiInfo;
+        import android.net.wifi.WifiManager;
+        import android.provider.Settings;
 import android.provider.Settings.Secure;
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -23,15 +27,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.arkamovil.android.menu_desplegable.CasosUso;
+        import com.arkamovil.android.herramientas.AppStatus;
+        import com.arkamovil.android.menu_desplegable.CasosUso;
 import com.arkamovil.android.procesos.FinalizarSesion;
 import com.arkamovil.android.servicios_web.WS_CerrarSesion;
 import com.arkamovil.android.servicios_web.WS_Funcionario;
 import com.arkamovil.android.servicios_web.WS_Login;
-        import com.google.zxing.client.android.Contents;
 
 public class Login extends ActionBarActivity {
 
+    private AlertDialog alertaConexion;
     private Context context = this;
     private Thread thread;
     private Thread thread_WS_Fucncionario;
@@ -71,6 +76,34 @@ public class Login extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        BroadcastReceiver broadcastReceiver  =new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                final String action = intent.getAction();
+                if (action.equals(WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION)) {
+                    if (intent.getBooleanExtra(WifiManager.EXTRA_SUPPLICANT_CONNECTED, false)){
+                        //do stuff
+                        alertaConexion.cancel();
+                        Toast.makeText(getApplicationContext(), "Conectado a Internet!!!!", Toast.LENGTH_LONG).show();
+                    } else {
+                        // wifi connection was lost
+                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        builder.setTitle("Sin Conexión a Internet");
+                        builder.setMessage("Por Favor Conectese a una red Wi-Fi o Movil");
+                        //builder.setIcon(android.R.drawable.ic_dialog_alert);
+                        builder.setCancelable(false);
+                        alertaConexion = builder.create();
+                        alertaConexion.show();
+
+                    }
+                }
+            }
+        };
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION);
+        registerReceiver(broadcastReceiver, intentFilter);
+
+
         try{
           salir = CasosUso.getSalir();
         }catch(Exception salida){
@@ -79,6 +112,8 @@ public class Login extends ActionBarActivity {
         if(salir  == 1){
             System.exit(0);
         }
+
+
 
 
         usuario = (EditText) findViewById(R.id.user);
@@ -105,21 +140,32 @@ public class Login extends ActionBarActivity {
                     contador++;
                 }
                 if (contador == 0) {
-
-                    thread_cerrarSesion = new Thread() {
-                        public void run() {
-                            Looper.prepare();
-                            String id_dispositivo = Settings.Secure.getString(getApplication().getContentResolver(), Settings.Secure.ANDROID_ID);
-                            WS_CerrarSesion ws_cerrarSesion = new WS_CerrarSesion();
-                            webResponse_cerrarSesion = ws_cerrarSesion.startWebAccess(new Login().getUsuarioSesion(), id_dispositivo);
-                            handler_cerrarSesion.post(cerrarSesion);
-                        }
-                    };
-                    thread_cerrarSesion.start();
-
+                    AppStatus status = new AppStatus();
+                    if (status.getInstance(getApplication()).isOnline()) {
+                        thread_cerrarSesion = new Thread() {
+                            public void run() {
+                                Looper.prepare();
+                                String id_dispositivo = Settings.Secure.getString(getApplication().getContentResolver(), Settings.Secure.ANDROID_ID);
+                                WS_CerrarSesion ws_cerrarSesion = new WS_CerrarSesion();
+                                webResponse_cerrarSesion = ws_cerrarSesion.startWebAccess(new Login().getUsuarioSesion(), id_dispositivo);
+                                handler_cerrarSesion.post(cerrarSesion);
+                            }
+                        };
+                        thread_cerrarSesion.start();
+                    } else {
+                        // wifi connection was lost
+                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        builder.setTitle("Sin Conexión a Internet");
+                        builder.setMessage("Por Favor Conectese a una red Wi-Fi o Movil");
+                        //builder.setIcon(android.R.drawable.ic_dialog_alert);
+                        builder.setCancelable(false);
+                        alertaConexion = builder.create();
+                        alertaConexion.show();
+                        boton.setEnabled(true);
+                        boton.setTextColor(getResources().getColor(R.color.NEGRO));
+                    }
                 } else {
                     boton.setEnabled(true);
-
                     boton.setTextColor(getResources().getColor(R.color.NEGRO));
                 }
             }

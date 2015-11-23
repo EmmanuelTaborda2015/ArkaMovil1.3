@@ -29,10 +29,12 @@ public class WS_Login {
         try {
             httpTransport.call(SOAP_ACTION, envelope);
             Object response = envelope.getResponse();
+            String statuses = envelope.getResponse().toString();
             webResponse = response.toString();
             Log.v("mensaje", webResponse);
 
         } catch (Exception exception) {
+            Log.v("emma","no conection|" );
         }
         return webResponse;
     }
