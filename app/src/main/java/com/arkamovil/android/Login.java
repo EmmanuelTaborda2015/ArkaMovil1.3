@@ -1,18 +1,11 @@
 package com.arkamovil.android;
 
-        import android.app.Dialog;
-        import android.content.BroadcastReceiver;
         import android.content.Context;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-        import android.content.IntentFilter;
-        import android.net.NetworkInfo;
-        import android.net.wifi.WifiInfo;
-        import android.net.wifi.WifiManager;
         import android.provider.Settings;
 import android.provider.Settings.Secure;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Handler;
@@ -22,17 +15,15 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
         import com.arkamovil.android.herramientas.AppStatus;
         import com.arkamovil.android.menu_desplegable.CasosUso;
-import com.arkamovil.android.procesos.FinalizarSesion;
 import com.arkamovil.android.servicios_web.WS_CerrarSesion;
-import com.arkamovil.android.servicios_web.WS_Funcionario;
 import com.arkamovil.android.servicios_web.WS_Login;
+        import com.arkamovil.android.servicios_web.WS_ValidarConexion;
 
 public class Login extends ActionBarActivity {
 
@@ -51,7 +42,10 @@ public class Login extends ActionBarActivity {
     private Thread thread_sesion;
     private Thread thread_cerrarSesion;
     private Handler handler_cerrarSesion = new Handler();
+    private Handler handler_conexion = new Handler();
     private String webResponse_cerrarSesion;
+    private Thread thread_validarConexion;
+    private String webResponse_conexion;
 
     public int getSalir() {
         return salir;
@@ -76,14 +70,17 @@ public class Login extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        BroadcastReceiver broadcastReceiver  =new BroadcastReceiver() {
+            //"0xel0t1l"
+            //MCrypt encriptar = new MCrypt();
+            //encriptar.encrypt("hola");
+
+       /* BroadcastReceiver broadcastReceiver  =new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 final String action = intent.getAction();
                 if (action.equals(WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION)) {
                     if (intent.getBooleanExtra(WifiManager.EXTRA_SUPPLICANT_CONNECTED, false)){
                         //do stuff
-                        alertaConexion.cancel();
                         Toast.makeText(getApplicationContext(), "Conectado a Internet!!!!", Toast.LENGTH_LONG).show();
                     } else {
                         // wifi connection was lost
@@ -102,7 +99,7 @@ public class Login extends ActionBarActivity {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(WifiManager.SUPPLICANT_CONNECTION_CHANGE_ACTION);
         registerReceiver(broadcastReceiver, intentFilter);
-
+*/
 
         try{
           salir = CasosUso.getSalir();
@@ -142,6 +139,18 @@ public class Login extends ActionBarActivity {
                 if (contador == 0) {
                     AppStatus status = new AppStatus();
                     if (status.getInstance(getApplication()).isOnline()) {
+
+                        thread_validarConexion = new Thread() {
+                            public void run() {
+                                Looper.prepare();
+                                WS_ValidarConexion validarConexion = new WS_ValidarConexion();
+                                webResponse_conexion = validarConexion.startWebAccess();
+                                handler_conexion.post(conexion);
+                            }
+                        };
+
+                        thread_validarConexion.start();
+
                         thread_cerrarSesion = new Thread() {
                             public void run() {
                                 Looper.prepare();
@@ -153,15 +162,23 @@ public class Login extends ActionBarActivity {
                         };
                         thread_cerrarSesion.start();
                     } else {
+
                         // wifi connection was lost
                         AlertDialog.Builder builder = new AlertDialog.Builder(context);
                         builder.setTitle("Sin Conexión a Internet");
-                        builder.setMessage("Por Favor Conectese a una red Wi-Fi o Movil");
+                        builder.setMessage("No se ha podido iniciar sesión debido a que no hay conexión a internet. \nPor favor conectese a una red Wi-Fi o Movil e inicie sesión.");
+                        builder.setPositiveButton("Entendido",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        dialog.cancel();
+                                    }
+                                });
                         //builder.setIcon(android.R.drawable.ic_dialog_alert);
                         builder.setCancelable(false);
                         alertaConexion = builder.create();
                         alertaConexion.show();
                         boton.setEnabled(true);
+
                         boton.setTextColor(getResources().getColor(R.color.NEGRO));
                     }
                 } else {
@@ -219,6 +236,7 @@ public class Login extends ActionBarActivity {
     final Runnable cerrarSesion = new Runnable() {
 
         public void run() {
+
                 thread = new Thread() {
                     public void run() {
                         //Se crea el objeto de la clase (Web Service Login), y se le envian los parametros Context, usuario y contraseña ingresadas.
@@ -231,6 +249,28 @@ public class Login extends ActionBarActivity {
 
             thread.start();
 
+        }
+    };
+
+    final Runnable conexion = new Runnable() {
+
+        public void run() {
+            if("false".equals(webResponse_conexion)){
+                // wifi connection was lost
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("Problemas en la Conexión a Internet");
+                builder.setMessage("La conexión a internet mediante la cual esta tratando de acceder no es valida. \nPor favor verifique la configuración del proxy o intente nuevamente conectandose a otra red Wi-Fi o Movil.");
+                builder.setPositiveButton("Entendido",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                //builder.setIcon(android.R.drawable.ic_dialog_alert);
+                builder.setCancelable(false);
+                alertaConexion = builder.create();
+                alertaConexion.show();
+            }
         }
     };
 

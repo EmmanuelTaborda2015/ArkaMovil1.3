@@ -3,6 +3,7 @@ package com.arkamovil.android.casos_uso;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Looper;
@@ -39,6 +40,7 @@ import com.arkamovil.android.servicios_web.WS_NumeroVisitas;
 import com.arkamovil.android.servicios_web.WS_RegistroActaVisita;
 import com.arkamovil.android.servicios_web.WS_Sede;
 import com.arkamovil.android.servicios_web.WS_Ubicacion;
+import com.arkamovil.android.servicios_web.WS_ValidarConexion;
 import com.arkamovil.android.servicios_web.WS_ValidarSesion;
 
 import java.util.ArrayList;
@@ -77,6 +79,8 @@ public class ActaVisita extends Fragment {
     private TextView proximaVis;
 
     private ProgressDialog circuloProgreso;
+
+
 
     private String proxVisita;
     private String fecha;
@@ -118,6 +122,10 @@ public class ActaVisita extends Fragment {
 
     private int focus = 0;
 
+    private Thread thread_validarConexion;
+    private String webResponse_conexion;
+    private AlertDialog alertaConexion;
+    private Handler handler_conexion = new Handler();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -129,6 +137,17 @@ public class ActaVisita extends Fragment {
 
         //Se definen los campos a utilizar en la clase.
         establecerCampos();
+
+        thread_validarConexion = new Thread() {
+            public void run() {
+                Looper.prepare();
+                WS_ValidarConexion validarConexion = new WS_ValidarConexion();
+                webResponse_conexion = validarConexion.startWebAccess();
+                handler_conexion.post(conexion);
+            }
+        };
+
+        thread_validarConexion.start();
 
         dependencia.setEnabled(false);
         ubicacion.setEnabled(false);
@@ -533,4 +552,27 @@ public class ActaVisita extends Fragment {
             lista_documento = ws_funcionario.getFun_identificacion();
         }
     };
+
+    final Runnable conexion = new Runnable() {
+
+        public void run() {
+            if("false".equals(webResponse_conexion)){
+                // wifi connection was lost
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Problemas en la Conexión a Internet");
+                builder.setMessage("Se ha cerrado la sesión debido a que la conexión a internet mediante la cual esta tratando de acceder no es valida. \nPor favor verifique la configuración del proxy o intente nuevamente conectandose a otra red Wi-Fi o Movil.");
+                builder.setPositiveButton("Entendido",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        });
+                //builder.setIcon(android.R.drawable.ic_dialog_alert);
+                builder.setCancelable(false);
+                alertaConexion = builder.create();
+                alertaConexion.show();
+            }
+        }
+    };
 }
+

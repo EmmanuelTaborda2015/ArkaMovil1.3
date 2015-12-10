@@ -1,10 +1,15 @@
 package com.arkamovil.android.servicios_web;
 import android.util.Log;
 
+import com.arkamovil.android.crypto.Encriptador;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
 import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
+
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+
 public class WS_Login {
     private final String NAMESPACE = "urn:arka";
     //private final String URL = "http://10.0.2.2/ws/servicio.php?wsdl";
@@ -19,8 +24,18 @@ public class WS_Login {
         URL = url.getURL();
 
         SoapObject request = new SoapObject(NAMESPACE, METHOD_NAME);
-        request.addProperty("usuario", usuario);
-        request.addProperty("contrasenna", contrasena);
+
+        try {
+            Log.v("pruebas",Encriptador.computeSHAHash( Encriptador.computeMD5Hash(usuario)));
+            Log.v("pruebas",Encriptador.computeSHAHash( Encriptador.computeMD5Hash(contrasena)));
+
+            request.addProperty("usuario", usuario);
+            request.addProperty("contrasenna",Encriptador.computeSHAHash( Encriptador.computeMD5Hash(contrasena)));
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         request.addProperty("dispositivo", id_dispositivo);
 
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);

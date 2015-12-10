@@ -8,6 +8,6 @@ public class Datos {
         return URL;
     }
 
-    private String URL = "http://10.20.0.38/WS_ARKA/servicio/servicio.php";
+    private String URL = "http://10.20.0.9/WS_ARKA/servicio/servicio.php";
 
 }

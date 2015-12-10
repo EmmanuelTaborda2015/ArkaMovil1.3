@@ -34,6 +34,7 @@ import com.arkamovil.android.casos_uso.Radicacion;
 import com.arkamovil.android.procesos.FinalizarSesion;
 import com.arkamovil.android.servicios_web.WS_CerrarSesion;
 import com.arkamovil.android.servicios_web.WS_Periodo;
+import com.arkamovil.android.servicios_web.WS_ValidarConexion;
 import com.arkamovil.android.servicios_web.WS_ValidarSesion;
 
 
@@ -41,6 +42,11 @@ public class CasosUso extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     int cont = 0;
+
+    private Context context = this;
+    private Thread thread_validarConexion;
+    private String webResponse_conexion;
+
 
     private Thread thread_cerrarSesion;
     private Handler handler_cerrarSesion = new Handler();
@@ -51,6 +57,9 @@ public class CasosUso extends ActionBarActivity
     private Thread thread_validarSesion;
     private Handler handler_validarSesion = new Handler();
     private String webResponse_sesion;
+
+    private Handler handler_conexion = new Handler();
+
 
     public static int getSalir() {
         return salir;
@@ -129,7 +138,15 @@ public class CasosUso extends ActionBarActivity
                         // wifi connection was lost
                         AlertDialog.Builder builder = new AlertDialog.Builder(context);
                         builder.setTitle("Sin Conexión a Internet");
-                        builder.setMessage("Por Favor Conectese a una red Wi-Fi o Movil");
+                        builder.setMessage("Se ha cerrado la sesión debido a que se ha perdido la conexión a internet y esto puede causar errores en la aplicación. \nPor favor conectese a una red Wi-Fi o Movil e inicie una nueva sesión.");
+                        builder.setPositiveButton("Entendido",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        Intent i = new Intent (CasosUso.this, Login.class) ;
+                                        startActivity(i);
+                                        dialog.cancel();
+                                    }
+                                });
                         //builder.setIcon(android.R.drawable.ic_dialog_alert);
                         builder.setCancelable(false);
                         alertaConexion = builder.create();
@@ -200,6 +217,16 @@ public class CasosUso extends ActionBarActivity
         Fragment fragment = null;
         switch (number) {
             case 1:
+                thread_validarConexion = new Thread() {
+                    public void run() {
+                        Looper.prepare();
+                        WS_ValidarConexion validarConexion = new WS_ValidarConexion();
+                        webResponse_conexion = validarConexion.startWebAccess();
+                        handler_conexion.post(conexion);
+                    }
+                };
+
+                thread_validarConexion.start();
                 if (cont == 1) {
                     fragment = new ActaVisita();
                     this.setTitle("Acta de Visita");
@@ -208,6 +235,16 @@ public class CasosUso extends ActionBarActivity
                 cont++;
                 break;
             case 2:
+                thread_validarConexion = new Thread() {
+                    public void run() {
+                        Looper.prepare();
+                        WS_ValidarConexion validarConexion = new WS_ValidarConexion();
+                        webResponse_conexion = validarConexion.startWebAccess();
+                        handler_conexion.post(conexion);
+                    }
+                };
+
+                thread_validarConexion.start();
                 fragment = new CriteriosLevantamientoFisico();
                 this.setTitle("Levantamiento Físico de Inventarios");
                 break;
@@ -216,11 +253,31 @@ public class CasosUso extends ActionBarActivity
 //                this.setTitle("Radicación");
 //                break;
             case 3:
+                thread_validarConexion = new Thread() {
+                    public void run() {
+                        Looper.prepare();
+                        WS_ValidarConexion validarConexion = new WS_ValidarConexion();
+                        webResponse_conexion = validarConexion.startWebAccess();
+                        handler_conexion.post(conexion);
+                    }
+                };
+
+                thread_validarConexion.start();
                 fragment = new AsociarImagen();
                 this.setTitle("Asociar Imagen a Elemento");
                 break;
 
             case 4:
+                thread_validarConexion = new Thread() {
+                    public void run() {
+                        Looper.prepare();
+                        WS_ValidarConexion validarConexion = new WS_ValidarConexion();
+                        webResponse_conexion = validarConexion.startWebAccess();
+                        handler_conexion.post(conexion);
+                    }
+                };
+
+                thread_validarConexion.start();
                 this.salir = 1;
                 thread_cerrarSesion = new Thread() {
                     public void run() {
@@ -286,6 +343,30 @@ public class CasosUso extends ActionBarActivity
 
         public void run() {
             new FinalizarSesion().sesionExpirada(CasosUso.this);
+        }
+    };
+
+    final Runnable conexion = new Runnable() {
+
+        public void run() {
+            if("false".equals(webResponse_conexion)){
+                // wifi connection was lost
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("Problemas en la Conexión a Internet");
+                builder.setMessage("Se ha cerrado la sesión debido a que la conexión a internet mediante la cual esta tratando de acceder no es valida. \nPor favor verifique la configuración del proxy o intente nuevamente conectandose a otra red Wi-Fi o Movil.");
+                builder.setPositiveButton("Entendido",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Intent i = new Intent (CasosUso.this, Login.class) ;
+                                startActivity(i);
+                                dialog.cancel();
+                            }
+                        });
+                //builder.setIcon(android.R.drawable.ic_dialog_alert);
+                builder.setCancelable(false);
+                alertaConexion = builder.create();
+                alertaConexion.show();
+            }
         }
     };
 }
