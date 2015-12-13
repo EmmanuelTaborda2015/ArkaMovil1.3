@@ -222,8 +222,8 @@ public class AsociarImagen extends Fragment {
 
                     Intent intent = new Intent(
                             "com.google.zxing.client.android.SCAN");
-                    intent.putExtra("SCAN_WIDTH",display.getHeight());
-                    intent.putExtra("SCAN_HEIGHT", display.getWidth());
+                    //intent.putExtra("SCAN_WIDTH",display.getHeight());
+                    //intent.putExtra("SCAN_HEIGHT", display.getWidth());
                     intent.putExtra("SCAN_FORMATS", "QR_CODE_MODE");
                     intent.putExtra("PROMPT_TITTLE", "ARKAMOVIL");
                     intent.putExtra("PROMPT_MESSAGE", "Ponga en el interior del recuadro el código de barras del elemento que desea consultar (ARKAMOVIL)");

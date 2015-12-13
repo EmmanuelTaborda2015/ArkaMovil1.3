@@ -41,7 +41,7 @@ import org.w3c.dom.Text;
 
 public class GenerarPDF_ActaVisita{
 
-    private final static String NOMBRE_DIRECTORIO = "Actas de Visitas";
+    private final static String NOMBRE_DIRECTORIO = "Actas";
     private static String NOMBRE_DOCUMENTO = "prueba.pdf";
     private final static String ETIQUETA_ERROR = "ERROR";
 
@@ -104,6 +104,7 @@ public class GenerarPDF_ActaVisita{
 
             // Creamos el flujo de datos de salida para el fichero donde
             // guardaremos el pdf.
+            Log.v("ficher",f.getAbsolutePath());
             FileOutputStream ficheroPdf = new FileOutputStream(
                     f.getAbsolutePath());
 

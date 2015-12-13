@@ -263,6 +263,8 @@ public class Login extends ActionBarActivity {
                 builder.setPositiveButton("Entendido",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
+                                Intent i = new Intent (Login.this, Login.class) ;
+                                startActivity(i);
                                 dialog.cancel();
                             }
                         });

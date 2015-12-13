@@ -404,6 +404,13 @@ public class ActaVisita extends Fragment {
 
                     dialogo.setTitle("ACTA DE VISITA GENERADA");
                     dialogo.setMessage("Se ha generado el acta de visita en la ruta -> Download -> Acta de Visita -> Actavisita" + numVisita_s);
+                    dialogo.setPositiveButton("Entendido",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+                    //builder.setIcon(android.R.drawable.ic_dialog_alert);
                     dialogo.setCancelable(true);
                     dialogo.create();
                     dialogo.show();
