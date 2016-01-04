@@ -125,6 +125,9 @@ public class CasosUso extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_casos_uso);
 
+        String id_dispositivo = Settings.Secure.getString(getApplication().getContentResolver(), Settings.Secure.ANDROID_ID);
+       Log.v("dispositivo", id_dispositivo);
+
         BroadcastReceiver broadcastReceiver  =new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -217,24 +220,11 @@ public class CasosUso extends ActionBarActivity
         Fragment fragment = null;
         switch (number) {
             case 1:
-                thread_validarConexion = new Thread() {
-                    public void run() {
-                        Looper.prepare();
-                        WS_ValidarConexion validarConexion = new WS_ValidarConexion();
-                        webResponse_conexion = validarConexion.startWebAccess();
-                        handler_conexion.post(conexion);
-                    }
-                };
-
-                thread_validarConexion.start();
                 if (cont == 1) {
                     fragment = new ActaVisita();
                     this.setTitle("Acta de Visita");
                     cont = 0;
                 }
-                cont++;
-                break;
-            case 2:
                 thread_validarConexion = new Thread() {
                     public void run() {
                         Looper.prepare();
@@ -245,14 +235,31 @@ public class CasosUso extends ActionBarActivity
                 };
 
                 thread_validarConexion.start();
+
+                cont++;
+                break;
+            case 2:
                 fragment = new CriteriosLevantamientoFisico();
                 this.setTitle("Levantamiento Físico de Inventarios");
+                thread_validarConexion = new Thread() {
+                    public void run() {
+                        Looper.prepare();
+                        WS_ValidarConexion validarConexion = new WS_ValidarConexion();
+                        webResponse_conexion = validarConexion.startWebAccess();
+                        handler_conexion.post(conexion);
+                    }
+                };
+
+                thread_validarConexion.start();
+
                 break;
 //            case 3:
 //                fragment = new Radicacion();
 //                this.setTitle("Radicación");
 //                break;
             case 3:
+                fragment = new AsociarImagen();
+                this.setTitle("Asociar Imagen a Elemento");
                 thread_validarConexion = new Thread() {
                     public void run() {
                         Looper.prepare();
@@ -263,8 +270,7 @@ public class CasosUso extends ActionBarActivity
                 };
 
                 thread_validarConexion.start();
-                fragment = new AsociarImagen();
-                this.setTitle("Asociar Imagen a Elemento");
+
                 break;
 
             case 4:

@@ -83,4 +83,4 @@
         android:title="@string/preferences_search_country"/>
   </PreferenceCategory>
 </PreferenceScreen>
-<!-- From: file:/home/emmanuel/Escritorio/prueba/ArkaMovil1.3/librerias/CaptureActivity/res/xml/preferences.xml -->
+<!-- From: file:/home/emmanuel/Escritorio/todo/movil/ArkaMovil1.3/librerias/CaptureActivity/res/xml/preferences.xml -->

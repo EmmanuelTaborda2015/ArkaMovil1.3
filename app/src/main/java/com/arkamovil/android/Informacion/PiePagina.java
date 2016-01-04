@@ -23,7 +23,7 @@ public class PiePagina extends Fragment {
         Time today = new Time(Time.getCurrentTimezone());
         today.setToNow();
 
-        fecha.setText(today.year + "/" + today.month + "/" + today.monthDay);
+        fecha.setText(today.year + "/" + (today.month+1) + "/" + today.monthDay);
 
         return rootView;
     }

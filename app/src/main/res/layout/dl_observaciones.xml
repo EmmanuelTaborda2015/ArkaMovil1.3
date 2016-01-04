@@ -44,7 +44,8 @@
                 android:scrollbars="vertical"
                 android:gravity="left|top"
                 style="@style/textViewArkaMovil"
-                android:id="@+id/obser_funcionario" />
+                android:id="@+id/obser_funcionario"
+                android:background="@color/GRIS" />
 
             <TextView
                 android:id="@+id/label_observacion_almacen"
@@ -59,7 +60,8 @@
                 android:scrollbars="vertical"
                 android:gravity="left|top"
                 style="@style/textViewArkaMovil"
-                android:id="@+id/observaciones_almacen" />
+                android:id="@+id/observaciones_almacen"
+                android:background="@color/GRIS" />
 
             <View
                 android:layout_width="fill_parent"

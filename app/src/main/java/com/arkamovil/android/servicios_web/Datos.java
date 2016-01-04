@@ -8,6 +8,7 @@ public class Datos {
         return URL;
     }
 
-    private String URL = "http://10.20.0.9/WS_ARKA/servicio/servicio.php";
+    //private String URL = "https://oas.udistrital.edu.co/WS_ARKA/servicio/servicio.php";
+    private String URL = "http://10.20.0.38/arkamovil/webservice/almacen/servicio/servicio.php";
 
 }
